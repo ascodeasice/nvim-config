@@ -1,6 +1,7 @@
 vim.wo.relativenumber = true
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.opt.clipboard = 'unnamedplus'
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
@@ -20,11 +21,51 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
+  'mbbill/undotree',
+  {
+    'alexghergh/nvim-tmux-navigation',
+    config = function()
+      local nvim_tmux_nav = require('nvim-tmux-navigation')
 
+      nvim_tmux_nav.setup {
+        disable_when_zoomed = true -- defaults to false
+      }
+
+      vim.keymap.set('n', "<A-n>", nvim_tmux_nav.NvimTmuxNavigateLeft)
+      vim.keymap.set('n', "<A-e>", nvim_tmux_nav.NvimTmuxNavigateDown)
+      vim.keymap.set('n', "<A-u>", nvim_tmux_nav.NvimTmuxNavigateUp)
+      vim.keymap.set('n', "<A-i>", nvim_tmux_nav.NvimTmuxNavigateRight)
+      vim.keymap.set('n', "<A-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
+      vim.keymap.set('n', "<A-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
+    end
+  },
+  'nvim-lua/plenary.nvim',
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = {
+      'nvim-lua/plenary.nvim'
+    },
+    config = function()
+      local harpoon = require("harpoon")
+
+      harpoon:setup()
+
+      vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end)
+      vim.keymap.set("n", "<leader>m", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+
+      vim.keymap.set("n", "<C-n>", function() harpoon:list():select(1) end)
+      vim.keymap.set("n", "<C-e>", function() harpoon:list():select(2) end)
+      vim.keymap.set("n", "<C-i>", function() harpoon:list():select(3) end)
+      vim.keymap.set("n", "<C-o>", function() harpoon:list():select(4) end)
+    end,
+  },
+  -- NOTE: First, some plugins that don't require any configuration
+  -- set up copilot
+  'github/copilot.vim',
+  -- recommend some better key presses
   -- some git commands
   'tpope/vim-fugitive',
-
   -- for auto remaining consistency in indentation
   'tpope/vim-sleuth',
 
@@ -39,7 +80,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -68,6 +109,8 @@ require('lazy').setup({
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-copilot',
+
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
@@ -238,9 +281,6 @@ vim.wo.number = true
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
--- Sync clipboard between OS and Neovim.
-vim.o.clipboard = 'unnamedplus'
-
 -- Enable break indent
 vim.o.breakindent = true
 
@@ -355,10 +395,14 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer' })
 
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' }) -- find every function in telescope
-vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', '<leader>p', require('telescope.builtin').find_files, { desc = 'Same as ctrl p in vscode'})
+vim.keymap.set('n', '<C-p>', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<leader>pp', require('telescope.builtin').find_files)
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = '[G]it [B]ranches' })
+vim.keymap.set('n', '<leader>ps', function()
+  require('telescope.builtin').grep_string({ search = vim.fn.input('Grep > ') })
+end)
+
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -424,7 +468,7 @@ vim.defer_fn(function()
       swap = {
         enable = true,
         swap_next = {
-          ['<leader>a'] = '@parameter.inner',
+          -- ['<leader>a'] = '@parameter.inner',
         },
         swap_previous = {
           ['<leader>A'] = '@parameter.inner',
@@ -464,7 +508,7 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
-  nmap('gh',vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('gh', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
@@ -590,14 +634,90 @@ cmp.setup {
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
 
+-- vim: ts=2 sts=2 sw=2 et
 
 -- my Remap
 -- remap H and L for motion
 vim.api.nvim_set_keymap('n', 'H', '^', { noremap = true })
 vim.api.nvim_set_keymap('n', 'L', '$', { noremap = true })
-vim.api.nvim_set_keymap('n', '<c-d>', '<c-d>zz', { noremap = true })
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
-vim.opt.timeoutlen=2000 -- allow longer wait time for leader key
+
+vim.opt.timeoutlen = 2000 -- allow longer wait time for leader key
 vim.opt.swapfile = false
+
+-- ctrl n  to  accept  Copilot suggestion
+-- NOTE:  alt right to  accept next word
+vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+
+vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git) -- git status
+
+-- prevent auto comment on new line
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.opt_local.formatoptions:remove({ 'r', 'o' })
+  end,
+})
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+vim.opt.termguicolors = true
+vim.opt.scrolloff = 8
+
+vim.opt.updatetime = 50
+vim.opt.colorcolumn = "80"
+
+-- remaps
+vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set("n", "J", "mzJ`z")
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
+
+-- greatest remap ever
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+
+-- This is going to get me cancelled
+vim.keymap.set("i", "<C-c>", "<Esc>")
+
+vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+
+-- for quickfix
+vim.keymap.set("n", "<C-Up>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-Down>", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader><Up>", "<cmd>lnext<CR>zz")
+vim.keymap.set("n", "<leader><Down>", "<cmd>lprev<CR>zz")
+
+-- replace the word that I am on
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+
+vim.keymap.set(
+  "n",
+  "<leader>ee",
+  "oif err != nil {<CR>}<Esc>Oreturn err<Esc>"
+)
+
+vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/.config/nvim/lua/theprimeagen/packer.lua<CR>");
+vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
+
+vim.keymap.set("n", "<leader><leader>", function()
+  vim.cmd("so")
+end)
