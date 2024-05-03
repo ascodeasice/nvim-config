@@ -1,3 +1,9 @@
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- show both relative and absolute line number
+vim.o.number = true
 vim.wo.relativenumber = true
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -21,6 +27,17 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end,
+  },
   'mbbill/undotree',
   {
     'alexghergh/nvim-tmux-navigation',
@@ -641,7 +658,6 @@ cmp.setup {
 -- remap H and L for motion
 vim.api.nvim_set_keymap('n', 'H', '^', { noremap = true })
 vim.api.nvim_set_keymap('n', 'L', '$', { noremap = true })
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 
 vim.opt.timeoutlen = 2000 -- allow longer wait time for leader key
@@ -721,3 +737,5 @@ vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
 vim.keymap.set("n", "<leader><leader>", function()
   vim.cmd("so")
 end)
+
+vim.keymap.set("n","<C-b>","<cmd>NvimTreeToggle<CR>")
