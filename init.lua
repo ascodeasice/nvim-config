@@ -350,12 +350,27 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
+
 require('telescope').setup {
   defaults = {
     mappings = {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
+      },
+    },
+  },
+  pickers = {
+    find_files = {
+      find_command = {
+        "rg",
+        "--no-ignore",
+        "--hidden",
+        "--files",
+        "-g",
+        "!**/node_modules/*",
+        "-g",
+        "!**/.git/*",
       },
     },
   },
@@ -413,7 +428,9 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' }) -- find every function in telescope
 vim.keymap.set('n', '<C-p>', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', '<leader>pp', require('telescope.builtin').find_files)
+vim.keymap.set('n', '<leader>pp', function()
+  require('telescope.builtin').find_files()
+end)
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = '[G]it [B]ranches' })
 vim.keymap.set('n', '<leader>ps', function()
@@ -681,7 +698,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.opt.hlsearch = false
+vim.opt.hlsearch = true
+-- toggle highlight search
+vim.keymap.set("n", "<leader>hh", ":set hlsearch!<CR>")
 vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
@@ -711,7 +730,7 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 -- This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
-vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "Q", "<cmd>q<CR>")
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
@@ -731,11 +750,8 @@ vim.keymap.set(
   "oif err != nil {<CR>}<Esc>Oreturn err<Esc>"
 )
 
-vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/.config/nvim/lua/theprimeagen/packer.lua<CR>");
-vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
-
 vim.keymap.set("n", "<leader><leader>", function()
   vim.cmd("so")
 end)
 
-vim.keymap.set("n","<C-b>","<cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
