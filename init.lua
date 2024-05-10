@@ -778,15 +778,19 @@ vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
 --[[ some shortcut for vim-fugitive ]]
-vim.keymap.set("n", "<leader>gs", vim.cmd.Git)                           -- git status
-vim.keymap.set("n", "<leader>gd", "<cmd>Git diff<CR>")                 -- git diff
-vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                 -- git diff editor
-vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>") -- git log
-vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>") -- git commit
-vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>") -- git add all
+vim.keymap.set("n", "<leader>gg", vim.cmd.Git)                                       -- git status
+vim.keymap.set("n", "<leader>gd", "<cmd>Git diff<CR>")                               -- git diff
+vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                            -- git diff editor
+vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>")             -- git log
+vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>")                             -- git commit
+vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>")                              -- git add all
 vim.keymap.set("n", "<leader>gm", "<cmd>Git add .|Git commit --amend --no-edit<CR>") -- git amend no edit
-vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>") -- git push
-vim.keymap.set("n", "<leader>gu", "<cmd>Git pull --rebase<CR>") -- git pull rebase
+vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>")                               -- git push
+vim.keymap.set("n", "<leader>gu", "<cmd>Git pull --rebase<CR>")                      -- git pull rebase
+vim.keymap.set("n", "<leader>gss", "<cmd>Git stash<CR>")
+vim.keymap.set("n", "<leader>gsl", "<cmd>Git stash list<CR>")
+vim.keymap.set("n", "<leader>gsp", "<cmd>Git stash pop<CR>")
+vim.keymap.set("n", "<leader>gsd", "<cmd>Git stash drop<CR>")
 
 -- prevent auto comment on new line
 vim.api.nvim_create_autocmd("FileType", {
@@ -865,7 +869,7 @@ if vim.g.started_by_firenvim == true then
   require("lualine").hide() -- hide lualine when using firenvim
   -- Auto enter insert mode when Neovim starts
   vim.cmd('au VimEnter * startinsert')
-  cmp.enabled()  -- toggle the enable state
+  cmp.enabled() -- toggle the enable state
 end
 
 
