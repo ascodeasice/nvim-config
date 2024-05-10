@@ -274,7 +274,7 @@ require('lazy').setup({
     opts = {
       toggler = {
         line = '<C-_>', -- <C-/> control slash
-        block = 'gbc', -- <C-/> control slash
+        block = 'gbc',  -- <C-/> control slash
       },
     }
   },
@@ -549,7 +549,7 @@ local git_blame = require('gitblame')
 vim.g.gitblame_display_virtual_text = 0 -- don't show line git blame  by default
 vim.g.gitblame_message_template = '<author> • <date>'
 vim.g.gitblame_date_format = '%r'
-vim.g.gitblame_delay = 1000 -- to prevent quick flashing 
+vim.g.gitblame_delay = 1000 -- to prevent quick flashing
 
 -- config lualine
 require('lualine').setup {
@@ -583,7 +583,7 @@ require('lualine').setup {
         no_harpoon = "Harpoon not loaded",
       },
     },
-    lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },  -- TODO: make it only show time and username
+    lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } }, -- TODO: make it only show time and username
     lualine_z = { 'location' }
   },
   inactive_sections = {
@@ -776,7 +776,9 @@ vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
 })
 
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
-vim.keymap.set("n", "<leader>gs", vim.cmd.Git) -- git status
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git)                           -- git status
+vim.keymap.set("n", "<leader>gd", "<cmd>Gdiffsplit!<CR>")                 -- git status
+vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>") -- git status
 
 -- prevent auto comment on new line
 vim.api.nvim_create_autocmd("FileType", {
@@ -845,7 +847,7 @@ end)
 vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "K", "%")
 vim.keymap.set("v", "K", "%")
-vim.keymap.set("n","<leader>lb",function()
+vim.keymap.set("n", "<leader>lb", function()
   git_blame.toggle()
 end) -- toggle showing line blame after line
 
