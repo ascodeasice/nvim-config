@@ -28,6 +28,25 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'glacambre/firenvim',
+
+    -- Lazy load firenvim
+    -- Explanation: https://github.com/folke/lazy.nvim/discussions/463#discussioncomment-4819297
+    lazy = not vim.g.started_by_firenvim,
+    build = function()
+      vim.fn["firenvim#install"](0)
+    end
+  },
+  {
+    "letieu/harpoon-lualine",
+    dependencies = {
+      {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+      }
+    },
+  },
+  {
     "nvim-tree/nvim-tree.lua",
     version = "*",
     lazy = false,
@@ -68,13 +87,14 @@ require('lazy').setup({
 
       harpoon:setup()
 
-      vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end)
+      vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
       vim.keymap.set("n", "<leader>m", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
       vim.keymap.set("n", "<C-n>", function() harpoon:list():select(1) end)
       vim.keymap.set("n", "<C-e>", function() harpoon:list():select(2) end)
       vim.keymap.set("n", "<C-i>", function() harpoon:list():select(3) end)
       vim.keymap.set("n", "<C-o>", function() harpoon:list():select(4) end)
+      vim.keymap.set("n", "<leader>re", function() harpoon:list():remove() end) -- remove current buffer
     end,
   },
   -- NOTE: First, some plugins that don't require any configuration
@@ -247,7 +267,14 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+      toggler = {
+        line = '<C-_>', -- <C-/> control slash
+      },
+    }
+  },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -512,6 +539,55 @@ vim.defer_fn(function()
   }
 end, 0)
 
+-- config lualine
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = { 'mode' },
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = { 'filename' },
+    lualine_x = { 'another_item',
+      {
+        "harpoon2",
+        indicators = { "n", "e", "i", "o" },
+        active_indicators = { "[n]", "[e]", "[i]", "[o]" },
+        no_harpoon = "Harpoon not loaded",
+      },
+    },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' }
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { 'filename' },
+    lualine_x = { 'location' },
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -730,7 +806,7 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 -- This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
-vim.keymap.set("n", "Q", "<cmd>q<CR>")
+vim.keymap.set("n", "Q", "<cmd>q!<CR>")
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
@@ -755,3 +831,10 @@ vim.keymap.set("n", "<leader><leader>", function()
 end)
 
 vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
+
+--[[ Configure FireNvim  ]]
+
+if vim.g.started_by_firenvim == true then
+  require("lualine").hide() -- hide lualine when using firenvim
+end
+
