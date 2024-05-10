@@ -865,3 +865,13 @@ if vim.g.started_by_firenvim == true then
   vim.cmd('au VimEnter * startinsert')
   cmp.enabled()  -- toggle the enable state
 end
+
+
+--[[ Configure nvim-tree ]]
+require('nvim-tree').setup({
+  actions = {
+    open_file = {
+      quit_on_open = true,
+    },
+  },
+})
