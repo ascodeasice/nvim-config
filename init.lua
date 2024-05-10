@@ -27,6 +27,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  "f-person/git-blame.nvim",
   "dstein64/vim-startuptime",
   {
     'glacambre/firenvim',
@@ -273,6 +274,7 @@ require('lazy').setup({
     opts = {
       toggler = {
         line = '<C-_>', -- <C-/> control slash
+        block = 'gbc', -- <C-/> control slash
       },
     }
   },
@@ -540,6 +542,15 @@ vim.defer_fn(function()
   }
 end, 0)
 
+
+--[[ Configure git-blame]]
+local git_blame = require('gitblame')
+-- This disables showing of the blame text next to the cursor
+vim.g.gitblame_display_virtual_text = 0 -- don't show line git blame  by default
+vim.g.gitblame_message_template = '<author> • <date>'
+vim.g.gitblame_date_format = '%r'
+vim.g.gitblame_delay = 1000 -- to prevent quick flashing 
+
 -- config lualine
 require('lualine').setup {
   options = {
@@ -572,7 +583,7 @@ require('lualine').setup {
         no_harpoon = "Harpoon not loaded",
       },
     },
-    lualine_y = { 'progress' },
+    lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },  -- TODO: make it only show time and username
     lualine_z = { 'location' }
   },
   inactive_sections = {
@@ -834,10 +845,14 @@ end)
 vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "K", "%")
 vim.keymap.set("v", "K", "%")
+vim.keymap.set("n","<leader>lb",function()
+  git_blame.toggle()
+end) -- toggle showing line blame after line
 
 --[[ Configure FireNvim  ]]
 
 if vim.g.started_by_firenvim == true then
   require("lualine").hide() -- hide lualine when using firenvim
+  -- Auto enter insert mode when Neovim starts
+  vim.cmd('au VimEnter * startinsert')
 end
-
