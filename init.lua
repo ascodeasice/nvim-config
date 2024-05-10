@@ -27,6 +27,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  "dstein64/vim-startuptime",
   {
     'glacambre/firenvim',
 
@@ -831,6 +832,8 @@ vim.keymap.set("n", "<leader><leader>", function()
 end)
 
 vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "K", "%")
+vim.keymap.set("v", "K", "%")
 
 --[[ Configure FireNvim  ]]
 
