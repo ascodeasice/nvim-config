@@ -792,6 +792,7 @@ vim.keymap.set("n", "<leader>gu", "<cmd>Git pull --rebase<CR>")                 
 vim.keymap.set("n", "<leader>gss", "<cmd>Git stash<CR>")
 vim.keymap.set("n", "<leader>gsp", "<cmd>Git stash pop<CR>")
 vim.keymap.set("n", "<leader>gsd", "<cmd>Git stash drop<CR>")
+vim.keymap.set("n", "<leader>gb", "<cmd>Git nah<CR>") -- go back to last commit(using git alias)
 
 -- prevent auto comment on new line
 vim.api.nvim_create_autocmd("FileType", {
