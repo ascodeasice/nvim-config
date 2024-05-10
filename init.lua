@@ -776,9 +776,15 @@ vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
 })
 
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+
+--[[ some shortcut for vim-fugitive ]]
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git)                           -- git status
-vim.keymap.set("n", "<leader>gd", "<cmd>Gdiffsplit!<CR>")                 -- git status
-vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>") -- git status
+vim.keymap.set("n", "<leader>gd", "<cmd>Git diff<CR>")                 -- git diff
+vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                 -- git diff editor
+vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>") -- git log
+vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>") -- git commit
+vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>") -- git add all
+vim.keymap.set("n", "<leader>gm", "<cmd>Git add .|Git commit --amend --no-edit<CR>") -- git amend no edit
 
 -- prevent auto comment on new line
 vim.api.nvim_create_autocmd("FileType", {
@@ -857,4 +863,5 @@ if vim.g.started_by_firenvim == true then
   require("lualine").hide() -- hide lualine when using firenvim
   -- Auto enter insert mode when Neovim starts
   vim.cmd('au VimEnter * startinsert')
+  cmp.enabled()  -- toggle the enable state
 end
