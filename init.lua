@@ -861,6 +861,7 @@ end)
 vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "K", "%")
 vim.keymap.set("v", "K", "%")
+vim.keymap.set("n", "<C-s>", ":w<CR>")
 vim.keymap.set("n", "<leader>lb", function()
   git_blame.toggle()
 end) -- toggle showing line blame after line
