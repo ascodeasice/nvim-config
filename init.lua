@@ -785,8 +785,8 @@ vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>") -- git 
 vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>") -- git commit
 vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>") -- git add all
 vim.keymap.set("n", "<leader>gm", "<cmd>Git add .|Git commit --amend --no-edit<CR>") -- git amend no edit
-vim.keymap.set("n", "<leader>gp", "<cmd>Gpush<CR>") -- git push
-vim.keymap.set("n", "<leader>gu", "<cmd>Gpull<CR>") -- git pull rebase
+vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>") -- git push
+vim.keymap.set("n", "<leader>gu", "<cmd>Git pull --rebase<CR>") -- git pull rebase
 
 -- prevent auto comment on new line
 vim.api.nvim_create_autocmd("FileType", {
