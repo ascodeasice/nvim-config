@@ -463,6 +463,8 @@ vim.keymap.set('n', '<leader>pp', function()
 end)
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = '[G]it [B]ranches' })
+vim.keymap.set('n', '<leader>gsl', require('telescope.builtin').git_stash) -- can apply stash, but not removing them
+vim.keymap.set('n', '<leader>gd', require('telescope.builtin').git_status) -- a useful way for checking git diff
 vim.keymap.set('n', '<leader>ps', function()
   require('telescope.builtin').grep_string({ search = vim.fn.input('Grep > ') })
 end)
@@ -779,16 +781,15 @@ vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
 --[[ some shortcut for vim-fugitive ]]
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git)                                       -- git status
-vim.keymap.set("n", "<leader>gd", "<cmd>Git diff<CR>")                               -- git diff
 vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                            -- git diff editor
 vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>")             -- git log
 vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>")                             -- git commit
 vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>")                              -- git add all
-vim.keymap.set("n", "<leader>gm", "<cmd>Git add .|Git commit --amend --no-edit<CR>") -- git amend no edit
+vim.keymap.set("n", "<leader>gm", "<cmd>Git commit --amend<CR>") -- git amend
+vim.keymap.set("n", "<leader>gn", "<cmd>Git add .|Git commit --amend --no-edit<CR>") -- git amend no edit
 vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>")                               -- git push
 vim.keymap.set("n", "<leader>gu", "<cmd>Git pull --rebase<CR>")                      -- git pull rebase
 vim.keymap.set("n", "<leader>gss", "<cmd>Git stash<CR>")
-vim.keymap.set("n", "<leader>gsl", "<cmd>Git stash list<CR>")
 vim.keymap.set("n", "<leader>gsp", "<cmd>Git stash pop<CR>")
 vim.keymap.set("n", "<leader>gsd", "<cmd>Git stash drop<CR>")
 
