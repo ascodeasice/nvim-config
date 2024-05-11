@@ -785,7 +785,7 @@ vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                       
 vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>")             -- git log
 vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>")                             -- git commit
 vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>")                              -- git add all
-vim.keymap.set("n", "<leader>gm", "<cmd>Git commit --amend<CR>") -- git amend
+vim.keymap.set("n", "<leader>gm", "<cmd>Git commit --amend<CR>")                     -- git amend
 vim.keymap.set("n", "<leader>gn", "<cmd>Git add .|Git commit --amend --no-edit<CR>") -- git amend no edit
 vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>")                               -- git push
 vim.keymap.set("n", "<leader>gu", "<cmd>Git pull --rebase<CR>")                      -- git pull rebase
@@ -870,9 +870,7 @@ end) -- toggle showing line blame after line
 
 if vim.g.started_by_firenvim == true then
   require("lualine").hide() -- hide lualine when using firenvim
-  -- Auto enter insert mode when Neovim starts
-  vim.cmd('au VimEnter * startinsert')
-  cmp.enabled() -- toggle the enable state
+  cmp.enable() -- toggle the enable state, which is disabling it
 end
 
 
