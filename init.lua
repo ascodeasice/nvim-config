@@ -171,26 +171,22 @@ require('lazy').setup({
         end
 
         -- Navigation
-        map({ 'n', 'v' }, '<leader>hn', function()
+        -- Navigation
+        map('n', ']c', function()
           if vim.wo.diff then
-            return '<leader>hn'
+            vim.cmd.normal({ ']c', bang = true })
+          else
+            gs.nav_hunk('next')
           end
-          vim.schedule(function()
-            gs.next_hunk()
-          end)
-          return '<Ignore>'
-        end, { expr = true, desc = 'Jump to next hunk' })
+        end)
 
-        map({ 'n', 'v' }, '<leader>hl', function()
+        map('n', '[c', function()
           if vim.wo.diff then
-            return '<leader>hl'
+            vim.cmd.normal({ '[c', bang = true })
+          else
+            gs.nav_hunk('prev')
           end
-          vim.schedule(function()
-            gs.prev_hunk()
-          end)
-          return '<Ignore>'
-        end, { expr = true, desc = 'Jump to last hunk' })
-
+        end)
         -- Actions
         -- visual mode
         map('v', '<leader>hs', function()
@@ -863,7 +859,7 @@ end) -- toggle showing line blame after line
 
 if vim.g.started_by_firenvim == true then
   require("lualine").hide() -- hide lualine when using firenvim
-  cmp.enable() -- toggle the enable state, which is disabling it
+  cmp.enable()              -- toggle the enable state, which is disabling it
 end
 
 
