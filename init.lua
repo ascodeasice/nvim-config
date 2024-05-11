@@ -25,21 +25,53 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local is_using_firenvim = function()
+  return not vim.g.started_by_firenvim
+end
+
 -- [[ Configure plugins ]]
 require('lazy').setup({
   -- lazy.nvim
   {
     "folke/noice.nvim",
     event = "VeryLazy",
-    cond = function()
-      return not vim.g.started_by_firenvim
-    end,
+    cond = is_using_firenvim,
     opts = {
       -- add any options here
       routes = {
         {
           view = "notify",
           filter = { event = "msg_showmode" },
+        },
+      },
+      views = {
+        cmdline_popup = {
+          position = {
+            row = 5,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = "auto",
+          },
+        },
+        popupmenu = {
+          relative = "editor",
+          position = {
+            row = 8,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = 10,
+          },
+          border = {
+            style = "rounded",
+            padding = { 0, 1 },
+          },
+          win_options = {
+            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+          },
         },
       },
     },
@@ -68,6 +100,7 @@ require('lazy').setup({
         branch = "harpoon2",
       }
     },
+    cond= is_using_firenvim,
   },
   {
     "nvim-tree/nvim-tree.lua",
@@ -150,6 +183,7 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
+    cond= is_using_firenvim,
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       {
@@ -879,8 +913,7 @@ end) -- toggle showing line blame after line
 --[[ Configure FireNvim  ]]
 
 if vim.g.started_by_firenvim == true then
-  require("lualine").hide() -- hide lualine when using firenvim
-  cmp.enable()              -- toggle the enable state, which is disabling it
+  -- do something specifically for firenvim
 end
 
 
