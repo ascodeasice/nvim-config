@@ -161,13 +161,6 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
@@ -178,9 +171,9 @@ require('lazy').setup({
         end
 
         -- Navigation
-        map({ 'n', 'v' }, ']c', function()
+        map({ 'n', 'v' }, '<leader>hn', function()
           if vim.wo.diff then
-            return ']c'
+            return '<leader>hn'
           end
           vim.schedule(function()
             gs.next_hunk()
@@ -188,15 +181,15 @@ require('lazy').setup({
           return '<Ignore>'
         end, { expr = true, desc = 'Jump to next hunk' })
 
-        map({ 'n', 'v' }, '[c', function()
+        map({ 'n', 'v' }, '<leader>hl', function()
           if vim.wo.diff then
-            return '[c'
+            return '<leader>hl'
           end
           vim.schedule(function()
             gs.prev_hunk()
           end)
           return '<Ignore>'
-        end, { expr = true, desc = 'Jump to previous hunk' })
+        end, { expr = true, desc = 'Jump to last hunk' })
 
         -- Actions
         -- visual mode
