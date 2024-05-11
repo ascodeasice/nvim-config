@@ -39,6 +39,7 @@ require('lazy').setup({
           filter = { event = "msg_showmode" },
         },
       },
+      -- show popup menu and cmdline in the same position
       views = {
         cmdline_popup = {
           position = {
