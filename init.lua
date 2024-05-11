@@ -25,17 +25,12 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local is_using_firenvim = function()
-  return not vim.g.started_by_firenvim
-end
-
 -- [[ Configure plugins ]]
 require('lazy').setup({
   -- lazy.nvim
   {
     "folke/noice.nvim",
     event = "VeryLazy",
-    cond = is_using_firenvim,
     opts = {
       -- add any options here
       routes = {
@@ -83,16 +78,6 @@ require('lazy').setup({
   "f-person/git-blame.nvim",
   "dstein64/vim-startuptime",
   {
-    'glacambre/firenvim',
-
-    -- Lazy load firenvim
-    -- Explanation: https://github.com/folke/lazy.nvim/discussions/463#discussioncomment-4819297
-    lazy = not vim.g.started_by_firenvim,
-    build = function()
-      vim.fn["firenvim#install"](0)
-    end
-  },
-  {
     "letieu/harpoon-lualine",
     dependencies = {
       {
@@ -100,7 +85,6 @@ require('lazy').setup({
         branch = "harpoon2",
       }
     },
-    cond= is_using_firenvim,
   },
   {
     "nvim-tree/nvim-tree.lua",
@@ -183,7 +167,6 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    cond= is_using_firenvim,
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       {
@@ -909,13 +892,6 @@ vim.keymap.set("n", "<C-s>", ":w<CR>")
 vim.keymap.set("n", "<leader>lb", function()
   git_blame.toggle()
 end) -- toggle showing line blame after line
-
---[[ Configure FireNvim  ]]
-
-if vim.g.started_by_firenvim == true then
-  -- do something specifically for firenvim
-end
-
 
 --[[ Configure nvim-tree ]]
 require('nvim-tree').setup({
