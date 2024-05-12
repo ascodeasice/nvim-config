@@ -1056,5 +1056,9 @@ require('nvim-tree').setup({
 vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
 vim.keymap.set("n", "<leader>dpr", function()
   require("dap-python").test_method()
-end) -- debug python run
+end)                           -- debug python run
 vim.keymap.set("n", "\"", "`") -- go to mark
+vim.keymap.set("n", "/", "ms/") -- mark with s before searching
+
+-- clear all marks on start
+vim.api.nvim_create_autocmd({ "BufRead" }, { command = ":delm a-zA-Z0-9", })
