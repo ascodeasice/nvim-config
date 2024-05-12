@@ -79,9 +79,6 @@ require('lazy').setup({
       lsp = {
         progress = {
           enabled = false
-        },
-        message = {
-          enabled = false
         }
       },
       routes = {
@@ -798,9 +795,11 @@ local lspconfig = require("lspconfig")
 mason_lspconfig.setup {
   ensure_installed = {
     'lua_ls',
+    'ruff_lsp',
+    'tsserver',
     'pyright',
-    'ruff',
   },
+  automatic_installation = true
   --[[    NOTE: black, mypy, debugpy
   cannot be put into ensure_installed, so install them manually in the :Mason command ]]
 }
@@ -828,6 +827,15 @@ lspconfig.pyright.setup {
         diagnosticMode = 'openFilesOnly',
         useLibraryCodeForTypes = true,
         typeCheckingMode = 'off' }
+    }
+  }
+}
+
+lspconfig.ruff_lsp.setup {
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
     }
   }
 }
