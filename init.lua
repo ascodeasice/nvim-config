@@ -1015,13 +1015,34 @@ vim.keymap.set("n", "<leader>lb", function()
 end) -- toggle showing line blame after line
 
 --[[ Configure nvim-tree ]]
+local function on_attach_nvim_tree(bufnr)
+  local api = require "nvim-tree.api"
+
+  local function opts(desc)
+    return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+
+  -- default mappings
+  api.config.mappings.default_on_attach(bufnr)
+
+  -- custom mappings
+  vim.keymap.del('n', '<C-e>', { buffer = bufnr }) -- unmap, used for harpoon
+  vim.keymap.set('n', '<Right>', function() api.node.open.edit() end, { buffer = bufnr })
+  vim.keymap.set('n', '<Left>', function() api.tree.collapse_all() end, { buffer = bufnr })
+end
+
+-- pass to setup along with your other options
 require('nvim-tree').setup({
   actions = {
     open_file = {
       quit_on_open = true,
     },
   },
+  on_attach = on_attach_nvim_tree,
 })
+
+
 
 --[[ Configure nvim dap]]
 vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
