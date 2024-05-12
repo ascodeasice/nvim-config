@@ -62,7 +62,6 @@ require('lazy').setup({
               { find = '; before #%d+' },
               { find = '%d fewer lines' },
               { find = '%d more lines' },
-              { find = 'Diagnosing' },
             },
             opts = { skip = true }
           },
@@ -184,7 +183,6 @@ require('lazy').setup({
       -- Automatically install LSPs to stdpath for neovim
       {
         'williamboman/mason.nvim',
-        config = true
       },
       {
         'williamboman/mason-lspconfig.nvim',
@@ -736,7 +734,6 @@ require('mason-lspconfig').setup()
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
@@ -763,7 +760,12 @@ local mason_lspconfig = require 'mason-lspconfig'
 local lspconfig = require("lspconfig")
 
 mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
+  ensure_installed = {
+    'lua_ls',
+    'pyright',
+    'ruff',
+  },
+  -- NOTE: black and mypy cannot be put into ensure_installed, so install them manually in the :Mason command
 }
 
 mason_lspconfig.setup_handlers {
@@ -949,7 +951,20 @@ end)
 vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "K", "%")
 vim.keymap.set("v", "K", "%")
-vim.keymap.set("n", "<C-s>", ":w<CR>")
+
+-- save remap
+function Save_file()
+  local modifiable = vim.api.nvim_buf_get_option(0, 'modifiable')
+  if modifiable then
+    vim.cmd 'w!'
+  end
+end
+
+vim.keymap.set({ 'n', 'i', 'v' }, '<C-s>', '<Cmd>lua Save_file()<CR>', {
+  noremap = true,
+  silent = true,
+})
+
 vim.keymap.set("n", "<leader>lb", function()
   git_blame.toggle()
 end) -- toggle showing line blame after line
