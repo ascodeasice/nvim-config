@@ -29,14 +29,43 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- lazy.nvim
   {
+    "nvimtools/none-ls.nvim",
+    ft = { "python" },
+    opts = function()
+      return require "custom.configs.null-ls"
+    end
+  },
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
       -- add any options here
+      lsp = {
+        progress = {
+          enabled = false
+        },
+        message = {
+          enabled = false
+        }
+      },
       routes = {
         {
           view = "notify",
-          filter = { event = "msg_showmode" },
+          filter = { event = "msg_showmode", find = "recording" },
+        },
+        {
+          -- don't show save messages
+          filter = {
+            any = {
+              { find = '%d+L, %d+B' },
+              { find = '; after #%d+' },
+              { find = '; before #%d+' },
+              { find = '%d fewer lines' },
+              { find = '%d more lines' },
+              { find = 'Diagnosing' },
+            },
+            opts = { skip = true }
+          },
         },
       },
       -- show popup menu and cmdline in the same position
@@ -153,12 +182,25 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
-
+      {
+        'williamboman/mason.nvim',
+        config = true
+      },
+      {
+        'williamboman/mason-lspconfig.nvim',
+      },
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        filter = function(client, title)
+          -- filter out diagnostic message
+          if client == 'null-ls' and title == 'diagnostics' then
+            return false
+          end
+          return true
+        end
+      },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -680,6 +722,7 @@ end
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
+-- I don't know why this is set up twice, but I didin't write this, so don't touch it
 require('mason-lspconfig').setup()
 
 -- Enable the following language servers
@@ -703,7 +746,7 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-      -- diagnostics = { disable = { 'missing-fields' } },
+      diagnostics = { disable = { 'missing-fields' } },
     },
   },
 }
