@@ -29,6 +29,14 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- lazy.nvim
   {
+    "chentoast/marks.nvim",
+    opts = {
+      mappings = {
+        delete_buf = "<leader>dm",
+      }
+    }
+  },
+  {
     "rcarriga/nvim-dap-ui",
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -1049,3 +1057,4 @@ vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
 vim.keymap.set("n", "<leader>dpr", function()
   require("dap-python").test_method()
 end) -- debug python run
+vim.keymap.set("n", "\"", "`") -- go to mark
