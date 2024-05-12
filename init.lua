@@ -29,6 +29,42 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- lazy.nvim
   {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",
+    },
+    config = function()
+      local dap = require("dap")
+      local dapui = require("dapui")
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end
+  },
+  {
+    "mfussenegger/nvim-dap",
+  },
+  {
+    "mfussenegger/nvim-dap-python",
+    ft = "python",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "rcarriga/nvim-dap-ui"
+    },
+    config = function(_, opts)
+      local path = " /home/leo/anaconda3/bin/python "
+      require("dap-python").setup(path)
+    end
+  },
+  {
     "nvimtools/none-ls.nvim",
     ft = { "python" },
     opts = function()
@@ -765,7 +801,8 @@ mason_lspconfig.setup {
     'pyright',
     'ruff',
   },
-  -- NOTE: black and mypy cannot be put into ensure_installed, so install them manually in the :Mason command
+  --[[    NOTE: black, mypy, debugpy
+  cannot be put into ensure_installed, so install them manually in the :Mason command ]]
 }
 
 mason_lspconfig.setup_handlers {
@@ -977,3 +1014,9 @@ require('nvim-tree').setup({
     },
   },
 })
+
+--[[ Configure nvim dap]]
+vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
+vim.keymap.set("n", "<leader>dpr", function()
+  require("dap-python").test_method()
+end) -- debug python run
