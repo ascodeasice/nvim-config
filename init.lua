@@ -28,11 +28,32 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    -- stylua: ignore
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+    },
+    opts = {
+      modes = {
+        search = {
+          enabled = true
+        },
+        char = {
+          enabled = false
+        }
+      }
+    }
+  },
+  {
     "jinh0/eyeliner.nvim",
     config = function()
       require 'eyeliner'.setup {
         highlight_on_key = true, -- show highlights only after keypress
-        dim = true              -- dim all other characters if set to true (recommended!)
+        dim = true               -- dim all other characters if set to true (recommended!)
       }
     end
   },
@@ -65,7 +86,7 @@ require('lazy').setup({
         return
       end
       url_open.setup({
-        open_only_when_cursor_on_url = true  -- for removing the highlight when searching with eyeliner
+        open_only_when_cursor_on_url = true -- for removing the highlight when searching with eyeliner
       })
     end,
   },
