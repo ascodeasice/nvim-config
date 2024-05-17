@@ -28,6 +28,15 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "jinh0/eyeliner.nvim",
+    config = function()
+      require 'eyeliner'.setup {
+        highlight_on_key = true, -- show highlights only after keypress
+        dim = true              -- dim all other characters if set to true (recommended!)
+      }
+    end
+  },
+  {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
@@ -47,7 +56,7 @@ require('lazy').setup({
     config = true,
   },
   {
-    "sontungexpt/url-open",
+    "sontungexpt/url-open", -- using this because opening url with `gx` is from netrw by default
     event = "VeryLazy",
     cmd = "URLOpenUnderCursor",
     config = function()
@@ -55,7 +64,9 @@ require('lazy').setup({
       if not status_ok then
         return
       end
-      url_open.setup({})
+      url_open.setup({
+        open_only_when_cursor_on_url = true  -- for removing the highlight when searching with eyeliner
+      })
     end,
   },
   {
