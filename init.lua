@@ -27,7 +27,44 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
-  -- lazy.nvim
+  {
+    'akinsho/flutter-tools.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim',   -- optional for vim.ui.select
+    },
+    config = true,
+  },
+  {
+    "sontungexpt/url-open",
+    event = "VeryLazy",
+    cmd = "URLOpenUnderCursor",
+    config = function()
+      local status_ok, url_open = pcall(require, "url-open")
+      if not status_ok then
+        return
+      end
+      url_open.setup({})
+    end,
+  },
+  {
+    'linux-cultist/venv-selector.nvim',
+    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
+    opts = {
+      -- Your options go here
+      -- name = "venv",
+      auto_refresh = true,
+      name = { "venv", ".venv" }
+    },
+    event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+    keys = {
+      -- Keymap to open VenvSelector to pick a venv.
+      { '<leader>vs', '<cmd>VenvSelect<cr>' },
+      -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
+      { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
+    },
+  },
   {
     "chentoast/marks.nvim",
     opts = {
@@ -93,19 +130,6 @@ require('lazy').setup({
         {
           view = "notify",
           filter = { event = "msg_showmode", find = "recording" },
-        },
-        {
-          -- don't show save messages
-          filter = {
-            any = {
-              { find = '%d+L, %d+B' },
-              { find = '; after #%d+' },
-              { find = '; before #%d+' },
-              { find = '%d fewer lines' },
-              { find = '%d more lines' },
-            },
-            opts = { skip = true }
-          },
         },
       },
       -- show popup menu and cmdline in the same position
@@ -773,7 +797,7 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  -- clangd = {},
+  clangd = {},
   -- gopls = {},
   -- rust_analyzer = {},
   -- tsserver = {},
@@ -806,6 +830,7 @@ mason_lspconfig.setup {
     'ruff_lsp',
     'tsserver',
     'pyright',
+    'clangd',
   },
   automatic_installation = true
   --[[    NOTE: black, mypy, debugpy
@@ -945,7 +970,6 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 
 vim.opt.updatetime = 50
-vim.opt.colorcolumn = "80"
 
 -- remaps
 vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
@@ -1047,10 +1071,23 @@ require('nvim-tree').setup({
 vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
 vim.keymap.set("n", "<leader>dpr", function()
   require("dap-python").test_method()
-end)                            -- debug python run
-vim.keymap.set("n", "\"", "`")  -- go to mark
-vim.keymap.set("n", "/", "ms/") -- mark with s before searching
+end)                                                    -- debug python run
+vim.keymap.set("n", "\"", "`")                          -- go to mark
+vim.keymap.set("n", "/", "ms/")                         -- mark with s before searching
 vim.keymap.set("n", "<leader>tt", "<cmd>tab split<CR>") -- open fullscreen in new tab
 
 -- clear all marks on start
 -- vim.api.nvim_create_autocmd({ "BufRead" }, { command = ":delm a-zA-Z0-9", })
+
+-- configure venv-selector
+require('venv-selector').setup {
+  poetry_path = '/home/leo/.cache/pypoetry/virtualenvs',
+  anaconda_base_path = '/home/leo/anaconda3',
+  anaconda_envs_path = '/home/leo/anaconda3/envs',
+}
+
+-- configure url-open plugin
+vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
+
+--configure set flutter tool setup
+require("flutter-tools").setup{}
