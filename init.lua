@@ -28,11 +28,21 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  },
+  {
     'akinsho/flutter-tools.nvim',
     lazy = false,
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'stevearc/dressing.nvim',   -- optional for vim.ui.select
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
     },
     config = true,
   },
@@ -395,6 +405,7 @@ require('lazy').setup({
   {
     -- Add indentation lines even on blank lines
     'lukas-reineke/indent-blankline.nvim',
+    version = "3.5", -- the latest version only supports latest neovim, so use a older version
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
     main = 'ibl',
@@ -1090,4 +1101,5 @@ require('venv-selector').setup {
 vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
 
 --configure set flutter tool setup
-require("flutter-tools").setup{}
+require("flutter-tools").setup {}
+require("nvim-surround").setup {}
