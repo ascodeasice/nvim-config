@@ -27,13 +27,14 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  { "m4xshen/autoclose.nvim" },
   {
     "folke/flash.nvim",
     event = "VeryLazy",
     -- stylua: ignore
     keys = {
-      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
       -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
     },
@@ -1135,3 +1136,15 @@ vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
 --configure set flutter tool setup
 require("flutter-tools").setup {}
 require("nvim-surround").setup {}
+require("autoclose").setup({
+  options = {
+    disabled_filetypes = { "text", "markdown" },
+  },
+  keys = {
+    require("autoclose").setup({
+      keys = {
+        ["<"] = { escape = false, close = true, pair = "<>", enabled_filetypes = { "html" } },
+      },
+    })
+  }
+})
