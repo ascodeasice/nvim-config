@@ -1157,3 +1157,6 @@ require("autoclose").setup({
 require("auto-save").setup({});
 
 vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
+
+vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg='#56B6C2', bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg='#C67BDD',bold = true, underline = true })
