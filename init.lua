@@ -28,6 +28,9 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "Pocco81/auto-save.nvim",
+  },
+  {
     "kamykn/spelunker.vim",
   },
   { "m4xshen/autoclose.nvim" },
@@ -1150,3 +1153,7 @@ require("autoclose").setup({
     })
   }
 })
+
+require("auto-save").setup({});
+
+vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
