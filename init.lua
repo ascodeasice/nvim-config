@@ -40,7 +40,7 @@ require('lazy').setup({
     -- stylua: ignore
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
-      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "R", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
       -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
     },
@@ -776,9 +776,9 @@ local on_attach = function(_, bufnr)
     require('telescope.builtin').lsp_definitions()
   end, '[G]oto [D]efinition')
   nmap('gr', function()
-      vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
-      require('telescope.builtin').lsp_references()
-    end, '[G]oto [R]eferences')
+    vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
+    require('telescope.builtin').lsp_references()
+  end, '[G]oto [R]eferences')
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -1180,4 +1180,4 @@ M.toggle_log = function()
 end
 
 
-vim.keymap.set("n","<leader>fl", M.toggle_log)
+vim.keymap.set("n", "<leader>fl", M.toggle_log)
