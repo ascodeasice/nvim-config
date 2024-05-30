@@ -670,7 +670,7 @@ vim.defer_fn(function()
     -- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
     modules = {},
     highlight = { enable = true },
-    indent = { enable = true },
+    indent = { enable = true , disable = { 'dart' } },
     incremental_selection = {
       enable = true,
       keymaps = {
@@ -680,50 +680,7 @@ vim.defer_fn(function()
         node_decremental = '<M-space>',
       },
     },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-        keymaps = {
-          -- You can use the capture groups defined in textobjects.scm
-          ['aa'] = '@parameter.outer',
-          ['ia'] = '@parameter.inner',
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          [']m'] = '@function.outer',
-          [']]'] = '@class.outer',
-        },
-        goto_next_end = {
-          [']M'] = '@function.outer',
-          [']['] = '@class.outer',
-        },
-        goto_previous_start = {
-          ['[m'] = '@function.outer',
-          ['[['] = '@class.outer',
-        },
-        goto_previous_end = {
-          ['[M'] = '@function.outer',
-          ['[]'] = '@class.outer',
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          -- ['<leader>a'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<leader>A'] = '@parameter.inner',
-        },
-      },
-    },
+    textobjects = { },
   }
 end, 0)
 
@@ -1141,6 +1098,13 @@ vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
 --configure set flutter tool setup
 require("flutter-tools").setup {
   flutter_path = "/home/leo/snap/flutter/common/flutter/bin/flutter",
+  lsp = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      analysisExcludedFolders = { vim.fn.expand("$HOME/flutter/.pub-cache") },
+    }
+  }
 }
 require("nvim-surround").setup {}
 require("autoclose").setup({
