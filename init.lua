@@ -1140,7 +1140,7 @@ vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
 
 --configure set flutter tool setup
 require("flutter-tools").setup {
-  flutter_path="/home/leo/snap/flutter/common/flutter/bin/flutter",
+  flutter_path = "/home/leo/snap/flutter/common/flutter/bin/flutter",
 }
 require("nvim-surround").setup {}
 require("autoclose").setup({
@@ -1156,9 +1156,18 @@ require("autoclose").setup({
   }
 })
 
-require("auto-save").setup({});
+require("auto-save").setup({
+  condition = function(buf)
+    local fn = vim.fn
+    local utils = require "auto-save.utils.data"
+    if utils.not_in(fn.getbufvar(buf, "&filetype"), { "harpoon" }) then
+      return true
+    end
+    return false
+  end,
+});
 
 vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
 
-vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg='#56B6C2', bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg='#C67BDD',bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg = '#56B6C2', bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#C67BDD', bold = true, underline = true })
