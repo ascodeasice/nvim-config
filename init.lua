@@ -1013,7 +1013,7 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.keymap.set("n", "Q", "<cmd>q!<CR>")
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>ff", vim.lsp.buf.format)
 
 -- for quickfix
 vim.keymap.set("n", "<C-Up>", "<cmd>cnext<CR>zz")
@@ -1152,3 +1152,32 @@ vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
 
 vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg = '#56B6C2', bold = true, underline = true })
 vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#C67BDD', bold = true, underline = true })
+
+-- some flutter tools shortcut
+vim.keymap.set("n", "<leader>fr", "<cmd>FlutterRun<CR>")
+vim.keymap.set("n", "<leader>fe", "<cmd>FlutterEmulators<CR>")
+vim.keymap.set("n", "<leader>fo", "<cmd>FlutterOutlineToggle<CR>")
+vim.keymap.set("n", "<leader>fR", "<cmd>FlutterRestart<CR>")
+vim.keymap.set("n", "<leader>fn", "<cmd>FlutterRename<CR>")
+
+local api = vim.api
+local M = {}
+
+-- toggle dev log of flutter
+M.toggle_log = function()
+  local wins = api.nvim_list_wins()
+
+  for _, id in pairs(wins) do
+    local bufnr = api.nvim_win_get_buf(id)
+    if api.nvim_buf_get_name(bufnr):match '.*/([^/]+)$' == '__FLUTTER_DEV_LOG__' then
+      return vim.api.nvim_win_close(id, true)
+    end
+  end
+
+  pcall(function()
+    vim.api.nvim_command 'sb + __FLUTTER_DEV_LOG__ | resize 15'
+  end)
+end
+
+
+vim.keymap.set("n","<leader>fl", M.toggle_log)
