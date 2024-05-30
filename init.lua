@@ -547,7 +547,14 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+vim.keymap.set('n', '[e', function()
+  vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, wrap = true })
+end);
+vim.keymap.set('n', ']e',
+  function()
+    vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, wrap = true })
+  end);
+vim.keymap.set('n', 'gf', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Highlight on yank ]]
@@ -670,7 +677,7 @@ vim.defer_fn(function()
     -- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
     modules = {},
     highlight = { enable = true },
-    indent = { enable = true , disable = { 'dart' } },
+    indent = { enable = true, disable = { 'dart' } },
     incremental_selection = {
       enable = true,
       keymaps = {
@@ -680,7 +687,7 @@ vim.defer_fn(function()
         node_decremental = '<M-space>',
       },
     },
-    textobjects = { },
+    textobjects = {},
   }
 end, 0)
 
@@ -764,8 +771,14 @@ local on_attach = function(_, bufnr)
     vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
   end, '[C]ode [A]ction')
 
-  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+  nmap('gd', function()
+    vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
+    require('telescope.builtin').lsp_definitions()
+  end, '[G]oto [D]efinition')
+  nmap('gr', function()
+      vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
+      require('telescope.builtin').lsp_references()
+    end, '[G]oto [R]eferences')
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -1102,7 +1115,11 @@ require("flutter-tools").setup {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
-      analysisExcludedFolders = { vim.fn.expand("$HOME/flutter/.pub-cache") },
+      analysisExcludedFolders = {
+        vim.fn.expand("$HOME/flutter/.pub-cache"),
+        vim.fn.expand("$HOME/.pub-cache"),
+        vim.fn.expand("$HOME/tools/flutter/"),
+      },
     }
   }
 }
