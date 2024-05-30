@@ -1139,7 +1139,9 @@ require('venv-selector').setup {
 vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
 
 --configure set flutter tool setup
-require("flutter-tools").setup {}
+require("flutter-tools").setup {
+  flutter_path="/home/leo/snap/flutter/common/flutter/bin/flutter",
+}
 require("nvim-surround").setup {}
 require("autoclose").setup({
   options = {
