@@ -26,6 +26,9 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  { 'eandrju/cellular-automaton.nvim' },
+  { "mistricky/codesnap.nvim",        build = "make" },
+  { "mtdl9/vim-log-highlighting" },
   {
     "smjonas/inc-rename.nvim",
     config = function()
@@ -67,7 +70,8 @@ require('lazy').setup({
         highlight_on_key = true, -- show highlights only after keypress
         dim = true               -- dim all other characters if set to true (recommended!)
       }
-    end
+    end,
+    condition = false -- temporary disable this plugin
   },
   {
     "kylechui/nvim-surround",
@@ -785,7 +789,7 @@ local on_attach = function(_, bufnr)
   end, '[G]oto [R]eferences')
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
@@ -1127,8 +1131,13 @@ require("flutter-tools").setup {
         vim.fn.expand("$HOME/tools/flutter/"),
       },
     }
-  }
+  },
+  debugger = {
+    -- enabled = true,
+    -- run_via_dap = true,
+  },
 }
+
 require("nvim-surround").setup {}
 require("autoclose").setup({
   options = {
@@ -1187,4 +1196,26 @@ end
 
 
 vim.keymap.set("n", "<leader>fl", M.toggle_log)
+vim.keymap.set("n", "<leader>fd", "<cmd>FlutterDevices<CR>")
+vim.keymap.set("n", "<leader>rq", "<cmd>FlutterQuit<CR>")
 vim.keymap.set("n", "<leader>rn", ":IncRename ")
+
+-- dap ui shortcut
+vim.keymap.set("n", "<leader>dt", require('dapui').toggle)
+vim.keymap.set("n", "<leader>dc", require("dap").continue)
+vim.keymap.set("n", "<leader>do", require("dap").step_over)
+vim.keymap.set("n", "<leader>di", require("dap").step_into)
+vim.keymap.set("n", "<leader>dO", require("dap").step_out)
+vim.keymap.set("n", "<leader>dB", require("dap").step_back)
+vim.keymap.set("n", "<leader>dr", require("dap").restart)
+vim.keymap.set("n", "<leader>ds", require("dap").stop)
+
+require("codesnap").setup({
+  bg_theme = "dusk"
+})
+
+
+vim.keymap.set("n", "<leader>fml", function()
+  vim.g.enable_spelunker_vim = 0; -- disable spelunker
+  require("cellular-automaton").start_animation("make_it_rain");
+end)
