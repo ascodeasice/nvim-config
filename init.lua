@@ -1225,3 +1225,8 @@ vim.keymap.set("n", "<leader>fml", function()
 end)
 
 vim.keymap.set("n", "<leader>pt", "<cmd>NvimTreeFindFile<CR>") -- find current file in nvim-tree
+
+vim.keymap.set("n", "<leader>dvo", "<cmd>DiffviewOpen<CR>") -- find current file in nvim-tree
+vim.keymap.set("n", "<leader>dvc", "<cmd>DiffviewClose<CR>") -- find current file in nvim-tree
+vim.keymap.set("n", "<leader>dvt", "<cmd>DiffviewToggleFiles<CR>") -- find current file in nvim-tree
+vim.keymap.set("n", "<leader>dvh", "<cmd>DiffviewFileHistory<CR>") -- find current file in nvim-tree
