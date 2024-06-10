@@ -159,3 +159,7 @@ envs
 ffffff
 youtube
 firestore
+lstm
+unsqueeze
+formik
+mongo

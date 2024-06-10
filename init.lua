@@ -26,6 +26,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  { "sindrets/diffview.nvim" },
   { 'eandrju/cellular-automaton.nvim' },
   { "mistricky/codesnap.nvim",        build = "make" },
   { "mtdl9/vim-log-highlighting" },
@@ -346,6 +347,7 @@ require('lazy').setup({
         end)(),
       },
       'saadparwaiz1/cmp_luasnip',
+      "mlaursen/vim-react-snippets",
 
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
@@ -792,6 +794,7 @@ local on_attach = function(_, bufnr)
   -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
+
   -- See `:help K` for why this keymap
   nmap('gh', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
@@ -906,6 +909,7 @@ lspconfig.ruff_lsp.setup {
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
+require("vim-react-snippets").lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
@@ -1219,3 +1223,5 @@ vim.keymap.set("n", "<leader>fml", function()
   vim.g.enable_spelunker_vim = 0; -- disable spelunker
   require("cellular-automaton").start_animation("make_it_rain");
 end)
+
+vim.keymap.set("n", "<leader>pt", "<cmd>NvimTreeFindFile<CR>") -- find current file in nvim-tree
