@@ -26,6 +26,29 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
+  },
+  {
+    "jemag/telescope-diff.nvim",
+    dependencies = {
+      { "nvim-telescope/telescope.nvim" },
+    }
+  },
+  {
+    "RutaTang/quicknote.nvim",
+    config = function()
+      -- you must call setup to let quicknote.nvim works correctly
+      require("quicknote").setup({
+        mode = "resident",
+      })
+    end
+    ,
+    dependencies = { "nvim-lua/plenary.nvim" }
+  },
   { "sindrets/diffview.nvim" },
   { 'eandrju/cellular-automaton.nvim' },
   { "mistricky/codesnap.nvim",        build = "make" },
@@ -50,8 +73,6 @@ require('lazy').setup({
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
       { "R", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-      -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
-      -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
     },
     opts = {
       modes = {
@@ -605,10 +626,18 @@ require('telescope').setup {
       },
     },
   },
+  extensions = {
+    quicknote = {
+      defaultScope = "CWD",
+    }
+  },
 }
+
+require("telescope").load_extension("quicknote")
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+require("telescope").load_extension("diff")
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -669,6 +698,9 @@ vim.keymap.set('n', '<leader>gd', require('telescope.builtin').git_status) -- a 
 vim.keymap.set('n', '<leader>ps', function()
   require('telescope.builtin').grep_string({ search = vim.fn.input('Grep > ') })
 end)
+vim.keymap.set("n", "<leader>pd", function()
+  require("telescope").extensions.diff.diff_current({ hidden = true })
+end, { desc = "Compare file with current" })
 
 
 -- [[ Configure Treesitter ]]
@@ -1167,8 +1199,6 @@ require("auto-save").setup({
   end,
 });
 
-vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
-
 vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg = '#56B6C2', bold = true, underline = true })
 vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#C67BDD', bold = true, underline = true })
 
@@ -1215,7 +1245,8 @@ vim.keymap.set("n", "<leader>dr", require("dap").restart)
 vim.keymap.set("n", "<leader>ds", require("dap").stop)
 
 require("codesnap").setup({
-  bg_theme = "dusk"
+  mac_window_bar = false,
+  watermark = ""
 })
 
 
@@ -1226,7 +1257,22 @@ end)
 
 vim.keymap.set("n", "<leader>pt", "<cmd>NvimTreeFindFile<CR>") -- find current file in nvim-tree
 
-vim.keymap.set("n", "<leader>dvo", "<cmd>DiffviewOpen<CR>") -- find current file in nvim-tree
-vim.keymap.set("n", "<leader>dvc", "<cmd>DiffviewClose<CR>") -- find current file in nvim-tree
-vim.keymap.set("n", "<leader>dvt", "<cmd>DiffviewToggleFiles<CR>") -- find current file in nvim-tree
-vim.keymap.set("n", "<leader>dvh", "<cmd>DiffviewFileHistory<CR>") -- find current file in nvim-tree
+vim.keymap.set("n", "<leader>Do", "<cmd>DiffviewOpen<CR>")
+vim.keymap.set("n", "<leader>Dc", "<cmd>DiffviewClose<CR>")
+vim.keymap.set("n", "<leader>Dt", "<cmd>DiffviewToggleFiles<CR>")
+vim.keymap.set("n", "<leader>Dh", "<cmd>DiffviewFileHistory<CR>")
+
+-- quick note
+vim.keymap.set("n", "<leader>nc", require("quicknote").NewNoteAtCWD) -- note cwd
+vim.keymap.set("n", "<leader>nl", require("quicknote").NewNoteAtCurrentLine)
+vim.keymap.set("n", "<leader>no", require("quicknote").OpenNoteAtCurrentLine)
+vim.keymap.set('n', "<leader>nt", "<cmd>Telescope quicknote<CR>") -- note telescope
+vim.keymap.set('n', "<leader>nd", require("quicknote").DeleteNoteAtCurrentLine)
+vim.keymap.set('n', "<leader>nD", require("quicknote").DeleteNoteAtCWD)
+
+-- resizing window
+
+vim.keymap.set("n", "<C-w>f", [[<cmd>vertical resize +20<cr>]]) -- note: nvim tree uses vertical size
+vim.keymap.set("n", "<C-w>s", [[<cmd>vertical resize -20<cr>]])
+vim.keymap.set("n", "<C-w>t", [[<cmd>horizontal resize +4<cr>]])
+vim.keymap.set("n", "<C-w>r", [[<cmd>horizontal resize -4<cr>]])
