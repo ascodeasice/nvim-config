@@ -27,6 +27,12 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "chrisgrieser/nvim-various-textobjs",
+    lazy = false,
+    opts = { useDefaultKeymaps = true },
+  },
+  { "chrisgrieser/nvim-spider",       lazy = true },
+  {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
@@ -127,23 +133,6 @@ require('lazy').setup({
         open_only_when_cursor_on_url = true -- for removing the highlight when searching with eyeliner
       })
     end,
-  },
-  {
-    'linux-cultist/venv-selector.nvim',
-    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
-    opts = {
-      -- Your options go here
-      -- name = "venv",
-      auto_refresh = true,
-      name = { "venv", ".venv" }
-    },
-    event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
-    keys = {
-      -- Keymap to open VenvSelector to pick a venv.
-      { '<leader>vs', '<cmd>VenvSelect<cr>' },
-      -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
-      { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
-    },
   },
   {
     "chentoast/marks.nvim",
@@ -1144,13 +1133,6 @@ vim.keymap.set("n", "<leader>tt", "<cmd>tab split<CR>") -- open fullscreen in ne
 -- clear all marks on start
 -- vim.api.nvim_create_autocmd({ "BufRead" }, { command = ":delm a-zA-Z0-9", })
 
--- configure venv-selector
-require('venv-selector').setup {
-  poetry_path = '/home/leo/.cache/pypoetry/virtualenvs',
-  anaconda_base_path = '/home/leo/anaconda3',
-  anaconda_envs_path = '/home/leo/anaconda3/envs',
-}
-
 -- configure url-open plugin
 vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
 
@@ -1276,3 +1258,26 @@ vim.keymap.set("n", "<C-w>f", [[<cmd>vertical resize +20<cr>]]) -- note: nvim tr
 vim.keymap.set("n", "<C-w>s", [[<cmd>vertical resize -20<cr>]])
 vim.keymap.set("n", "<C-w>t", [[<cmd>horizontal resize +4<cr>]])
 vim.keymap.set("n", "<C-w>r", [[<cmd>horizontal resize -4<cr>]])
+
+vim.keymap.set(
+  { "n", "o", "x" },
+  "w",
+  "<cmd>lua require('spider').motion('w')<CR>",
+  { desc = "Spider-w" }
+)
+vim.keymap.set(
+  { "n", "o", "x" },
+  "e",
+  "<cmd>lua require('spider').motion('e')<CR>",
+  { desc = "Spider-e" }
+)
+vim.keymap.set(
+  { "n", "o", "x" },
+  "b",
+  "<cmd>lua require('spider').motion('b')<CR>",
+  { desc = "Spider-b" }
+)
+
+-- `as` for outer subword, `is` for inner subword
+vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
+vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
