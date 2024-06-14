@@ -27,6 +27,28 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'nvim-java/nvim-java',
+    dependencies = {
+      'nvim-java/lua-async-await',
+      'nvim-java/nvim-java-refactor',
+      'nvim-java/nvim-java-core',
+      'nvim-java/nvim-java-test',
+      'nvim-java/nvim-java-dap',
+      'MunifTanjim/nui.nvim',
+      'neovim/nvim-lspconfig',
+      'mfussenegger/nvim-dap',
+      {
+        'williamboman/mason.nvim',
+        opts = {
+          registries = {
+            'github:nvim-java/mason-registry',
+            'github:mason-org/mason-registry',
+          },
+        },
+      }
+    },
+  },
+  {
     "chrisgrieser/nvim-various-textobjs",
     lazy = false,
     opts = { useDefaultKeymaps = true },
@@ -691,6 +713,10 @@ vim.keymap.set("n", "<leader>pd", function()
   require("telescope").extensions.diff.diff_current({ hidden = true })
 end, { desc = "Compare file with current" })
 
+vim.keymap.set("n", "<leader>po", function()
+  require("telescope.builtin").lsp_document_symbols()
+end, { desc = "Compare file with current" })
+
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -834,6 +860,8 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
+require('java').setup()
+
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
@@ -885,6 +913,8 @@ mason_lspconfig.setup {
     'clangd',
   },
   automatic_installation = true
+  -- actionlint
+  -- yaml-language-server
   --[[    NOTE: black, mypy, debugpy
   cannot be put into ensure_installed, so install them manually in the :Mason command ]]
 }
@@ -924,6 +954,8 @@ lspconfig.ruff_lsp.setup {
     }
   }
 }
+
+lspconfig.jdtls.setup { }
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -994,7 +1026,7 @@ vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 --[[ some shortcut for vim-fugitive ]]
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git)                                       -- git status
 vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                            -- git diff editor
-vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline <CR>")             -- git log
+vim.keymap.set("n", "<leader>gl", "<cmd>Git log --graph --oneline --decorate<CR>")   -- git log
 vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>")                             -- git commit
 vim.keymap.set("n", "<leader>ga", "<cmd>Git add .<CR>")                              -- git add all
 vim.keymap.set("n", "<leader>gm", "<cmd>Git commit --amend<CR>")                     -- git amend
@@ -1151,8 +1183,8 @@ require("flutter-tools").setup {
     }
   },
   debugger = {
-    -- enabled = true,
-    -- run_via_dap = true,
+    enabled = true,
+    run_via_dap = true,
   },
 }
 
