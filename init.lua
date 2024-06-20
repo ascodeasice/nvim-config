@@ -1313,3 +1313,6 @@ vim.keymap.set(
 -- `as` for outer subword, `is` for inner subword
 vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
 vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
+
+vim.api.nvim_set_keymap('n', '<leader>te', '<cmd>tabn<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>tn', '<cmd>tabp<CR>', { noremap = true, silent = true })

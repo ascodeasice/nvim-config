@@ -10,6 +10,8 @@ local opts = {
 		null_ls.builtins.formatting.isort,
 		null_ls.builtins.formatting.black,
 		null_ls.builtins.diagnostics.mypy,
+		null_ls.builtins.shellcheck.with({ filetypes = { "sh", "zsh" } }),
+		null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
 	}
 }
 return opts
