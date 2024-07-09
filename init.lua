@@ -27,6 +27,12 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'barrett-ruth/live-server.nvim',
+    build = 'pnpm add -g live-server',
+    cmd = { 'LiveServerStart', 'LiveServerStop' },
+    config = true
+  },
+  {
     'nvim-java/nvim-java',
     dependencies = {
       'nvim-java/lua-async-await',
@@ -955,7 +961,7 @@ lspconfig.ruff_lsp.setup {
   }
 }
 
-lspconfig.jdtls.setup { }
+lspconfig.jdtls.setup {}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -1158,7 +1164,6 @@ vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
 vim.keymap.set("n", "<leader>dpr", function()
   require("dap-python").test_method()
 end)                                                    -- debug python run
-vim.keymap.set("n", "\"", "`")                          -- go to mark
 vim.keymap.set("n", "/", "ms/")                         -- mark with s before searching
 vim.keymap.set("n", "<leader>tt", "<cmd>tab split<CR>") -- open fullscreen in new tab
 
