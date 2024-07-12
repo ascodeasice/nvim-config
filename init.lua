@@ -27,9 +27,30 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "tversteeg/registers.nvim",
+    cmd = "Registers",
+    config = function()
+      local registers = require("registers")
+      registers.setup({
+        show_register_types = false,
+        show_empty = false,
+        show = "\"neio12345:./+",
+        window = {
+          border = "rounded",
+          transparency = 0
+        }
+      });
+    end,
+    keys = {
+      { "\"",    mode = { "n", "v" } },
+      { "<C-R>", mode = "i" }
+    },
+    name = "registers",
+  },
+  {
     "nvimtools/none-ls.nvim",
     dependencies = {
-        "gbprod/none-ls-shellcheck.nvim",
+      "gbprod/none-ls-shellcheck.nvim",
     },
   },
   {
@@ -42,7 +63,7 @@ require('lazy').setup({
         -- number-less fold indicator, then signs, then line number & separator
         segments = {
           { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
-          { text = { '%s' }, click = 'v:lua.ScSa' },
+          { text = { '%s' },             click = 'v:lua.ScSa' },
           {
             text = { builtin.lnumfunc, ' ' },
             condition = { true, builtin.not_empty },
@@ -1378,9 +1399,31 @@ vim.api.nvim_set_keymap('n', 'z<Down>', 'zj', { noremap = true, silent = true })
 
 -- disable auto completion in telescope
 cmp.setup({
-    enabled = function ()
-        buftype = vim.api.nvim_buf_get_option(0, "buftype")
-        if buftype == "prompt" then return false end
-        return true
-    end
+  enabled = function()
+    buftype = vim.api.nvim_buf_get_option(0, "buftype")
+    if buftype == "prompt" then return false end
+    return true
+  end
 })
+
+-- store recent five registers in neio
+
+-- move registers between them
+local function move_registers()
+    vim.fn.setreg('o', vim.fn.getreg('i'))
+    vim.fn.setreg('i', vim.fn.getreg('e'))
+    vim.fn.setreg('e', vim.fn.getreg('n'))
+    vim.fn.setreg('n', vim.fn.getreg('0')) -- NOTE: 0 is default copy register)
+end
+
+-- 自動命令組：每次複製、刪除和改變寄存器內容後自動調用 move_registers 函數
+local yank_augroup = vim.api.nvim_create_augroup('YankToRegisters', { clear = true })
+
+
+vim.api.nvim_create_autocmd({'TextYankPost'}, {
+    callback = function()
+        move_registers()
+    end,
+    group = yank_augroup,
+})
+
