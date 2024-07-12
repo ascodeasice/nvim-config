@@ -46,8 +46,9 @@ require('lazy').setup({
       extensions = {
         undo = {
           -- telescope-undo.nvim config, see below
-          use_delta=false,
+          use_delta = false,
           entry_format = "#$ID, $STAT, $TIME",
+          saved_only=true,
         },
         -- no other extensions here, they can have their own spec too
       },
@@ -202,7 +203,11 @@ require('lazy').setup({
     end,
   },
   {
-    "Pocco81/auto-save.nvim",
+    "okuuva/auto-save.nvim",
+    cmd = "ASToggle",                         -- optional for lazy loading on command
+    opts = {
+      debounce_delay = 5000,                 -- delay after which a pending save is executed
+    },
   },
   {
     "kamykn/spelunker.vim",
