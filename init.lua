@@ -1365,3 +1365,7 @@ vim.o.foldenable = true
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 vim.keymap.set('n', 'zu', require('ufo').enableFold)
+
+-- next and prev fold
+vim.api.nvim_set_keymap('n', 'z<Up>', 'zk', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'z<Down>', 'zj', { noremap = true, silent = true })
