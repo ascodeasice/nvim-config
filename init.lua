@@ -27,14 +27,17 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "windwp/nvim-ts-autotag"
+  },
+  {
     "ecthelionvi/NeoComposer.nvim",
     dependencies = { "kkharji/sqlite.lua" },
     opts = {
-      keymaps={
+      keymaps = {
         play_macro = "<c-q>",
-        cycle_next="<leader>qn",
-        cycle_prev="<leader>qp",
-        toggle_macro_menu="<leader>qm",
+        cycle_next = "<leader>qn",
+        cycle_prev = "<leader>qp",
+        toggle_macro_menu = "<leader>qm",
       }
     }
   },
@@ -1271,11 +1274,7 @@ require("autoclose").setup({
     disabled_filetypes = { "text", "markdown" },
   },
   keys = {
-    require("autoclose").setup({
-      keys = {
-        ["<"] = { escape = false, close = true, pair = "<>", enabled_filetypes = { "html" } },
-      },
-    })
+    require("autoclose").setup({})
   }
 })
 
@@ -1441,5 +1440,23 @@ vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
 })
 
 -- neocomposer
-vim.keymap.set("n", "<leader>qc","<cmd>ClearNeoComposer<CR>")
-vim.keymap.set("n", "<leader>qe","<cmd>EditMacros<CR>")
+vim.keymap.set("n", "<leader>qc", "<cmd>ClearNeoComposer<CR>")
+vim.keymap.set("n", "<leader>qe", "<cmd>EditMacros<CR>")
+
+-- nvim-ts-autotag
+require('nvim-ts-autotag').setup({
+  opts = {
+    -- Defaults
+    enable_close = true, -- Auto close tags
+    enable_rename = true, -- Auto rename pairs of tags
+    enable_close_on_slash = false -- Auto close on trailing </
+  },
+  -- Also override individual filetype configs, these take priority.
+  -- Empty by default, useful if one of the "opts" global settings
+  -- doesn't work well in a specific filetype
+  -- per_filetype = {
+  --   ["html"] = {
+  --     enable_close = false
+  --   }
+  -- }
+})
