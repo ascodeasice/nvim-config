@@ -27,6 +27,12 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "nvimtools/none-ls.nvim",
+    dependencies = {
+        "gbprod/none-ls-shellcheck.nvim",
+    },
+  },
+  {
     'luukvbaal/statuscol.nvim',
     opts = function()
       local builtin = require('statuscol.builtin')
@@ -64,28 +70,28 @@ require('lazy').setup({
     cmd = { 'LiveServerStart', 'LiveServerStop' },
     config = true
   },
-  {
-    'nvim-java/nvim-java',
-    dependencies = {
-      'nvim-java/lua-async-await',
-      'nvim-java/nvim-java-refactor',
-      'nvim-java/nvim-java-core',
-      'nvim-java/nvim-java-test',
-      'nvim-java/nvim-java-dap',
-      'MunifTanjim/nui.nvim',
-      'neovim/nvim-lspconfig',
-      'mfussenegger/nvim-dap',
-      {
-        'williamboman/mason.nvim',
-        opts = {
-          registries = {
-            'github:nvim-java/mason-registry',
-            'github:mason-org/mason-registry',
-          },
-        },
-      }
-    },
-  },
+  -- {
+  --   'nvim-java/nvim-java',
+  --   dependencies = {
+  --     'nvim-java/lua-async-await',
+  --     'nvim-java/nvim-java-refactor',
+  --     'nvim-java/nvim-java-core',
+  --     'nvim-java/nvim-java-test',
+  --     'nvim-java/nvim-java-dap',
+  --     'MunifTanjim/nui.nvim',
+  --     'neovim/nvim-lspconfig',
+  --     'mfussenegger/nvim-dap',
+  --     {
+  --       'williamboman/mason.nvim',
+  --       opts = {
+  --         registries = {
+  --           'github:nvim-java/mason-registry',
+  --           'github:mason-org/mason-registry',
+  --         },
+  --       },
+  --     }
+  --   },
+  -- },
   {
     "chrisgrieser/nvim-various-textobjs",
     lazy = false,
@@ -898,7 +904,7 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
-require('java').setup()
+-- require('java').setup()
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
