@@ -1369,3 +1369,12 @@ vim.keymap.set('n', 'zu', require('ufo').enableFold)
 -- next and prev fold
 vim.api.nvim_set_keymap('n', 'z<Up>', 'zk', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'z<Down>', 'zj', { noremap = true, silent = true })
+
+-- disable auto completion in telescope
+cmp.setup({
+    enabled = function ()
+        buftype = vim.api.nvim_buf_get_option(0, "buftype")
+        if buftype == "prompt" then return false end
+        return true
+    end
+})
