@@ -27,6 +27,18 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "ecthelionvi/NeoComposer.nvim",
+    dependencies = { "kkharji/sqlite.lua" },
+    opts = {
+      keymaps={
+        play_macro = "<c-q>",
+        cycle_next="<leader>qn",
+        cycle_prev="<leader>qp",
+        toggle_macro_menu="<leader>qm",
+      }
+    }
+  },
+  {
     "tversteeg/registers.nvim",
     cmd = "Registers",
     config = function()
@@ -663,7 +675,6 @@ vim.keymap.set('n', ']e',
     vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, wrap = true })
   end);
 vim.keymap.set('n', 'gf', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -714,6 +725,7 @@ require("telescope").load_extension("quicknote")
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 require("telescope").load_extension("diff")
+require('telescope').load_extension('macros')
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -783,6 +795,7 @@ vim.keymap.set("n", "<leader>po", function()
 end, { desc = "Compare file with current" })
 
 
+vim.keymap.set("n", "<leader>pm", "<cmd>Telescope macros<CR>")
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
@@ -1410,20 +1423,23 @@ cmp.setup({
 
 -- move registers between them
 local function move_registers()
-    vim.fn.setreg('o', vim.fn.getreg('i'))
-    vim.fn.setreg('i', vim.fn.getreg('e'))
-    vim.fn.setreg('e', vim.fn.getreg('n'))
-    vim.fn.setreg('n', vim.fn.getreg('0')) -- NOTE: 0 is default copy register)
+  vim.fn.setreg('o', vim.fn.getreg('i'))
+  vim.fn.setreg('i', vim.fn.getreg('e'))
+  vim.fn.setreg('e', vim.fn.getreg('n'))
+  vim.fn.setreg('n', vim.fn.getreg('0')) -- NOTE: 0 is default copy register)
 end
 
 -- 自動命令組：每次複製、刪除和改變寄存器內容後自動調用 move_registers 函數
 local yank_augroup = vim.api.nvim_create_augroup('YankToRegisters', { clear = true })
 
 
-vim.api.nvim_create_autocmd({'TextYankPost'}, {
-    callback = function()
-        move_registers()
-    end,
-    group = yank_augroup,
+vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
+  callback = function()
+    move_registers()
+  end,
+  group = yank_augroup,
 })
 
+-- neocomposer
+vim.keymap.set("n", "<leader>qc","<cmd>ClearNeoComposer<CR>")
+vim.keymap.set("n", "<leader>qe","<cmd>EditMacros<CR>")
