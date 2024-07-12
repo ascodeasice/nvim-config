@@ -27,6 +27,40 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "debugloop/telescope-undo.nvim",
+    dependencies = { -- note how they're inverted to above example
+      {
+        "nvim-telescope/telescope.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+      },
+    },
+    keys = {
+      { -- lazy style key map
+        "<leader>u",
+        "<cmd>Telescope undo<cr>",
+        desc = "undo history",
+      },
+    },
+    opts = {
+      -- don't use `defaults = { }` here, do this in the main telescope spec
+      extensions = {
+        undo = {
+          -- telescope-undo.nvim config, see below
+          use_delta=false,
+          entry_format = "#$ID, $STAT, $TIME",
+        },
+        -- no other extensions here, they can have their own spec too
+      },
+    },
+    config = function(_, opts)
+      -- Calling telescope's setup from multiple specs does not hurt, it will happily merge the
+      -- configs for us. We won't use data, as everything is in it's own namespace (telescope
+      -- defaults, as well as each extension).
+      require("telescope").setup(opts)
+      require("telescope").load_extension("undo")
+    end,
+  },
+  {
     "windwp/nvim-ts-autotag"
   },
   {
@@ -362,7 +396,7 @@ require('lazy').setup({
       require("nvim-tree").setup {}
     end,
   },
-  'mbbill/undotree',
+  -- 'mbbill/undotree',
   {
     'alexghergh/nvim-tmux-navigation',
     config = function()
@@ -719,7 +753,7 @@ require('telescope').setup {
   extensions = {
     quicknote = {
       defaultScope = "CWD",
-    }
+    },
   },
 }
 
@@ -729,6 +763,7 @@ require("telescope").load_extension("quicknote")
 pcall(require('telescope').load_extension, 'fzf')
 require("telescope").load_extension("diff")
 require('telescope').load_extension('macros')
+require("telescope").load_extension("undo")
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -1102,7 +1137,7 @@ vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
   replace_keycodes = false
 })
 
-vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+-- vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
 --[[ some shortcut for vim-fugitive ]]
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git)                                       -- git status
@@ -1447,8 +1482,8 @@ vim.keymap.set("n", "<leader>qe", "<cmd>EditMacros<CR>")
 require('nvim-ts-autotag').setup({
   opts = {
     -- Defaults
-    enable_close = true, -- Auto close tags
-    enable_rename = true, -- Auto rename pairs of tags
+    enable_close = true,          -- Auto close tags
+    enable_rename = true,         -- Auto rename pairs of tags
     enable_close_on_slash = false -- Auto close on trailing </
   },
   -- Also override individual filetype configs, these take priority.
