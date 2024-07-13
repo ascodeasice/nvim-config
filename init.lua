@@ -27,6 +27,20 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "nat-418/boole.nvim",
+    config = function()
+      require('boole').setup({
+        mappings = {
+          increment = '<C-a>',
+          decrement = '<C-x>'
+        },
+        additions = {
+          -- { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" }, -- this is causing crash
+        }
+      })
+    end
+  },
+  {
     "norcalli/nvim-colorizer.lua",
     config = function()
       require("colorizer").setup()
@@ -1516,4 +1530,3 @@ vim.api.nvim_create_autocmd('BufEnter', {
   command = 'TwilightEnable'
 })
 
--- nvim-colorizer.lua
