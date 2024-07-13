@@ -27,6 +27,13 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'echasnovski/mini.starter',
+    version = false,
+    config = function()
+      require('mini.starter').setup()
+    end
+  },
+  {
     "nat-418/boole.nvim",
     config = function()
       require('boole').setup({
@@ -1529,4 +1536,3 @@ vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*',
   command = 'TwilightEnable'
 })
-
