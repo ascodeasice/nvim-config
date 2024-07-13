@@ -226,7 +226,13 @@ require('lazy').setup({
   {
     "kamykn/spelunker.vim",
   },
-  { "m4xshen/autoclose.nvim" },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equalent to setup({}) function
+  },
   {
     "folke/flash.nvim",
     event = "VeryLazy",
@@ -1323,14 +1329,6 @@ require("flutter-tools").setup {
 }
 
 require("nvim-surround").setup {}
-require("autoclose").setup({
-  options = {
-    disabled_filetypes = { "text", "markdown" },
-  },
-  keys = {
-    require("autoclose").setup({})
-  }
-})
 
 require("auto-save").setup({
   condition = function(buf)
