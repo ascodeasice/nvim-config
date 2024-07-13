@@ -27,6 +27,14 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "folke/twilight.nvim",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
+  {
     "debugloop/telescope-undo.nvim",
     dependencies = { -- note how they're inverted to above example
       {
@@ -48,7 +56,7 @@ require('lazy').setup({
           -- telescope-undo.nvim config, see below
           use_delta = false,
           entry_format = "#$ID, $STAT, $TIME",
-          saved_only=true,
+          saved_only = true,
         },
         -- no other extensions here, they can have their own spec too
       },
@@ -204,9 +212,9 @@ require('lazy').setup({
   },
   {
     "okuuva/auto-save.nvim",
-    cmd = "ASToggle",                         -- optional for lazy loading on command
+    cmd = "ASToggle",        -- optional for lazy loading on command
     opts = {
-      debounce_delay = 5000,                 -- delay after which a pending save is executed
+      debounce_delay = 5000, -- delay after which a pending save is executed
     },
   },
   {
@@ -1499,4 +1507,15 @@ require('nvim-ts-autotag').setup({
   --     enable_close = false
   --   }
   -- }
+})
+
+-- twilight.nvim
+vim.keymap.set("n", "<leader>tw", "<cmd>Twilight<CR>")
+
+-- enable twilight by default 
+vim.api.nvim_create_augroup('Twilight', { clear = true })
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = 'Twilight',
+  pattern = '*',
+  command = 'TwilightEnable'
 })
