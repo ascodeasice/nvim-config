@@ -27,6 +27,14 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "theKnightsOfRohan/csvlens.nvim",
+    dependencies = {
+      "akinsho/toggleterm.nvim"
+    },
+    config = true,
+    opts = { --[[ Place your opts here ]] }
+  },
+  {
     'echasnovski/mini.starter',
     version = false,
     config = function()
