@@ -27,6 +27,9 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "gitaarik/nvim-cmp-toggle",
+  },
+  {
     "andrewferrier/debugprint.nvim",
     opts = {},
     dependencies = {
@@ -1088,8 +1091,8 @@ require('neodev').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true
+  dynamicRegistration = false,
+  lineFoldingOnly = true
 }
 
 -- Ensure the servers above are installed
@@ -1569,3 +1572,6 @@ vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*',
   command = 'TwilightEnable'
 })
+
+-- toggle nvim cmp
+vim.api.nvim_set_keymap('n', '<leader>tc', ':NvimCmpToggle<CR>', { noremap = true, silent = true })
