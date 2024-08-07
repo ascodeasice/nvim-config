@@ -129,18 +129,6 @@ require('lazy').setup({
     "windwp/nvim-ts-autotag"
   },
   {
-    "ecthelionvi/NeoComposer.nvim",
-    dependencies = { "kkharji/sqlite.lua" },
-    opts = {
-      keymaps = {
-        play_macro = "<c-q>",
-        cycle_next = "<leader>qn",
-        cycle_prev = "<leader>qp",
-        toggle_macro_menu = "<leader>qm",
-      }
-    }
-  },
-  {
     "tversteeg/registers.nvim",
     cmd = "Registers",
     config = function()
@@ -837,7 +825,6 @@ require("telescope").load_extension("quicknote")
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 require("telescope").load_extension("diff")
-require('telescope').load_extension('macros')
 require("telescope").load_extension("undo")
 
 -- Telescope live_grep in git root
@@ -908,7 +895,6 @@ vim.keymap.set("n", "<leader>po", function()
 end, { desc = "Compare file with current" })
 
 
-vim.keymap.set("n", "<leader>pm", "<cmd>Telescope macros<CR>")
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
@@ -1546,10 +1532,6 @@ vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
   end,
   group = yank_augroup,
 })
-
--- neocomposer
-vim.keymap.set("n", "<leader>qc", "<cmd>ClearNeoComposer<CR>")
-vim.keymap.set("n", "<leader>qe", "<cmd>EditMacros<CR>")
 
 -- nvim-ts-autotag
 require('nvim-ts-autotag').setup({
