@@ -501,7 +501,10 @@ require('lazy').setup({
   },
   -- NOTE: First, some plugins that don't require any configuration
   -- set up copilot
-  'github/copilot.vim',
+  { 
+    'github/copilot.vim' ,
+    enabled=false
+  },
   -- recommend some better key presses
   -- some git commands
   'tpope/vim-fugitive',
@@ -561,7 +564,7 @@ require('lazy').setup({
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
-      'hrsh7th/cmp-copilot',
+      -- 'hrsh7th/cmp-copilot',
 
 
       -- Adds a number of user-friendly snippets
