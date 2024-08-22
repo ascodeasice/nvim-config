@@ -27,6 +27,16 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "keaising/im-select.nvim",
+    config = function()
+      require("im_select").setup({
+        default_im_select = "1",
+        default_command = "fcitx-remote",
+        set_default_events = { "VimEnter", "InsertLeave", "CmdlineLeave" },
+      })
+    end,
+  },
+  {
     "gitaarik/nvim-cmp-toggle",
   },
   {
@@ -501,9 +511,9 @@ require('lazy').setup({
   },
   -- NOTE: First, some plugins that don't require any configuration
   -- set up copilot
-  { 
-    'github/copilot.vim' ,
-    enabled=false
+  {
+    'github/copilot.vim',
+    enabled = false
   },
   -- recommend some better key presses
   -- some git commands
@@ -878,7 +888,18 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer' })
 
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' }) -- find every function in telescope
-vim.keymap.set('n', '<C-p>', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<C-p>', function()
+  local path = vim.loop.cwd() .. "/.git"
+  local isdir = function(path)
+    local ok = vim.loop.fs_stat(path)
+    return ok
+  end
+  if isdir(path) then
+    require("telescope.builtin").git_files()
+  else
+    require("telescope.builtin").find_files()
+  end
+end)
 vim.keymap.set('n', '<leader>pp', function()
   require('telescope.builtin').find_files()
 end)
@@ -1559,3 +1580,14 @@ vim.api.nvim_create_autocmd('BufEnter', {
 
 -- toggle nvim cmp
 vim.api.nvim_set_keymap('n', '<leader>tc', ':NvimCmpToggle<CR>', { noremap = true, silent = true })
+
+-- dot lsp
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = { "*.dot" },
+  callback = function()
+    vim.lsp.start({
+      name = "dot",
+      cmd = { "dot-language-server", "--stdio" }
+    })
+  end,
+})
