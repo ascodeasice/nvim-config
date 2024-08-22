@@ -8,6 +8,8 @@ vim.wo.relativenumber = true
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.opt.conceallevel = 2 -- to make markdown syntax prettier
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -146,7 +148,7 @@ require('lazy').setup({
       registers.setup({
         show_register_types = false,
         show_empty = false,
-        show = "\"neio12345:./+",
+        show = "neio12345:./+",
         window = {
           border = "rounded",
           transparency = 0
@@ -925,7 +927,7 @@ end, { desc = "Compare file with current" })
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash','markdown' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
