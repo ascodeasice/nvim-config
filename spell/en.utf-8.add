@@ -173,3 +173,6 @@ cname
 nums
 colemak
 berylline
+fastapi
+sqlalchemy
+postgres

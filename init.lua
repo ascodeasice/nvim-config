@@ -8,8 +8,6 @@ vim.wo.relativenumber = true
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.opt.conceallevel = 2 -- to make markdown syntax prettier
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -28,6 +26,13 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  {
+    'echasnovski/mini.trailspace',
+    version = false,
+    config = function()
+      require('mini.trailspace').setup()
+    end
+  },
   {
     "keaising/im-select.nvim",
     config = function()
@@ -927,7 +932,7 @@ end, { desc = "Compare file with current" })
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash','markdown' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -1080,7 +1085,7 @@ require('mason-lspconfig').setup()
 --  define the property 'filetypes' to the map in question.
 local servers = {
   clangd = {},
-  marksman={},
+  marksman = {},
   -- gopls = {},
   -- rust_analyzer = {},
   -- tsserver = {},
@@ -1600,6 +1605,8 @@ vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*.md',
   group = augroup,
   callback = function()
+    -- only set conceal level to 2 in markdown files
+    vim.opt.conceallevel = 2;
     vim.api.nvim_set_hl(0, 'Conceal', { bg = 'NONE', fg = '#00cf37' })
     vim.api.nvim_set_hl(0, 'todoCheckbox', { link = 'Todo' })
 
@@ -1612,3 +1619,5 @@ vim.api.nvim_create_autocmd('BufEnter', {
     ]]
   end
 })
+
+vim.keymap.set('n','<leader>tr',MiniTrailspace.trim)  -- trim trailing space
