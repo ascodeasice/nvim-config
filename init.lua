@@ -1351,6 +1351,15 @@ local function on_attach_nvim_tree(bufnr)
   vim.keymap.del('n', '<C-e>', { buffer = bufnr }) -- unmap, used for harpoon
   vim.keymap.set('n', '<Right>', function() api.node.open.edit() end, { buffer = bufnr })
   vim.keymap.set('n', '<Left>', function() api.tree.collapse_all() end, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>gx", function()
+    local bufname = vim.fn.bufname()
+    -- Check if the current buffer is NvimTree
+    if string.find(bufname, "NvimTree_1") then
+      local path = require("nvim-tree.api").tree.get_node_under_cursor().absolute_path
+      -- run os command
+      os.execute("xdg-open '" .. path .. "' > /dev/null")  -- make it quiet
+    end
+  end, opts "xdg-open file from nvim-tree")
 end
 
 -- pass to setup along with your other options
