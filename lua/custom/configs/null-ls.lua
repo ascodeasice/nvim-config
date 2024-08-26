@@ -8,6 +8,7 @@ local opts = {
 		null_ls.builtins.formatting.black,
 		null_ls.builtins.diagnostics.mypy,
 		null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
+		null_ls.builtins.formatting.prettierd,
 	}
 }
 return opts

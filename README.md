@@ -20,7 +20,7 @@ Distribution Alternatives:
 
 ### Installation
 
-> **NOTE** 
+> **NOTE**
 > [Backup](#FAQ) your previous configuration (if any exists)
 
 Requirements:
@@ -46,12 +46,12 @@ git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HO
 
 - on Windows (cmd)
 ```
-git clone https://github.com/nvim-lua/kickstart.nvim.git %userprofile%\AppData\Local\nvim\ 
+git clone https://github.com/nvim-lua/kickstart.nvim.git %userprofile%\AppData\Local\nvim\
 ```
 
 - on Windows (powershell)
 ```
-git clone https://github.com/nvim-lua/kickstart.nvim.git $env:USERPROFILE\AppData\Local\nvim\ 
+git clone https://github.com/nvim-lua/kickstart.nvim.git $env:USERPROFILE\AppData\Local\nvim\
 ```
 
 
@@ -79,7 +79,7 @@ See [Effective Neovim: Instant IDE](https://youtu.be/stqUbv-5u2s), covering the 
 
 [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) this repo (so that you have your own copy that you can modify) and then installing you can install to your machine using the methods above.
 
-> **NOTE**  
+> **NOTE**
 > Your fork's url will be something like this: `https://github.com/<your_github_username>/kickstart.nvim.git`
 
 ### Configuration And Extension

@@ -167,12 +167,6 @@ require('lazy').setup({
     name = "registers",
   },
   {
-    "nvimtools/none-ls.nvim",
-    dependencies = {
-      "gbprod/none-ls-shellcheck.nvim",
-    },
-  },
-  {
     'luukvbaal/statuscol.nvim',
     opts = function()
       local builtin = require('statuscol.builtin')
@@ -396,7 +390,10 @@ require('lazy').setup({
   },
   {
     "nvimtools/none-ls.nvim",
-    ft = { "python" },
+    event="VeryLazy",
+    dependencies = {
+      "gbprod/none-ls-shellcheck.nvim",
+    },
     opts = function()
       return require "custom.configs.null-ls"
     end
@@ -1357,7 +1354,7 @@ local function on_attach_nvim_tree(bufnr)
     if string.find(bufname, "NvimTree_1") then
       local path = require("nvim-tree.api").tree.get_node_under_cursor().absolute_path
       -- run os command
-      os.execute("xdg-open '" .. path .. "' > /dev/null")  -- make it quiet
+      os.execute("xdg-open '" .. path .. "' > /dev/null") -- make it quiet
     end
   end, opts "xdg-open file from nvim-tree")
 end
@@ -1629,4 +1626,4 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end
 })
 
-vim.keymap.set('n','<leader>tr',MiniTrailspace.trim)  -- trim trailing space
+vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
