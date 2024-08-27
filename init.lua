@@ -580,10 +580,111 @@ require('lazy').setup({
       'hrsh7th/cmp-path',
       -- 'hrsh7th/cmp-copilot',
 
-      'SergioRibera/cmp-dotenv',
+      { "SergioRibera/cmp-dotenv", event = "UiEnter" },
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
+    config = function()
+      local cmp_kinds = {
+        Text = '',
+        Method = '',
+        Function = '',
+        Constructor = '',
+        Field = '',
+        Variable = '',
+        Class = '',
+        Interface = '',
+        Module = '',
+        Property = '',
+        Unit = '',
+        Value = '',
+        Enum = '',
+        Keyword = '',
+        Snippet = '',
+        Color = '',
+        File = '',
+        Reference = '',
+        Folder = '',
+        EnumMember = '',
+        Constant = '',
+        Struct = '',
+        Event = '',
+        Operator = '',
+        TypeParameter = '',
+      }
+
+      local cmp = require("cmp")
+      cmp.setup {
+        formatting = {
+          fields = { "kind", "abbr", "menu" },
+          format = function(_, vim_item)
+            -- remove the text after icon
+            vim_item.menu = "    (" .. (vim_item.kind or "") .. ")"
+            vim_item.kind = (cmp_kinds[vim_item.kind] or '')
+            return vim_item
+          end,
+        },
+        snippet = {
+          expand = function(args)
+            local luasnip = require 'luasnip'
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        completion = {
+          completeopt = 'menu,menuone,noinsert',
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<Down>'] = cmp.mapping.select_next_item(),
+          ['<Up>'] = cmp.mapping.select_prev_item(),
+          ['<Tab>'] = cmp.mapping.complete {}, -- suggest what you can type next
+          ["<C-Up>"] = function(fallback)
+            for i = 1, 5 do
+              cmp.mapping.select_prev_item()(nil)
+            end
+          end,
+          ["<C-Down>"] = function(fallback)
+            for i = 1, 5 do
+              cmp.mapping.select_next_item()(nil)
+            end
+          end,
+          ["<PageUp>"] = function(fallback)
+            for i = 1, 10 do
+              cmp.mapping.select_prev_item()(nil)
+            end
+          end,
+          ["<PageDown>"] = function(fallback)
+            for i = 1, 10 do
+              cmp.mapping.select_next_item()(nil)
+            end
+          end,
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+          { name = 'path' },
+          { name = "dotenv",
+            option = {
+              load_shell = false,
+            }
+          }
+        },
+        enabled = function()
+          -- disable completion in comments
+          local context = require 'cmp.config.context'
+          buftype = vim.api.nvim_buf_get_option(0, "buftype")
+
+          -- keep command mode completion enabled when cursor is in a comment
+          -- also, when it's not in telescope prompt
+          if vim.api.nvim_get_mode().mode == 'c' and buftype ~= "prompt" then
+            return true
+          else
+            return not context.in_treesitter_capture("comment")
+                and not context.in_syntax_group("Comment")
+          end
+        end
+      }
+    end
   },
 
   {
@@ -1166,6 +1267,7 @@ lspconfig.ruff_lsp.setup {
 
 lspconfig.jdtls.setup {}
 
+lspconfig.emmet_language_server.setup({})
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -1174,100 +1276,7 @@ require('luasnip.loaders.from_vscode').lazy_load()
 require("vim-react-snippets").lazy_load()
 luasnip.config.setup {}
 
-local cmp_kinds = {
-  Text = '',
-  Method = '',
-  Function = '',
-  Constructor = '',
-  Field = '',
-  Variable = '',
-  Class = '',
-  Interface = '',
-  Module = '',
-  Property = '',
-  Unit = '',
-  Value = '',
-  Enum = '',
-  Keyword = '',
-  Snippet = '',
-  Color = '',
-  File = '',
-  Reference = '',
-  Folder = '',
-  EnumMember = '',
-  Constant = '',
-  Struct = '',
-  Event = '',
-  Operator = '',
-  TypeParameter = '',
-}
 
-cmp.setup {
-  formatting = {
-    fields = { "kind", "abbr", "menu" },
-    format = function(_, vim_item)
-      -- remove the text after icon
-      vim_item.menu = "    (" .. (vim_item.kind or "") .. ")"
-      vim_item.kind = (cmp_kinds[vim_item.kind] or '')
-      return vim_item
-    end,
-  },
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  completion = {
-    completeopt = 'menu,menuone,noinsert',
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<Down>'] = cmp.mapping.select_next_item(),
-    ['<Up>'] = cmp.mapping.select_prev_item(),
-    ['<Tab>'] = cmp.mapping.complete {}, -- suggest what you can type next
-    ["<C-Up>"] = function(fallback)
-      for i = 1, 5 do
-        cmp.mapping.select_prev_item()(nil)
-      end
-    end,
-    ["<C-Down>"] = function(fallback)
-      for i = 1, 5 do
-        cmp.mapping.select_next_item()(nil)
-      end
-    end,
-    ["<PageUp>"] = function(fallback)
-      for i = 1, 10 do
-        cmp.mapping.select_prev_item()(nil)
-      end
-    end,
-    ["<PageDown>"] = function(fallback)
-      for i = 1, 10 do
-        cmp.mapping.select_next_item()(nil)
-      end
-    end,
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-  }),
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
-    { name = "dotenv",
-      option = {
-        load_shell = false
-      }
-    }
-  },
-  enabled = function()
-    -- disable completion in comments
-    local context = require 'cmp.config.context'
-    -- keep command mode completion enabled when cursor is in a comment
-    if vim.api.nvim_get_mode().mode == 'c' then
-      return true
-    else
-      return not context.in_treesitter_capture("comment")
-          and not context.in_syntax_group("Comment")
-    end
-  end
-}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 
@@ -1464,7 +1473,15 @@ require("flutter-tools").setup {
   },
 }
 
-require("nvim-surround").setup {}
+require("nvim-surround").setup {
+  surrounds = {
+    ["$"] = {
+      add = function()
+        return { { "${" }, { "}" } }
+      end,
+    },
+  },
+}
 
 require("auto-save").setup({
   condition = function(buf)
@@ -1601,13 +1618,6 @@ vim.api.nvim_set_keymap('n', 'z<Up>', 'zk', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'z<Down>', 'zj', { noremap = true, silent = true })
 
 -- disable auto completion in telescope
-cmp.setup({
-  enabled = function()
-    buftype = vim.api.nvim_buf_get_option(0, "buftype")
-    if buftype == "prompt" then return false end
-    return true
-  end
-})
 
 -- store recent five registers in neio
 
