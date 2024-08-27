@@ -580,7 +580,7 @@ require('lazy').setup({
       'hrsh7th/cmp-path',
       -- 'hrsh7th/cmp-copilot',
 
-
+      'SergioRibera/cmp-dotenv',
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
@@ -1250,6 +1250,11 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
+    { name = "dotenv",
+      option = {
+        load_shell = false
+      }
+    }
   },
   enabled = function()
     -- disable completion in comments
@@ -1681,3 +1686,24 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
+
+-- my snippet
+local ls = require("luasnip")
+local s = ls.snippet
+local t = ls.text_node
+ls.add_snippets("javascript", {
+  s("menv", { t("import.meta.env.") }),
+  s("penv", { t("process.env") })
+})
+ls.add_snippets("javascriptreact", {
+  s("menv", { t("import.meta.env.") }),
+  s("penv", { t("process.env") })
+})
+ls.add_snippets("typescript", {
+  s("menv", { t("import.meta.env.") }),
+  s("penv", { t("process.env") })
+})
+ls.add_snippets("typescriptreact", {
+  s("menv", { t("import.meta.env.") }),
+  s("penv", { t("process.env") })
+})
