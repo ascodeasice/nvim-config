@@ -1223,7 +1223,7 @@ cmp.setup {
   mapping = cmp.mapping.preset.insert({
     ['<Down>'] = cmp.mapping.select_next_item(),
     ['<Up>'] = cmp.mapping.select_prev_item(),
-    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<Tab>'] = cmp.mapping.complete {}, -- suggest what you can type next
     ["<C-Up>"] = function(fallback)
       for i = 1, 5 do
         cmp.mapping.select_prev_item()(nil)
@@ -1244,10 +1244,7 @@ cmp.setup {
         cmp.mapping.select_next_item()(nil)
       end
     end,
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
   }),
   sources = {
     { name = 'nvim_lsp' },
