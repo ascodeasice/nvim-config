@@ -617,9 +617,17 @@ require('lazy').setup({
       cmp.setup {
         formatting = {
           fields = { "kind", "abbr", "menu" },
-          format = function(_, vim_item)
+          format = function(entry, vim_item)
             -- remove the text after icon
-            vim_item.menu = "    (" .. (vim_item.kind or "") .. ")"
+            vim_item.menu = "    (" .. (vim_item.kind or "") .. ")" .. " " .. ({
+              buffer = "[Buffer]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[LuaSnip]",
+              nvim_lua = "[Lua]",
+              latex_symbols = "[LaTeX]",
+              dotenv = "[Env]",
+              path = "[Path]"
+            })[entry.source.name]
             vim_item.kind = (cmp_kinds[vim_item.kind] or '')
             return vim_item
           end,
@@ -636,7 +644,7 @@ require('lazy').setup({
         mapping = cmp.mapping.preset.insert({
           ['<Down>'] = cmp.mapping.select_next_item(),
           ['<Up>'] = cmp.mapping.select_prev_item(),
-          ['<Tab>'] = cmp.mapping.complete {}, -- suggest what you can type next
+          ['<leader>co'] = cmp.mapping.complete {}, -- suggest what you can type next
           ["<C-Up>"] = function(fallback)
             for i = 1, 5 do
               cmp.mapping.select_prev_item()(nil)
@@ -658,6 +666,20 @@ require('lazy').setup({
             end
           end,
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if require("luasnip").expand_or_locally_jumpable() then
+              require("luasnip").expand_or_jump()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if require("luasnip").locally_jumpable(-1) then
+              require("luasnip").jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
         }),
         sources = {
           { name = 'nvim_lsp' },
@@ -1274,8 +1296,21 @@ local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 require("vim-react-snippets").lazy_load()
-luasnip.config.setup {}
 
+-- my snippet
+local ls = require("luasnip")
+local s = ls.snippet
+local t = ls.text_node
+-- ts, tsx, jsx also loads this
+ls.add_snippets("javascript", {
+  s("menv", { t("import.meta.env.") }),
+  s("penv", { t("process.env") })
+})
+
+luasnip.config.setup {}
+luasnip.filetype_extend('typescript', { 'javascript' })
+luasnip.filetype_extend('typescriptreact', { 'javascript' })
+luasnip.filetype_extend('javascriptreact', { 'javascript', 'typescript' })
 
 
 -- The line beneath this is called `modeline`. See `:help modeline`
@@ -1696,24 +1731,3 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
-
--- my snippet
-local ls = require("luasnip")
-local s = ls.snippet
-local t = ls.text_node
-ls.add_snippets("javascript", {
-  s("menv", { t("import.meta.env.") }),
-  s("penv", { t("process.env") })
-})
-ls.add_snippets("javascriptreact", {
-  s("menv", { t("import.meta.env.") }),
-  s("penv", { t("process.env") })
-})
-ls.add_snippets("typescript", {
-  s("menv", { t("import.meta.env.") }),
-  s("penv", { t("process.env") })
-})
-ls.add_snippets("typescriptreact", {
-  s("menv", { t("import.meta.env.") }),
-  s("penv", { t("process.env") })
-})

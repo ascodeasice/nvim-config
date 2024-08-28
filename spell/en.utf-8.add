@@ -176,3 +176,5 @@ berylline
 fastapi
 sqlalchemy
 postgres
+fastify
+fastify
