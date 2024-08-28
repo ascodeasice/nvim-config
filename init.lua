@@ -27,6 +27,14 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "folke/zen-mode.nvim",
+    opts = {
+      plugins={
+        tmux=true
+      }
+    }
+  },
+  {
     'echasnovski/mini.trailspace',
     version = false,
     config = function()
@@ -1731,3 +1739,4 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
+vim.keymap.set("n","<leader>ze","<cmd>ZenMode<CR>")
