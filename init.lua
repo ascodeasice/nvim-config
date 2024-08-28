@@ -652,7 +652,7 @@ require('lazy').setup({
         mapping = cmp.mapping.preset.insert({
           ['<Down>'] = cmp.mapping.select_next_item(),
           ['<Up>'] = cmp.mapping.select_prev_item(),
-          ['<leader>co'] = cmp.mapping.complete {}, -- suggest what you can type next
+          ['<C-c>'] = cmp.mapping.complete {}, -- suggest what you can type next
           ["<C-Up>"] = function(fallback)
             for i = 1, 5 do
               cmp.mapping.select_prev_item()(nil)
@@ -702,11 +702,13 @@ require('lazy').setup({
         enabled = function()
           -- disable completion in comments
           local context = require 'cmp.config.context'
-          buftype = vim.api.nvim_buf_get_option(0, "buftype")
+          local buftype = vim.api.nvim_buf_get_option(0, "buftype")
 
           -- keep command mode completion enabled when cursor is in a comment
           -- also, when it's not in telescope prompt
-          if vim.api.nvim_get_mode().mode == 'c' and buftype ~= "prompt" then
+          if buftype == "prompt" then return false end
+
+          if vim.api.nvim_get_mode().mode == 'c' then
             return true
           else
             return not context.in_treesitter_capture("comment")
@@ -1397,7 +1399,7 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set({ "n", "v" }, "<leader>P", [["+p]]) -- my remap,paste from system clipboard
 
 -- This is going to get me cancelled
-vim.keymap.set("i", "<C-c>", "<Esc>")
+-- vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.keymap.set("n", "Q", "<cmd>q!<CR>")
 vim.keymap.set("n", "<leader>ff", vim.lsp.buf.format)
