@@ -587,6 +587,7 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
       -- 'hrsh7th/cmp-copilot',
+      'hrsh7th/cmp-buffer',
 
       { "SergioRibera/cmp-dotenv", event = "UiEnter" },
       -- Adds a number of user-friendly snippets
@@ -697,7 +698,12 @@ require('lazy').setup({
             option = {
               load_shell = false,
             }
-          }
+          },
+          {
+            name = 'buffer',
+            option = {
+            },
+          },
         },
         enabled = function()
           -- disable completion in comments
