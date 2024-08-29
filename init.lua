@@ -272,6 +272,7 @@ require('lazy').setup({
     config = function()
       require("inc_rename").setup()
     end,
+    enabled = false
   },
   {
     "okuuva/auto-save.nvim",
@@ -1570,7 +1571,8 @@ end
 vim.keymap.set("n", "<leader>fl", M.toggle_log)
 vim.keymap.set("n", "<leader>fd", "<cmd>FlutterDevices<CR>")
 vim.keymap.set("n", "<leader>rq", "<cmd>FlutterQuit<CR>")
-vim.keymap.set("n", "<leader>rn", ":IncRename ")
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename) -- lsp rename
+-- vim.keymap.set("n", "<leader>rn", ":IncRename ")
 
 -- dap ui shortcut
 vim.keymap.set("n", "<leader>dt", require('dapui').toggle)
@@ -1740,3 +1742,10 @@ vim.api.nvim_create_autocmd('BufEnter', {
 
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
 vim.keymap.set("n", "<leader>ze", "<cmd>ZenMode<CR>")
+
+-- format on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+})

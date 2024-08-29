@@ -178,3 +178,5 @@ sqlalchemy
 postgres
 fastify
 fastify
+whitelist
+whitelisted
