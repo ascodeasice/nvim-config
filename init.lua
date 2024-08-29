@@ -29,8 +29,8 @@ require('lazy').setup({
   {
     "folke/zen-mode.nvim",
     opts = {
-      plugins={
-        tmux=true
+      plugins = {
+        tmux = true
       }
     }
   },
@@ -581,7 +581,6 @@ require('lazy').setup({
         end)(),
       },
       'saadparwaiz1/cmp_luasnip',
-      "mlaursen/vim-react-snippets",
 
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
@@ -1305,7 +1304,6 @@ lspconfig.emmet_language_server.setup({})
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
-require("vim-react-snippets").lazy_load()
 
 -- my snippet
 local ls = require("luasnip")
@@ -1741,4 +1739,4 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
-vim.keymap.set("n","<leader>ze","<cmd>ZenMode<CR>")
+vim.keymap.set("n", "<leader>ze", "<cmd>ZenMode<CR>")
