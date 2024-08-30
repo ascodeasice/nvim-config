@@ -1792,3 +1792,6 @@ end, { desc = "Choose a scoped collection and open it" })
 vim.keymap.set("n", "<leader>fgc", function()
   curl.pick_global_collection()
 end, { desc = "Choose a global collection and open it" })
+
+vim.api.nvim_set_keymap('n', '<C-a>', 'gg^vG$', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-y>', '<C-a>', { noremap = true })
