@@ -27,6 +27,28 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      signs = false,
+      highlight = {
+        multiline = false,
+        before = "fg",
+        keyword = "fg"
+      },
+      search = {
+        command = "rg",
+        args = {
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+        },
+      },
+    }
+  },
+  {
     "oysandvik94/curl.nvim",
     cmd = { "CurlOpen" },
     dependencies = {
@@ -1760,6 +1782,9 @@ vim.keymap.set("n", "<leader>ze", "<cmd>ZenMode<CR>")
 -- format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function()
+    if vim.bo.filetype == "curl" then
+      return
+    end
     vim.lsp.buf.format()
   end,
 })
@@ -1795,3 +1820,19 @@ end, { desc = "Choose a global collection and open it" })
 
 vim.api.nvim_set_keymap('n', '<C-a>', 'gg^vG$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-y>', '<C-a>', { noremap = true })
+
+-- todo-comment.nvim
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>pc",
+  ":TodoTelescope keywords=TODO,FIX<CR>",
+  { noremap = true, silent = true }
+)
+
+vim.keymap.set("n", "]t", function()
+  require("todo-comments").jump_next({ keywords = { "TODO", "FIX" } })
+end, { desc = "Next TODO/FIX comment" })
+
+vim.keymap.set("n", "[t", function()
+  require("todo-comments").jump_prev({ keywords = { "TODO", "FIX" } })
+end, { desc = "Previous TODO/FIX comment" })
