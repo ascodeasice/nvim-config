@@ -1346,10 +1346,26 @@ require('luasnip.loaders.from_vscode').lazy_load()
 local ls = require("luasnip")
 local s = ls.snippet
 local t = ls.text_node
+local i = ls.insert_node
 -- ts, tsx, jsx also loads this
 ls.add_snippets("javascript", {
   s("menv", { t("import.meta.env.") }),
   s("penv", { t("process.env") })
+})
+
+ls.add_snippets("typescript", {
+  s("cn", {
+    t("constructor("),
+    i(1), -- 第一次跳到這裡，進入 ()
+    t({ ") {", "\t" }),
+    i(2), -- 第二次跳到這裡，進入 {}
+    t({ "", "}" })
+  }),
+  s("pu", { t("public ") }),
+  s("pv", { t("private ") }),
+  s("uo", { t("public readonly ") }),
+  s("po", { t("private readonly ") }),
+  s("rl", { t("readonly ") })
 })
 
 luasnip.config.setup {}
