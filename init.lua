@@ -81,6 +81,7 @@ require('lazy').setup({
       })
     end,
   },
+
   {
     "gitaarik/nvim-cmp-toggle",
   },
