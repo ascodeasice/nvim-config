@@ -46,6 +46,9 @@ require('lazy').setup({
           "--column",
         },
       },
+      keywords = {
+        NOTE = { icon = " ", color = "hint", alt = { "INFO", "SECTION" } },
+      }
     }
   },
   {
@@ -1336,7 +1339,7 @@ lspconfig.ruff_lsp.setup {
 
 lspconfig.jdtls.setup {}
 
-lspconfig.emmet_language_server.setup({})
+-- lspconfig.emmet_language_server.setup({})
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -1847,9 +1850,9 @@ vim.api.nvim_set_keymap(
 )
 
 vim.keymap.set("n", "]t", function()
-  require("todo-comments").jump_next({ keywords = { "TODO", "FIX" } })
+  require("todo-comments").jump_next({ keywords = { "TODO", "FIX", "SECTION" } })
 end, { desc = "Next TODO/FIX comment" })
 
 vim.keymap.set("n", "[t", function()
-  require("todo-comments").jump_prev({ keywords = { "TODO", "FIX" } })
+  require("todo-comments").jump_prev({ keywords = { "TODO", "FIX", "SECTION" } })
 end, { desc = "Previous TODO/FIX comment" })
