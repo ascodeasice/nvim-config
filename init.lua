@@ -1646,7 +1646,7 @@ end
 vim.keymap.set("n", "<leader>fl", M.toggle_log)
 vim.keymap.set("n", "<leader>fd", "<cmd>FlutterDevices<CR>")
 vim.keymap.set("n", "<leader>rq", "<cmd>FlutterQuit<CR>")
-vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename) -- lsp rename
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename) -- lsp rename
 -- vim.keymap.set("n", "<leader>rn", ":IncRename ")
 
 -- dap ui shortcut
@@ -1820,6 +1820,8 @@ vim.keymap.set("n", "<leader>ze", "<cmd>ZenMode<CR>")
 
 -- format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
+  desc = 'Format on Save',
+  -- ts and tsx are handled in another autocmd
   callback = function()
     if vim.bo.filetype == "curl" then
       return
@@ -1875,3 +1877,39 @@ end, { desc = "Next TODO/FIX comment" })
 vim.keymap.set("n", "[t", function()
   require("todo-comments").jump_prev({ keywords = { "TODO", "FIX", "SECTION" } })
 end, { desc = "Previous TODO/FIX comment" })
+
+-- ts auto add missing imports, and remove unused
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = vim.api.nvim_create_augroup("ts_fix_imports", { clear = true }),
+  desc = "Add missing imports and remove unused imports for TS",
+  pattern = { "*.ts", "*.tsx" },
+  callback = function()
+    local params = vim.lsp.util.make_range_params()
+    local kinds_to_check = { "source.addMissingImports.ts", "source.removeUnused.ts", "source.removeUnusedImports.ts" }
+    params.context = {
+      only = kinds_to_check
+    }
+
+    -- 發送同步請求來獲取可用的 code actions
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+
+    -- 檢查結果是否有可用的 code actions
+    if result and next(result) ~= nil then
+      for _, res in pairs(result) do
+        for _, r in pairs(res.result or {}) do
+          -- 使用 for 迴圈檢查 r.kind 是否在 kinds_to_check 陣列中
+          for _, kind in ipairs(kinds_to_check) do
+            if r.kind == kind then
+              vim.lsp.buf.code_action({
+                apply = true,
+                context = {
+                  only = { kind },
+                },
+              })
+            end
+          end
+        end
+      end
+    end
+  end
+})
