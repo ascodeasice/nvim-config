@@ -1340,48 +1340,6 @@ lspconfig.ruff_lsp.setup {
   }
 }
 
-lspconfig.ts_ls.setup {
-  capabilities = capabilities,
-  on_attach = function(_, bufnr)
-    on_attach(nil, bufnr)
-    -- ts auto add missing imports, and remove unused
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = vim.api.nvim_create_augroup("ts_fix_imports", { clear = true }),
-      desc = "Add missing imports and remove unused imports for TS",
-      pattern = { "*.ts", "*.tsx", "*.js", ".jsx" },
-      callback = function()
-        local params = vim.lsp.util.make_range_params()
-        local kinds_to_check = { "source.addMissingImports.ts", "source.removeUnused.ts", "source.removeUnusedImports.ts" }
-        params.context = {
-          only = kinds_to_check
-        }
-
-        -- 發送同步請求來獲取可用的 code actions
-        local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
-
-        -- 檢查結果是否有可用的 code actions
-        -- HACK: pretty buggy, if it does not work, use code action and don't bother it, or just remove them
-        if result and next(result) ~= nil then
-          for _, res in pairs(result) do
-            for _, r in pairs(res.result or {}) do
-              -- 使用 for 迴圈檢查 r.kind 是否在 kinds_to_check 陣列中
-              for _, kind in ipairs(kinds_to_check) do
-                if r.kind == kind then
-                  vim.lsp.buf.code_action({
-                    apply = true,
-                    context = {
-                      only = { kind },
-                    },
-                  })
-                end
-              end
-            end
-          end
-        end
-      end
-    })
-  end
-}
 
 lspconfig.jdtls.setup {}
 
