@@ -1304,7 +1304,7 @@ mason_lspconfig.setup {
 mason_lspconfig.setup_handlers {
   function(server_name)
     if server_name == "tsserver" then
-      server_name="ts_ls"
+      server_name = "ts_ls"
     end
     require('lspconfig')[server_name].setup {
       capabilities = capabilities,
@@ -1373,6 +1373,22 @@ ls.add_snippets("typescript", {
   s("uo", { t("public readonly ") }),
   s("po", { t("private readonly ") }),
   s("rl", { t("readonly ") })
+})
+
+ls.add_snippets("javascriptreact", {
+  s("com", {
+    t({ "{/* " }),
+    i(1, "Your comment here"),
+    t({ " */}" })
+  }),
+})
+
+ls.add_snippets("typescriptreact", {
+  s("com", {
+    t({ "{/* " }),
+    i(1, "Your comment here"),
+    t({ " */}" })
+  }),
 })
 
 luasnip.config.setup {}
