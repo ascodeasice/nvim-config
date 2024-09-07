@@ -642,15 +642,7 @@ require('lazy').setup({
           fields = { "kind", "abbr", "menu" },
           format = function(entry, vim_item)
             -- remove the text after icon
-            vim_item.menu = "    (" .. (vim_item.kind or "") .. ")" .. " " .. ({
-              buffer = "[Buffer]",
-              nvim_lsp = "[LSP]",
-              luasnip = "[LuaSnip]",
-              nvim_lua = "[Lua]",
-              latex_symbols = "[LaTeX]",
-              dotenv = "[Env]",
-              path = "[Path]"
-            })[entry.source.name]
+            vim_item.menu = "    (" .. (vim_item.kind or "") .. ")" .. " "
             vim_item.kind = (cmp_kinds[vim_item.kind] or '')
             return vim_item
           end,
