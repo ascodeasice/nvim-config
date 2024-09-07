@@ -1172,6 +1172,34 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  -- SECTION: ts code actions
+  nmap('<leader>ru', function()
+    vim.lsp.buf.code_action {
+      context = {
+        only = { 'source.removeUnused.ts' }
+      },
+      apply = true
+    }
+  end, '[R]emove [U]nused')
+
+  nmap('<leader>ti', function()
+    vim.lsp.buf.code_action {
+      context = {
+        only = { 'source.addMissingImports.ts' }
+      },
+      apply = true
+    }
+  end, '[T]ypescript add missing imports')
+
+  nmap('<leader>ri', function()
+    vim.lsp.buf.code_action {
+      context = {
+        only = { 'source.removeUnusedImports.ts' }
+      },
+      apply = true
+    }
+  end, '[R]emove unused i[m]ports')
+
   nmap('<leader>ca', function()
     vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
   end, '[C]ode [A]ction')
