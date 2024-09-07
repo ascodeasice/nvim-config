@@ -27,6 +27,26 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {
+    },
+    -- Optional dependencies
+    -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+    config = function()
+      require("oil").setup({
+        delete_to_trash = true,
+        skip_confirm_for_simple_edits = true,
+        keymaps = {
+          ["<C-p>"] = false,
+          ["gp"] = "actions.preview",
+        }
+      })
+    end
+  },
+  {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
@@ -113,13 +133,6 @@ require('lazy').setup({
     },
     config = true,
     opts = { --[[ Place your opts here ]] }
-  },
-  {
-    'echasnovski/mini.starter',
-    version = false,
-    config = function()
-      require('mini.starter').setup()
-    end
   },
   {
     "nat-418/boole.nvim",
@@ -1884,3 +1897,6 @@ end, { desc = "Next TODO/FIX comment" })
 vim.keymap.set("n", "[t", function()
   require("todo-comments").jump_prev({ keywords = { "TODO", "FIX", "SECTION" } })
 end, { desc = "Previous TODO/FIX comment" })
+
+-- oil.nvim
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
