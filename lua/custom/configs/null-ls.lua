@@ -12,6 +12,8 @@ local opts = {
 			condition = function(utils)
 				return utils.has_file({ ".prettierrc.js" })
 			end,
-		}), }
+		}),
+		null_ls.builtins.diagnostics.actionlint
+	}
 }
 return opts

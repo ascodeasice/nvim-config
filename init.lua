@@ -33,15 +33,41 @@ require('lazy').setup({
     opts = {
     },
     -- Optional dependencies
-    -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
     config = function()
       require("oil").setup({
         delete_to_trash = true,
         skip_confirm_for_simple_edits = true,
         keymaps = {
           ["<C-p>"] = false,
+          ["<C-s>"] = false,
+          ["<C-l>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
+          ["<C-r>"] = "actions.refresh",
           ["gp"] = "actions.preview",
+          ["gd"] = {
+            desc = "Toggle file detail view",
+            callback = function()
+              detail = not detail
+              if detail then
+                require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+              else
+                require("oil").set_columns({ "icon" })
+              end
+            end,
+          },
+        },
+        view_options = {
+          show_hidden = true,
+          is_always_hidden = function(name, _)
+            return name == '..' or name == '.git'
+          end
+        },
+        win_options = {
+          wrap = true
+        },
+        float = {
+          padding = 3,
         }
       })
     end
@@ -517,17 +543,6 @@ require('lazy').setup({
         branch = "harpoon2",
       }
     },
-  },
-  {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("nvim-tree").setup {}
-    end,
   },
   -- 'mbbill/undotree',
   {
@@ -1518,7 +1533,6 @@ vim.keymap.set("n", "<leader><leader>", function()
   vim.cmd("so")
 end)
 
-vim.keymap.set("n", "<C-b>", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "K", "%")
 vim.keymap.set("v", "K", "%")
 
@@ -1538,45 +1552,6 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<C-s>', '<Cmd>lua Save_file()<CR>', {
 vim.keymap.set("n", "<leader>lb", function()
   git_blame.toggle()
 end) -- toggle showing line blame after line
-
---[[ Configure nvim-tree ]]
-local function on_attach_nvim_tree(bufnr)
-  local api = require "nvim-tree.api"
-
-  local function opts(desc)
-    return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  end
-
-
-  -- default mappings
-  api.config.mappings.default_on_attach(bufnr)
-
-  -- custom mappings
-  vim.keymap.del('n', '<C-e>', { buffer = bufnr }) -- unmap, used for harpoon
-  vim.keymap.set('n', '<Right>', function() api.node.open.edit() end, { buffer = bufnr })
-  vim.keymap.set('n', '<Left>', function() api.tree.collapse_all() end, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>gx", function()
-    local bufname = vim.fn.bufname()
-    -- Check if the current buffer is NvimTree
-    if string.find(bufname, "NvimTree_1") then
-      local path = require("nvim-tree.api").tree.get_node_under_cursor().absolute_path
-      -- run os command
-      os.execute("xdg-open '" .. path .. "' > /dev/null") -- make it quiet
-    end
-  end, opts "xdg-open file from nvim-tree")
-end
-
--- pass to setup along with your other options
-require('nvim-tree').setup({
-  actions = {
-    open_file = {
-      quit_on_open = true,
-    },
-  },
-  on_attach = on_attach_nvim_tree,
-})
-
-
 
 --[[ Configure nvim dap]]
 vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint<CR>")
@@ -1689,8 +1664,6 @@ vim.keymap.set("n", "<leader>fml", function()
   vim.g.enable_spelunker_vim = 0; -- disable spelunker
   require("cellular-automaton").start_animation("make_it_rain");
 end)
-
-vim.keymap.set("n", "<leader>pt", "<cmd>NvimTreeFindFile<CR>") -- find current file in nvim-tree
 
 vim.keymap.set("n", "<leader>Do", "<cmd>DiffviewOpen<CR>")
 vim.keymap.set("n", "<leader>Dc", "<cmd>DiffviewClose<CR>")
@@ -1900,3 +1873,4 @@ end, { desc = "Previous TODO/FIX comment" })
 
 -- oil.nvim
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
