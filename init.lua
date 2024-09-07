@@ -32,9 +32,7 @@ require('lazy').setup({
     ---@type oil.SetupOpts
     opts = {
     },
-    -- Optional dependencies
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("oil").setup({
         delete_to_trash = true,
@@ -189,41 +187,6 @@ require('lazy').setup({
     }
   },
   {
-    "debugloop/telescope-undo.nvim",
-    dependencies = { -- note how they're inverted to above example
-      {
-        "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-      },
-    },
-    keys = {
-      { -- lazy style key map
-        "<leader>u",
-        "<cmd>Telescope undo<cr>",
-        desc = "undo history",
-      },
-    },
-    opts = {
-      -- don't use `defaults = { }` here, do this in the main telescope spec
-      extensions = {
-        undo = {
-          -- telescope-undo.nvim config, see below
-          use_delta = false,
-          entry_format = "#$ID, $STAT, $TIME",
-          saved_only = true,
-        },
-        -- no other extensions here, they can have their own spec too
-      },
-    },
-    config = function(_, opts)
-      -- Calling telescope's setup from multiple specs does not hurt, it will happily merge the
-      -- configs for us. We won't use data, as everything is in it's own namespace (telescope
-      -- defaults, as well as each extension).
-      require("telescope").setup(opts)
-      require("telescope").load_extension("undo")
-    end,
-  },
-  {
     "windwp/nvim-ts-autotag"
   },
   {
@@ -285,28 +248,6 @@ require('lazy').setup({
     cmd = { 'LiveServerStart', 'LiveServerStop' },
     config = true
   },
-  -- {
-  --   'nvim-java/nvim-java',
-  --   dependencies = {
-  --     'nvim-java/lua-async-await',
-  --     'nvim-java/nvim-java-refactor',
-  --     'nvim-java/nvim-java-core',
-  --     'nvim-java/nvim-java-test',
-  --     'nvim-java/nvim-java-dap',
-  --     'MunifTanjim/nui.nvim',
-  --     'neovim/nvim-lspconfig',
-  --     'mfussenegger/nvim-dap',
-  --     {
-  --       'williamboman/mason.nvim',
-  --       opts = {
-  --         registries = {
-  --           'github:nvim-java/mason-registry',
-  --           'github:mason-org/mason-registry',
-  --         },
-  --       },
-  --     }
-  --   },
-  -- },
   {
     "chrisgrieser/nvim-various-textobjs",
     lazy = false,
@@ -399,7 +340,13 @@ require('lazy').setup({
     event = "VeryLazy",
     config = function()
       require("nvim-surround").setup({
-        -- Configuration here, or leave empty to use defaults
+        surrounds = {
+          ["$"] = {
+            add = function()
+              return { { "${" }, { "}" } }
+            end,
+          },
+        },
       })
     end
   },
@@ -544,7 +491,6 @@ require('lazy').setup({
       }
     },
   },
-  -- 'mbbill/undotree',
   {
     'alexghergh/nvim-tmux-navigation',
     config = function()
@@ -1049,7 +995,6 @@ require("telescope").load_extension("quicknote")
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 require("telescope").load_extension("diff")
-require("telescope").load_extension("undo")
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -1452,8 +1397,6 @@ vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
   replace_keycodes = false
 })
 
--- vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
-
 --[[ some shortcut for vim-fugitive ]]
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git)                                       -- git status
 vim.keymap.set("n", "<leader>ge", "<cmd>Gdiffsplit!<CR>")                            -- git diff editor
@@ -1584,16 +1527,6 @@ require("flutter-tools").setup {
   debugger = {
     enabled = true,
     run_via_dap = true,
-  },
-}
-
-require("nvim-surround").setup {
-  surrounds = {
-    ["$"] = {
-      add = function()
-        return { { "${" }, { "}" } }
-      end,
-    },
   },
 }
 
