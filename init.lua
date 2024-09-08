@@ -139,6 +139,7 @@ require('lazy').setup({
         default_im_select = "1",
         default_command = "fcitx-remote",
         set_default_events = { "VimEnter", "InsertLeave", "CmdlineLeave" },
+        set_previous_events = {}, -- always english when entering insert mode
       })
     end,
   },
