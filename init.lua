@@ -27,6 +27,16 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
+    config = function()
+      require('treesj').setup({
+        use_default_keymaps = false,
+      })
+    end,
+  },
+  {
     "refractalize/oil-git-status.nvim",
 
     dependencies = {
@@ -1843,3 +1853,8 @@ end, { desc = "Previous TODO/FIX comment" })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<C-b>", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
+
+-- treesj.nvimo
+vim.keymap.set("n", "<leader>ts", require('treesj').split)
+vim.keymap.set("n", "<leader>tj", require('treesj').join)
+vim.keymap.set("n", "<leader>T", require('treesj').toggle)
