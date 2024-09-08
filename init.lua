@@ -27,6 +27,19 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "refractalize/oil-git-status.nvim",
+
+    dependencies = {
+      "stevearc/oil.nvim",
+    },
+
+    config = function()
+      require('oil-git-status').setup({
+        show_ignored = false -- show files that match gitignore with !!
+      })
+    end,
+  },
+  {
     'stevearc/oil.nvim',
     ---@module 'oil'
     ---@type oil.SetupOpts
@@ -62,7 +75,8 @@ require('lazy').setup({
           end
         },
         win_options = {
-          wrap = true
+          wrap = true,
+          signcolumn = "yes:2",
         },
         float = {
           padding = 3,
