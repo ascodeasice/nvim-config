@@ -1773,16 +1773,6 @@ vim.api.nvim_create_autocmd('BufEnter', {
   callback = function()
     -- only set conceal level to 2 in markdown files
     vim.opt.conceallevel = 2;
-    vim.api.nvim_set_hl(0, 'Conceal', { bg = 'NONE', fg = '#00cf37' })
-    vim.api.nvim_set_hl(0, 'todoCheckbox', { link = 'Todo' })
-
-    vim.cmd [[
-      syn match todoCheckbox '\v(\s+)?(-|\*)\s\[\s\]'hs=e-4 conceal cchar=
-      syn match todoCheckbox '\v(\s+)?(-|\*)\s\[x\]'hs=e-4 conceal cchar=
-      "syn match todoCheckbox '\v(\s+)?(-|\*)\s\[-\]'hs=e-4 conceal cchar=󰅘
-      " syn match todoCheckbox '\v(\s+)?(-|\*)\s\[\.\]'hs=e-4 conceal cchar=⊡
-      " syn match todoCheckbox '\v(\s+)?(-|\*)\s\[o\]'hs=e-4 conceal cchar=⬕
-    ]]
   end
 })
 
