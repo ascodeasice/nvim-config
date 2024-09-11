@@ -28,7 +28,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   {
     'Wansmer/treesj',
-    keys = { '<space>m', '<space>j', '<space>s' },
+    keys = {},
     dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
     config = function()
       require('treesj').setup({
@@ -1630,7 +1630,7 @@ vim.keymap.set("n", "<leader>di", require("dap").step_into)
 vim.keymap.set("n", "<leader>dO", require("dap").step_out)
 vim.keymap.set("n", "<leader>dB", require("dap").step_back)
 vim.keymap.set("n", "<leader>dr", require("dap").restart)
-vim.keymap.set("n", "<leader>ds", require("dap").stop)
+vim.keymap.set("n", "<leader>ds", require("dap").close) -- dap stop
 
 require("codesnap").setup({
   mac_window_bar = false,
