@@ -27,6 +27,12 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "GCBallesteros/jupytext.nvim",
+    config = true,
+    -- Depending on your nvim distro or config you may need to make the loading not lazy
+    -- lazy=false,
+  },
+  {
     'Wansmer/treesj',
     keys = {},
     dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
@@ -1090,6 +1096,7 @@ end, { desc = "Compare file with current" })
 vim.keymap.set("n", "<leader>po", function()
   require("telescope.builtin").lsp_document_symbols()
 end, { desc = "Compare file with current" })
+vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 
 
 -- [[ Configure Treesitter ]]
@@ -1232,6 +1239,10 @@ local on_attach = function(_, bufnr)
   nmap('gd', function()
     vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
     require('telescope.builtin').lsp_definitions()
+  end, '[G]oto [D]efinition')
+  nmap('gD', function()
+    vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
+    require('telescope.builtin').lsp_type_definitions()
   end, '[G]oto [D]efinition')
   nmap('gr', function()
     vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
@@ -1516,10 +1527,6 @@ vim.keymap.set(
   "<leader>ee",
   "oif err != nil {<CR>}<Esc>Oreturn err<Esc>"
 )
-
-vim.keymap.set("n", "<leader><leader>", function()
-  vim.cmd("so")
-end)
 
 vim.keymap.set("n", "K", "%")
 vim.keymap.set("v", "K", "%")
@@ -1844,7 +1851,7 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<C-b>", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 
--- treesj.nvimo
+-- treesj.nvim
 vim.keymap.set("n", "<leader>ts", require('treesj').split)
 vim.keymap.set("n", "<leader>tj", require('treesj').join)
 vim.keymap.set("n", "<leader>T", require('treesj').toggle)

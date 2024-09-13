@@ -8,11 +8,7 @@ local opts = {
 		null_ls.builtins.formatting.black,
 		null_ls.builtins.diagnostics.mypy,
 		null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
-		null_ls.builtins.formatting.prettierd.with({
-			condition = function(utils)
-				return utils.has_file({ ".prettierrc.js" })
-			end,
-		}),
+		null_ls.builtins.formatting.prettierd,
 		null_ls.builtins.diagnostics.actionlint
 	}
 }

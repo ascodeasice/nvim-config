@@ -183,3 +183,6 @@ whitelisted
 datetime
 workdir
 navbar
+upsert
+collab
+cloudflare
