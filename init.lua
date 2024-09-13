@@ -27,6 +27,19 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'echasnovski/mini.splitjoin',
+    version = false,
+    config = function()
+      require('mini.splitjoin').setup({
+        mappings = {
+          toggle = '<leader>T',
+          split = '<leader>ts',
+          join = '<leader>tj',
+        },
+      })
+    end
+  },
+  {
     'echasnovski/mini.surround',
     version = false,
     config = function()
@@ -80,16 +93,6 @@ require('lazy').setup({
     config = true,
     -- Depending on your nvim distro or config you may need to make the loading not lazy
     -- lazy=false,
-  },
-  {
-    'Wansmer/treesj',
-    keys = {},
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
-    config = function()
-      require('treesj').setup({
-        use_default_keymaps = false,
-      })
-    end,
   },
   {
     "refractalize/oil-git-status.nvim",
@@ -1883,11 +1886,6 @@ end, { desc = "Previous TODO/FIX comment" })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<C-b>", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
-
--- treesj.nvim
-vim.keymap.set("n", "<leader>ts", require('treesj').split)
-vim.keymap.set("n", "<leader>tj", require('treesj').join)
-vim.keymap.set("n", "<leader>T", require('treesj').toggle)
 
 -- to be used with mini.surround
 vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
