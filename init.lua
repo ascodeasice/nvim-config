@@ -27,6 +27,55 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'echasnovski/mini.surround',
+    version = false,
+    config = function()
+      require('mini.surround').setup({
+        custom_surroundings = {
+          -- js [t]emplate literal
+          ['t'] = {
+            input = { '${' .. '().-()' .. '}' },
+            output = { left = '${', right = '}' }
+          },
+
+          -- python [f]-string
+          ['f'] = {
+            input = { 'f"{' .. '().-()' .. '}"' },
+            output = { left = 'f"{', right = '}"' },
+          },
+
+          -- markdown [l]ink
+          ['l'] = {
+            input = { '%[().-()%]%(%)' },
+            output = { left = '[', right = ']()' },
+          },
+
+          -- markdown [i]mage
+          ['i'] = {
+            input = { '!%[' .. '().-()' .. '%]%(%)' },
+            output = { left = '![', right = ']()' },
+          },
+
+          ['B'] = {
+            input = { '{' .. '().-()' .. '}' },
+            output = { left = '{', right = '}' },
+          },
+
+          ['o'] = {
+            input = { '%[().-()%]' },
+            output = { left = '[', right = ']' },
+          },
+        },
+
+        -- TODO: c/C for single line/multiline comment function, use function to return type
+        mappings = {
+          suffix_last = 'n', -- Suffix to search with "prev" method
+          suffix_next = 'e', -- Suffix to search with "next" method
+        }
+      })
+    end
+  },
+  {
     "GCBallesteros/jupytext.nvim",
     config = true,
     -- Depending on your nvim distro or config you may need to make the loading not lazy
@@ -341,7 +390,7 @@ require('lazy').setup({
     event = "VeryLazy",
     -- stylua: ignore
     keys = {
-      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
       { "R", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
     },
     opts = {
@@ -1855,3 +1904,6 @@ vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 vim.keymap.set("n", "<leader>ts", require('treesj').split)
 vim.keymap.set("n", "<leader>tj", require('treesj').join)
 vim.keymap.set("n", "<leader>T", require('treesj').toggle)
+
+-- to be used with mini.surround
+vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
