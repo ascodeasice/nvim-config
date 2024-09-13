@@ -415,22 +415,6 @@ require('lazy').setup({
     condition = false -- temporary disable this plugin
   },
   {
-    "kylechui/nvim-surround",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup({
-        surrounds = {
-          ["$"] = {
-            add = function()
-              return { { "${" }, { "}" } }
-            end,
-          },
-        },
-      })
-    end
-  },
-  {
     'akinsho/flutter-tools.nvim',
     lazy = false,
     dependencies = {
