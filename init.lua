@@ -365,13 +365,6 @@ require('lazy').setup({
   { "mistricky/codesnap.nvim",        build = "make" },
   { "mtdl9/vim-log-highlighting" },
   {
-    "smjonas/inc-rename.nvim",
-    config = function()
-      require("inc_rename").setup()
-    end,
-    enabled = false
-  },
-  {
     "okuuva/auto-save.nvim",
     cmd = "ASToggle",        -- optional for lazy loading on command
     opts = {
@@ -604,11 +597,6 @@ require('lazy').setup({
     end,
   },
   -- NOTE: First, some plugins that don't require any configuration
-  -- set up copilot
-  {
-    'github/copilot.vim',
-    enabled = false
-  },
   -- recommend some better key presses
   -- some git commands
   'tpope/vim-fugitive',
@@ -667,7 +655,6 @@ require('lazy').setup({
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
-      -- 'hrsh7th/cmp-copilot',
       'hrsh7th/cmp-buffer',
 
       { "SergioRibera/cmp-dotenv", event = "UiEnter" },
@@ -1481,13 +1468,6 @@ vim.api.nvim_set_keymap('n', 'L', '$', { noremap = true })
 
 vim.opt.timeoutlen = 2000 -- allow longer wait time for leader key
 vim.opt.swapfile = false
-
--- ctrl n  to  accept  Copilot suggestion
--- NOTE:  alt right to  accept next word
-vim.keymap.set('i', '<C-t>', 'copilot#Accept("\\<CR>")', {
-  expr = true,
-  replace_keycodes = false
-})
 
 --[[ some shortcut for vim-fugitive ]]
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git)                                       -- git status
