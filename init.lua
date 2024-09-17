@@ -44,6 +44,15 @@ require('lazy').setup({
     version = false,
     config = function()
       require('mini.surround').setup({
+        mappings = {
+          add = 'ys',            -- Add surrounding in Normal and Visual modes
+          delete = 'ds',         -- Delete surrounding
+          find = 'Sf',           -- Find surrounding (to the right)
+          find_left = 'SF',      -- Find surrounding (to the left)
+          highlight = 'SH',      -- Highlight surrounding
+          replace = 'cs',        -- Replace surrounding
+          update_n_lines = 'Sn', -- Update `n_lines`
+        },
         custom_surroundings = {
           -- python [f]-string
           ['f'] = {
@@ -72,13 +81,9 @@ require('lazy').setup({
             input = { '%[().-()%]' },
             output = { left = '[', right = ']' },
           },
+          -- TODO: c/C for single line/multiline comment function, use function to return type
         },
 
-        -- TODO: c/C for single line/multiline comment function, use function to return type
-        mappings = {
-          suffix_last = 'n', -- Suffix to search with "prev" method
-          suffix_next = 'e', -- Suffix to search with "next" method
-        }
       })
     end
   },
@@ -380,7 +385,7 @@ require('lazy').setup({
     event = "VeryLazy",
     -- stylua: ignore
     keys = {
-      { "S", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
       { "R", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
     },
     opts = {
@@ -1099,7 +1104,7 @@ end)
 vim.keymap.set('n', '<leader>pp', function()
   require('telescope.builtin').find_files()
 end)
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
+-- vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = '[G]it [B]ranches' })
 vim.keymap.set('n', '<leader>gsl', require('telescope.builtin').git_stash) -- can apply stash, but not removing them
 vim.keymap.set('n', '<leader>gd', require('telescope.builtin').git_status) -- a useful way for checking git diff
@@ -1530,7 +1535,7 @@ vim.keymap.set("n", "<leader><Up>", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader><Down>", "<cmd>lprev<CR>zz")
 
 -- replace the word that I am on
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+-- vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set(
@@ -1861,6 +1866,9 @@ end, { desc = "Previous TODO/FIX comment" })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<C-b>", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
+vim.keymap.set("n", "_", function()
+  require('oil').open(vim.loop.cwd())
+end) -- open cwd
 
 -- to be used with mini.surround
-vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
+vim.keymap.set({ 'n', 'x' }, 'S', '<Nop>')
