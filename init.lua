@@ -222,14 +222,6 @@ require('lazy').setup({
     config = true,
   },
   {
-    "folke/zen-mode.nvim",
-    opts = {
-      plugins = {
-        tmux = true
-      }
-    }
-  },
-  {
     'echasnovski/mini.trailspace',
     version = false,
     config = function()
@@ -286,7 +278,10 @@ require('lazy').setup({
           decrement = '<C-x>'
         },
         additions = {
-          -- { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" }, -- this is causing crash
+          -- NOTE: unicode characters causes crash
+        },
+        allow_caps_additions = {
+          { 'dev', 'prod' }
         }
       })
     end
@@ -384,17 +379,6 @@ require('lazy').setup({
     dependencies = {
       { "nvim-telescope/telescope.nvim" },
     }
-  },
-  {
-    "RutaTang/quicknote.nvim",
-    config = function()
-      -- you must call setup to let quicknote.nvim works correctly
-      require("quicknote").setup({
-        mode = "resident",
-      })
-    end
-    ,
-    dependencies = { "nvim-lua/plenary.nvim" }
   },
   { "sindrets/diffview.nvim" },
   { 'eandrju/cellular-automaton.nvim' },
@@ -1066,13 +1050,9 @@ require('telescope').setup {
     },
   },
   extensions = {
-    quicknote = {
-      defaultScope = "CWD",
-    },
   },
 }
 
-require("telescope").load_extension("quicknote")
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
@@ -1708,14 +1688,6 @@ vim.keymap.set("n", "<leader>Dc", "<cmd>DiffviewClose<CR>")
 vim.keymap.set("n", "<leader>Dt", "<cmd>DiffviewToggleFiles<CR>")
 vim.keymap.set("n", "<leader>Dh", "<cmd>DiffviewFileHistory<CR>")
 
--- quick note
-vim.keymap.set("n", "<leader>nc", require("quicknote").NewNoteAtCWD) -- note cwd
-vim.keymap.set("n", "<leader>nl", require("quicknote").NewNoteAtCurrentLine)
-vim.keymap.set("n", "<leader>no", require("quicknote").OpenNoteAtCurrentLine)
-vim.keymap.set('n', "<leader>nt", "<cmd>Telescope quicknote<CR>") -- note telescope
-vim.keymap.set('n', "<leader>nd", require("quicknote").DeleteNoteAtCurrentLine)
-vim.keymap.set('n', "<leader>nD", require("quicknote").DeleteNoteAtCWD)
-
 -- resizing window
 
 vim.keymap.set("n", "<C-w>f", [[<cmd>vertical resize +20<cr>]]) -- note: nvim tree uses vertical size
@@ -1880,8 +1852,8 @@ vim.keymap.set("n", "<leader>fgc", function()
   curl.pick_global_collection()
 end, { desc = "Choose a global collection and open it" })
 
-vim.api.nvim_set_keymap('n', '<C-a>', 'gg^vG$', { noremap = true })
-vim.api.nvim_set_keymap('n', '<C-y>', '<C-a>', { noremap = true })
+-- vim.api.nvim_set_keymap('n', '<C-a>', 'gg^vG$', { noremap = true })
+-- vim.api.nvim_set_keymap('n', '<C-y>', '<C-a>', { noremap = true })
 
 -- todo-comment.nvim
 vim.api.nvim_set_keymap(
@@ -1906,9 +1878,3 @@ vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 vim.keymap.set("n", "_", function()
   require('oil').open(vim.loop.cwd())
 end) -- open cwd
-
-
-
--- highlight current line number (put this at the end to override the theme)
--- TODO: or put them in the theme code
-vim.cmd([[highlight CursorLineNr gui=bold guifg=#e5c07b]])
