@@ -45,7 +45,7 @@ require('lazy').setup({
     config = function()
       require('mini.surround').setup({
         mappings = {
-          add = 'ys',            -- Add surrounding in Normal and Visual modes
+          add = 'S',             -- Add surrounding in Normal and Visual modes
           delete = 'ds',         -- Delete surrounding
           find = 'Sf',           -- Find surrounding (to the right)
           find_left = 'SF',      -- Find surrounding (to the left)
@@ -1871,4 +1871,3 @@ vim.keymap.set("n", "_", function()
 end) -- open cwd
 
 -- to be used with mini.surround
-vim.keymap.set({ 'n', 'x' }, 'S', '<Nop>')
