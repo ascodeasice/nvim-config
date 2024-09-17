@@ -7,6 +7,8 @@ vim.o.number = true
 vim.wo.relativenumber = true
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.opt.cursorline = true -- highlight current line number
+vim.o.cursorlineopt = "number"
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
@@ -1904,3 +1906,9 @@ vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 vim.keymap.set("n", "_", function()
   require('oil').open(vim.loop.cwd())
 end) -- open cwd
+
+
+
+-- highlight current line number (put this at the end to override the theme)
+-- TODO: or put them in the theme code
+vim.cmd([[highlight CursorLineNr gui=bold guifg=#e5c07b]])
