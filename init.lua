@@ -27,6 +27,37 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'MeanderingProgrammer/render-markdown.nvim',
+    opts = {
+      render_modes = { 'n', 'i', 'c' },
+      heading = {
+        position = 'inline',
+        backgrounds = {
+          "DiagnosticVirtualTextError",
+          "DiagnosticVirtualTextHint",
+          "DiagnosticVirtualTextWarn",
+          "DiagnosticVirtualTextError",
+          "DiagnosticVirtualTextHint",
+          "DiagnosticVirtualTextWarn",
+        },
+        -- icons = { "󰬺", " 󰬻", "  󰬼", "   󰬽", "    󰬾", "     󰬿", },
+        icons = { "󰬺", "󰬻", "󰬼", "󰬽", "󰬾", "󰬿", },
+        left_pad = 1,
+        sign = false
+      },
+      code = {
+        sign = false,
+        left_pad = 2,
+        right_pad = 4,
+        width = 'block',
+      },
+      pipe_table = {
+        row = 'TSRainbowRed',
+      }
+    },
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+  },
+  {
     'echasnovski/mini.splitjoin',
     version = false,
     config = function()
@@ -52,6 +83,9 @@ require('lazy').setup({
           highlight = 'SH',      -- Highlight surrounding
           replace = 'cs',        -- Replace surrounding
           update_n_lines = 'Sn', -- Update `n_lines`
+
+          suffix_last = '',      -- Suffix to search with "prev" method
+          suffix_next = '',      -- Suffix to search with "next" method
         },
         custom_surroundings = {
           -- python [f]-string
@@ -77,7 +111,8 @@ require('lazy').setup({
             output = { left = '{', right = '}' },
           },
 
-          ['o'] = {
+          -- b[r]acket
+          ['r'] = {
             input = { '%[().-()%]' },
             output = { left = '[', right = ']' },
           },
@@ -1869,5 +1904,3 @@ vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 vim.keymap.set("n", "_", function()
   require('oil').open(vim.loop.cwd())
 end) -- open cwd
-
--- to be used with mini.surround
