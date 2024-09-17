@@ -45,12 +45,6 @@ require('lazy').setup({
     config = function()
       require('mini.surround').setup({
         custom_surroundings = {
-          -- js [t]emplate literal
-          ['t'] = {
-            input = { '${' .. '().-()' .. '}' },
-            output = { left = '${', right = '}' }
-          },
-
           -- python [f]-string
           ['f'] = {
             input = { 'f"{' .. '().-()' .. '}"' },
@@ -1193,7 +1187,8 @@ require('lualine').setup {
         no_harpoon = "Harpoon not loaded",
       },
     },
-    lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } }, -- TODO: make it only show time and username
+    -- TODO: make it only show time and username
+    lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
     lualine_z = { 'location' }
   },
   inactive_sections = {
