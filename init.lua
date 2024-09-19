@@ -10,6 +10,9 @@ vim.g.maplocalleader = ' '
 vim.opt.cursorline = true -- highlight current line number
 vim.o.cursorlineopt = "number"
 
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -28,6 +31,29 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  {
+    "3rd/image.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("image").setup({
+        backend = "kitty",
+        integrations = {
+          markdown = {
+            enabled = true,
+            clear_in_insert_mode = true,
+            download_remote_images = true,
+            only_render_image_at_cursor = false,
+            filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+          },
+        },
+        editor_only_render_when_focused = true, -- auto show/hide images when the editor gains/looses focus
+        tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+        max_height_window_percentage = 50,
+        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.svg" },
+      })
+    end
+  }
+  ,
   {
     'MeanderingProgrammer/render-markdown.nvim',
     opts = {
@@ -232,8 +258,8 @@ require('lazy').setup({
     "keaising/im-select.nvim",
     config = function()
       require("im_select").setup({
-        default_im_select = "1",
-        default_command = "fcitx-remote",
+        default_im_select = "keyboard-us",
+        default_command = "fcitx5-remote",
         set_default_events = { "VimEnter", "InsertLeave", "CmdlineLeave" },
         set_previous_events = {}, -- always english when entering insert mode
       })
@@ -1778,11 +1804,6 @@ vim.keymap.set("n", "<leader>tw", "<cmd>Twilight<CR>")
 
 -- enable twilight by default
 vim.api.nvim_create_augroup('Twilight', { clear = true })
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = 'Twilight',
-  pattern = '*',
-  command = 'TwilightEnable'
-})
 
 -- toggle nvim cmp
 vim.api.nvim_set_keymap('n', '<leader>tc', ':NvimCmpToggle<CR>', { noremap = true, silent = true })
