@@ -32,6 +32,46 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    'echasnovski/mini.operators',
+    config = function()
+      require('mini.operators').setup({
+        exchange = {
+          prefix = 'ge',
+        },
+        sort = {
+          func = function(content)
+            local opts = {}
+            if content.submode == 'v' then
+              -- 問使用者要用哪個分隔符進行排序
+              local delimiter = vim.fn.input('Sort delimiter: ')
+              -- 處理分隔符兩邊的空白
+              opts.split_patterns = { '%s*' .. vim.pesc(delimiter) .. '%s*' }
+            end
+
+            -- 設置排序比較函數，數字按大小排列
+            opts.compare_fun = function(a, b)
+              local num_a = tonumber(a)
+              local num_b = tonumber(b)
+              print(num_a)
+              print(num_b)
+
+              if num_a and num_b then
+                -- 如果兩者都是數字，按數值大小排序
+                return num_a < num_b
+              else
+                -- 否則按字母順序排序
+                return a < b
+              end
+            end
+
+            return MiniOperators.default_sort_func(content, opts)
+          end
+        }
+      })
+    end,
+    version = false,
+  },
+  {
     "3rd/image.nvim",
     event = "VeryLazy",
     config = function()
@@ -1170,7 +1210,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -1310,7 +1350,7 @@ local on_attach = function(_, bufnr)
     vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
     require('telescope.builtin').lsp_type_definitions()
   end, '[G]oto [D]efinition')
-  nmap('gr', function()
+  nmap('gR', function()
     vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
     require('telescope.builtin').lsp_references()
   end, '[G]oto [R]eferences')
