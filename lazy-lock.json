@@ -39,7 +39,6 @@
   "mini.splitjoin": { "branch": "main", "commit": "3e92f6764e770ba392325cad3a4497adcada695f" },
   "mini.surround": { "branch": "main", "commit": "0e67c4bc147f2a15cee94e7c94dcc0e115b9f55e" },
   "mini.trailspace": { "branch": "main", "commit": "c48d74a3cecf93f5adc6a7518c7ced60e6302895" },
-  "molten-nvim": { "branch": "main", "commit": "eafa6aa0335a239ee333e6ca45076888b9b011ae" },
   "neodev.nvim": { "branch": "main", "commit": "46aa467dca16cf3dfe27098042402066d2ae242d" },
   "noice.nvim": { "branch": "main", "commit": "448bb9c524a7601035449210838e374a30153172" },
   "none-ls-shellcheck.nvim": { "branch": "main", "commit": "0f84461241e76e376a95fb7391deac82dc3efdbf" },

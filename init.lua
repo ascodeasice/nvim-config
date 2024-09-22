@@ -109,8 +109,9 @@ require('lazy').setup({
           "DiagnosticVirtualTextWarn",
         },
         -- icons = { "󰬺", " 󰬻", "  󰬼", "   󰬽", "    󰬾", "     󰬿", },
-        icons = { "󰬺", "󰬻", "󰬼", "󰬽", "󰬾", "󰬿", },
-        left_pad = 1,
+        -- icons = { "󰬺", "󰬻", "󰬼", "󰬽", "󰬾", "󰬿", },
+        icons = { "", "", "", "", "", "", },
+        -- left_pad = 1,
         sign = false
       },
       code = {
@@ -1210,7 +1211,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin" },
+    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -1870,7 +1871,6 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
-vim.keymap.set("n", "<leader>ze", "<cmd>ZenMode<CR>")
 
 -- format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -1939,3 +1939,7 @@ vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 vim.keymap.set("n", "_", function()
   require('oil').open(vim.loop.cwd())
 end) -- open cwd
+
+
+-- SECTION: my keymap
+vim.keymap.set('n', '<leader>sa', 'ggVG', { desc = "select all" })
