@@ -346,8 +346,9 @@ require('lazy').setup({
           increment = '<C-a>',
           decrement = '<C-x>'
         },
+        -- NOTE: unicode characters causes crash
+        -- NOTE: seems like it cannot work with symbols
         additions = {
-          -- NOTE: unicode characters causes crash
         },
         allow_caps_additions = {
           { 'dev', 'prod' }
