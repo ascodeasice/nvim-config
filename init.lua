@@ -253,15 +253,6 @@ require('lazy').setup({
               end
             end,
           },
-          ["<leader>P"] = function()
-            local oil = require("oil")
-            local filename = oil.get_cursor_entry().name
-            local dir = oil.get_current_dir()
-            oil.close()
-
-            local img_clip = require("img-clip")
-            img_clip.paste_image({}, dir .. filename)
-          end,
         },
         view_options = {
           show_hidden = true,
