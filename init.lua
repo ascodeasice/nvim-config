@@ -1074,10 +1074,6 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- TODO: check the plugins
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
-
 }, {})
 
 -- [[ Setting options ]]
