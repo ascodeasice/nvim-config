@@ -13,9 +13,6 @@ vim.o.cursorlineopt = "number"
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -31,6 +28,38 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  {
+    "gaoDean/autolist.nvim",
+    ft = {
+      "markdown",
+      "text",
+      "tex",
+      "plaintex",
+      "norg",
+    },
+    config = function()
+      require("autolist").setup()
+
+      vim.keymap.set("i", "<tab>", "<cmd>AutolistTab<cr>")
+      vim.keymap.set("i", "<s-tab>", "<cmd>AutolistShiftTab<cr>")
+      -- NOTE: not working
+      vim.keymap.set("i", "<CR>", "<CR><cmd>AutolistNewBullet<cr>")
+      vim.keymap.set("n", "o", "o<cmd>AutolistNewBullet<cr>")
+      vim.keymap.set("n", "O", "O<cmd>AutolistNewBulletBefore<cr>")
+      vim.keymap.set("n", "<leader>ct", "<cmd>AutolistToggleCheckbox<cr><CR>") -- checkbox toggle
+      vim.keymap.set("n", "<C-r>", "<cmd>AutolistRecalculate<cr>")
+
+      -- cycle list types with dot-repeat
+      vim.keymap.set("n", "<leader>cn", require("autolist").cycle_next_dr, { expr = true })
+      vim.keymap.set("n", "<leader>cp", require("autolist").cycle_prev_dr, { expr = true })
+
+      -- functions to recalculate list on edit
+      vim.keymap.set("n", ">>", ">><cmd>AutolistRecalculate<cr>")
+      vim.keymap.set("n", "<<", "<<<cmd>AutolistRecalculate<cr>")
+      vim.keymap.set("n", "dd", "dd<cmd>AutolistRecalculate<cr>")
+      vim.keymap.set("v", "d", "d<cmd>AutolistRecalculate<cr>")
+    end,
+  },
   'jghauser/follow-md-links.nvim',
   {
     'rapan931/lasterisk.nvim'
@@ -1992,4 +2021,7 @@ vim.keymap.set('n', '*', function() require("lasterisk").search() end)
 vim.keymap.set('n', 'g*', function() require("lasterisk").search({ is_whole = false }) end)
 vim.keymap.set('x', 'g*', function() require("lasterisk").search({ is_whole = false }) end)
 
+-- SECTION: follow-md-links.nvim
+-- NOTE: <CR> is mapped into opening files in markdown
+-- Go back to where the file is from
 vim.keymap.set('n', '<bs>', ':edit #<cr>', { silent = true })
