@@ -44,6 +44,10 @@ require('lazy').setup({
             if content.submode == 'v' then
               -- 問使用者要用哪個分隔符進行排序
               local delimiter = vim.fn.input('Sort delimiter: ')
+              -- 如果輸入是空的，則返回，不進行排序
+              if delimiter == '' then
+                return
+              end
               -- 處理分隔符兩邊的空白
               opts.split_patterns = { '%s*' .. vim.pesc(delimiter) .. '%s*' }
             end
@@ -52,8 +56,6 @@ require('lazy').setup({
             opts.compare_fun = function(a, b)
               local num_a = tonumber(a)
               local num_b = tonumber(b)
-              print(num_a)
-              print(num_b)
 
               if num_a and num_b then
                 -- 如果兩者都是數字，按數值大小排序
