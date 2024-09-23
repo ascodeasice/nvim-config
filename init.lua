@@ -31,6 +31,10 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+  'jghauser/follow-md-links.nvim',
+  {
+    'rapan931/lasterisk.nvim'
+  },
   {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
@@ -250,6 +254,17 @@ require('lazy').setup({
                 require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
               else
                 require("oil").set_columns({ "icon" })
+              end
+            end,
+          },
+          ["gi"] = {
+            desc = "Toggle icon",
+            callback = function()
+              icon = not icon
+              if icon then
+                require("oil").set_columns({ "icon" })
+              else
+                require("oil").set_columns({})
               end
             end,
           },
@@ -944,7 +959,6 @@ require('lazy').setup({
 
         -- Toggles
         map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'toggle git blame line' })
-        map('n', '<leader>td', gs.toggle_deleted, { desc = 'toggle git show deleted' })
 
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
@@ -1337,7 +1351,7 @@ local on_attach = function(_, bufnr)
     }
   end, '[R]emove [U]nused')
 
-  nmap('<leader>ti', function()
+  nmap('<leader>tm', function()
     vim.lsp.buf.code_action {
       context = {
         only = { 'source.addMissingImports.ts' }
@@ -1969,3 +1983,13 @@ vim.keymap.set("n", "<leader>ti", function()
     image.enable()
   end
 end, {})
+
+vim.keymap.set('n', '<leader>td', require('render-markdown.api').toggle)
+
+-- SECTION: lasterisk.nvim
+
+vim.keymap.set('n', '*', function() require("lasterisk").search() end)
+vim.keymap.set('n', 'g*', function() require("lasterisk").search({ is_whole = false }) end)
+vim.keymap.set('x', 'g*', function() require("lasterisk").search({ is_whole = false }) end)
+
+vim.keymap.set('n', '<bs>', ':edit #<cr>', { silent = true })
