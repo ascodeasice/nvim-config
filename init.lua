@@ -32,6 +32,18 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
   {
+    "HakonHarnes/img-clip.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add options here
+      -- or leave it empty to use the default settings
+    },
+    keys = {
+      -- suggested keymap
+      { "<leader>P", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
+  },
+  {
     'echasnovski/mini.operators',
     config = function()
       require('mini.operators').setup({
@@ -76,6 +88,7 @@ require('lazy').setup({
   {
     "3rd/image.nvim",
     event = "VeryLazy",
+    branch = "feat/toggle-rendering",
     config = function()
       require("image").setup({
         backend = "kitty",
@@ -240,6 +253,15 @@ require('lazy').setup({
               end
             end,
           },
+          ["<leader>P"] = function()
+            local oil = require("oil")
+            local filename = oil.get_cursor_entry().name
+            local dir = oil.get_current_dir()
+            oil.close()
+
+            local img_clip = require("img-clip")
+            img_clip.paste_image({}, dir .. filename)
+          end,
         },
         view_options = {
           show_hidden = true,
@@ -1607,7 +1629,6 @@ vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
-vim.keymap.set({ "n", "v" }, "<leader>P", [["+p]]) -- my remap,paste from system clipboard
 
 -- This is going to get me cancelled
 -- vim.keymap.set("i", "<C-c>", "<Esc>")
@@ -1946,3 +1967,14 @@ end) -- open cwd
 
 -- SECTION: my keymap
 vim.keymap.set('n', '<leader>sa', 'ggVG', { desc = "select all" })
+
+-- SECTION: image.nvim
+
+vim.keymap.set("n", "<leader>ti", function()
+  local image = require('image')
+  if image.is_enabled() then
+    image.disable()
+  else
+    image.enable()
+  end
+end, {})
