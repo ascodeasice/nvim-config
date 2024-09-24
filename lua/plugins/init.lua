@@ -495,7 +495,18 @@ require('lazy').setup({
 	},
 	{ "sindrets/diffview.nvim" },
 	{ 'eandrju/cellular-automaton.nvim' },
-	{ "mistricky/codesnap.nvim",        build = "make" },
+	{
+		"mistricky/codesnap.nvim",
+		keys = {
+			{ "<leader>cc", "<cmd>CodeSnap<cr>",     mode = "x", desc = "Save selected code snapshot into clipboard" },
+			{ "<leader>cs", "<cmd>CodeSnapSave<cr>", mode = "x", desc = "Save selected code snapshot in ~/Pictures" },
+		},
+		build = "make build_generator",
+		opts = {
+			save_path = "~/Pictures",
+			has_breadcrumbs = false,
+		},
+	},
 	{ "mtdl9/vim-log-highlighting" },
 	{
 		"okuuva/auto-save.nvim",
