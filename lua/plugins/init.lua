@@ -106,13 +106,13 @@ require('lazy').setup({
 	{
 		"3rd/image.nvim",
 		event = "VeryLazy",
-		branch = "feat/toggle-rendering",
 		config = function()
 			require("image").setup({
 				backend = "kitty",
 				integrations = {
 					markdown = {
-						enabled = true,
+						-- enable again after https://github.com/3rd/image.nvim/issues/174 is fixed
+						enabled = false,
 						clear_in_insert_mode = true,
 						download_remote_images = true,
 						only_render_image_at_cursor = false,

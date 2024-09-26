@@ -877,15 +877,17 @@ vim.keymap.set('n', '<leader>sa', 'ggVG', { desc = "select all" })
 
 -- SECTION: image.nvim
 
-vim.keymap.set("n", "<leader>ti", function()
-  local image = require('image')
-  if image.is_enabled() then
-    image.disable()
-  else
-    image.enable()
-  end
-end, {})
+-- NOTE: must use the branch that allows toggle image to use this keymap
 
+-- vim.keymap.set("n", "<leader>ti", function()
+--   local image = require('image')
+--   if image.is_enabled() then
+--     image.disable()
+--   else
+--     image.enable()
+--   end
+-- end, {})
+--
 vim.keymap.set('n', '<leader>td', require('render-markdown.api').toggle)
 
 -- SECTION: lasterisk.nvim
