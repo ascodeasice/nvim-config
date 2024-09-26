@@ -245,10 +245,6 @@ require('lualine').setup {
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
@@ -900,3 +896,8 @@ vim.keymap.set('x', 'g*', function() require("lasterisk").search({ is_whole = fa
 -- NOTE: <CR> is mapped into opening files in markdown
 -- Go back to where the file is from
 vim.keymap.set('n', '<bs>', ':edit #<cr>', { silent = true })
+
+-- SECTION: treesitter-context
+vim.keymap.set("n", "[x", function()
+  require("treesitter-context").go_to_context(vim.v.count1)
+end, { silent = true })

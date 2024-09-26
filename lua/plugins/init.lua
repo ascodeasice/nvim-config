@@ -14,6 +14,9 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		'nvim-treesitter/nvim-treesitter-context'
+	},
+	{
 		"gaoDean/autolist.nvim",
 		ft = {
 			"markdown",
