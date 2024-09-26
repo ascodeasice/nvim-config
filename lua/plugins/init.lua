@@ -14,7 +14,12 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
-		'nvim-treesitter/nvim-treesitter-context'
+		'nvim-treesitter/nvim-treesitter-context',
+		config = function()
+			require('treesitter-context').setup({
+				mode = 'topline'
+			})
+		end
 	},
 	{
 		"gaoDean/autolist.nvim",
