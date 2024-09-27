@@ -901,3 +901,14 @@ vim.keymap.set('n', '<bs>', ':edit #<cr>', { silent = true })
 vim.keymap.set("n", "[x", function()
   require("treesitter-context").go_to_context(vim.v.count1)
 end, { silent = true })
+
+-- 將 Ctrl + , 映射到跳轉列表中的前一個位置 (Ctrl + o)
+vim.api.nvim_set_keymap('n', '<C-,>', '<C-o>', { noremap = true, silent = true })
+
+-- 將 Ctrl + . 映射到跳轉列表中的下一個位置 (Ctrl + i)
+vim.api.nvim_set_keymap('n', '<C-.>', '<C-i>', { noremap = true, silent = true })
+
+
+-- SECTION: portal.nvim
+vim.keymap.set("n", "go", "<cmd>Portal jumplist backward<cr>")
+vim.keymap.set("n", "gi", "<cmd>Portal jumplist forward<cr>")

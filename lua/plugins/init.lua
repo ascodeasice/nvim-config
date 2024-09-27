@@ -14,6 +14,15 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"cbochs/portal.nvim",
+		config = function()
+			require('portal').setup({
+				labels = { "n", "e", "i", "o" },
+
+			})
+		end
+	},
+	{
 		'nvim-treesitter/nvim-treesitter-context',
 		config = function()
 			require('treesitter-context').setup({
@@ -493,7 +502,7 @@ require('lazy').setup({
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		ft = { "markdown" },
-		build = function() vim.fn["mkdp#util#install"]() end,
+		build = "npm install",
 	},
 	{
 		"jemag/telescope-diff.nvim",
