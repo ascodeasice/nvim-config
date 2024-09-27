@@ -226,7 +226,7 @@ require('lualine').setup {
     },
     -- TODO: make it only show time and username
     lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
-    lualine_z = { 'location' }
+    lualine_z = { 'selectioncount', 'location' }
   },
   inactive_sections = {
     lualine_a = {},

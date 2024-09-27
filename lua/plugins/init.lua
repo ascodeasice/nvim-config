@@ -18,7 +18,7 @@ require('lazy').setup({
 		config = function()
 			require('portal').setup({
 				labels = { "n", "e", "i", "o" },
-
+				select_first = true,
 			})
 		end
 	},
