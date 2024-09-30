@@ -14,6 +14,9 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"HiPhish/rainbow-delimiters.nvim",
+	},
+	{
 		"cbochs/portal.nvim",
 		config = function()
 			require('portal').setup({
@@ -169,6 +172,13 @@ require('lazy').setup({
 				left_pad = 2,
 				right_pad = 4,
 				width = 'block',
+			},
+			link = {
+				custom = {
+					youtube = { pattern = '^http[s]?://www%.youtube%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					github = { pattern = '^http[s]?://github%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+
+				}
 			},
 			pipe_table = {
 				row = 'TSRainbowRed',
