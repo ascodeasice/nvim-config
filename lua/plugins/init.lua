@@ -174,10 +174,22 @@ require('lazy').setup({
 				width = 'block',
 			},
 			link = {
+				hyperlink = ' ',
 				custom = {
 					youtube = { pattern = '^http[s]?://www%.youtube%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					github = { pattern = '^http[s]?://github%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-
+					directory = { pattern = "^[^https].*/$", icon = ' ', highlight = 'RenderMarkdownLink' },
+					pdf = { pattern = ".*%.pdf$", icon = ' ', highlight = 'RenderMarkdownLink' },
+					md = { pattern = ".*%.md$", icon = '󰽛 ', highlight = 'RenderMarkdownLink' },
+					reddit = { pattern = '^http[s]?://www%.reddit%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					gitlab = { pattern = '^http[s]?://gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					stackoverflow = { pattern = '^http[s]?://stackoverflow%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					medium = { pattern = '^http[s]?://%w-%.?medium%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					freedium = { pattern = '^http[s]?://%w-%.?freedium%.cfd/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					googlesheet = { pattern = '^http[s]?://docs%.google%.com/spreadsheets/.*', icon = '󰧷 ', highlight = 'RenderMarkdownLink' },
+					googledoc = { pattern = '^http[s]?://docs%.google%.com/document/.*', icon = '󰈙 ', highlight = 'RenderMarkdownLink' },
+					moodle = { pattern = '^http[s]?://moodle%.ncku%.edu%.tw/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					ncku = { pattern = '^http[s]?://.*ncku%.edu%.tw[/]?.*', icon = '󱆀 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
