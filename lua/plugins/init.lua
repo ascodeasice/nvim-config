@@ -179,7 +179,7 @@ require('lazy').setup({
 					youtube = { pattern = '^http[s]?://www%.youtube%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					github = { pattern = '^http[s]?://github%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					directory = { pattern = "^[^https].*/$", icon = ' ', highlight = 'RenderMarkdownLink' },
-					pdf = { pattern = ".*%.pdf$", icon = ' ', highlight = 'RenderMarkdownLink' },
+					pdf = { pattern = ".*%.pdf[>]?$", icon = ' ', highlight = 'RenderMarkdownLink' },
 					md = { pattern = ".*%.md$", icon = '󰽛 ', highlight = 'RenderMarkdownLink' },
 					reddit = { pattern = '^http[s]?://www%.reddit%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					gitlab = { pattern = '^http[s]?://gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },

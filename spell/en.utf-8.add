@@ -202,3 +202,6 @@ ncku
 ideavimrc
 debugprint
 virtualenv
+defun
+elisp
+treesitters
