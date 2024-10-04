@@ -411,22 +411,7 @@ require('lazy').setup({
 		opts = { --[[ Place your opts here ]] }
 	},
 	{
-		"nat-418/boole.nvim",
-		config = function()
-			require('boole').setup({
-				mappings = {
-					increment = '<C-a>',
-					decrement = '<C-x>'
-				},
-				-- NOTE: unicode characters causes crash
-				-- NOTE: seems like it cannot work with symbols
-				additions = {
-				},
-				allow_caps_additions = {
-					{ 'dev', 'prod' }
-				}
-			})
-		end
+		"monaqa/dial.nvim"
 	},
 	{
 		"norcalli/nvim-colorizer.lua",
