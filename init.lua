@@ -909,9 +909,9 @@ vim.api.nvim_set_keymap('n', '<C-,>', '<C-o>', { noremap = true, silent = true }
 vim.api.nvim_set_keymap('n', '<C-.>', '<C-i>', { noremap = true, silent = true })
 
 
--- SECTION: portal.nvim
-vim.keymap.set("n", "go", "<cmd>Portal jumplist backward<cr>")
-vim.keymap.set("n", "gi", "<cmd>Portal jumplist forward<cr>")
+-- map go and gi to jump list
+vim.api.nvim_set_keymap('n', 'go', '<C-o>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gi', '<C-i>', { noremap = true, silent = true })
 
 -- do not open binary files
 

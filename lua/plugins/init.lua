@@ -17,15 +17,6 @@ require('lazy').setup({
 		"HiPhish/rainbow-delimiters.nvim",
 	},
 	{
-		"cbochs/portal.nvim",
-		config = function()
-			require('portal').setup({
-				labels = { "n", "e", "i", "o" },
-				select_first = true,
-			})
-		end
-	},
-	{
 		'nvim-treesitter/nvim-treesitter-context',
 		config = function()
 			require('treesitter-context').setup({
@@ -308,17 +299,6 @@ require('lazy').setup({
 									"size", "mtime" })
 							else
 								require("oil").set_columns({ "icon" })
-							end
-						end,
-					},
-					["gi"] = {
-						desc = "Toggle icon",
-						callback = function()
-							icon = not icon
-							if icon then
-								require("oil").set_columns({ "icon" })
-							else
-								require("oil").set_columns({})
 							end
 						end,
 					},
