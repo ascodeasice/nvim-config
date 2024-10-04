@@ -912,3 +912,42 @@ vim.api.nvim_set_keymap('n', '<C-.>', '<C-i>', { noremap = true, silent = true }
 -- SECTION: portal.nvim
 vim.keymap.set("n", "go", "<cmd>Portal jumplist backward<cr>")
 vim.keymap.set("n", "gi", "<cmd>Portal jumplist forward<cr>")
+
+-- do not open binary files
+
+local function xdg_open()
+  -- Get the current buffer number before opening the file
+  local prev_buf = vim.fn.bufnr('%')
+
+  -- Get the full path of the current file
+  local fn = vim.fn.expand('%:p')
+
+  -- Open the file using xdg-open
+  vim.fn.jobstart('xdg-open "' .. fn .. '"')
+
+  -- Echo a message
+  vim.api.nvim_echo({ { string.format("Opening file: %s", fn) }, { type = "" } }, false, {})
+
+  -- Switch back to the previous buffer
+  if vim.fn.buflisted(prev_buf) == 1 then
+    vim.api.nvim_set_current_buf(prev_buf)
+  end
+
+  -- Optionally close the current buffer if you want
+  vim.api.nvim_buf_delete(0, { force = true })
+end
+
+-- Open binary files with the default application
+local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
+
+-- open those with image.nvim
+-- "jpg", "jpeg", "webp", "png",
+local file_types = { "pdf", "mp3", "mp4", "xls", "xlsx", "xopp", "gif", "doc", "docx" }
+
+for _, ext in ipairs(file_types) do
+  vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
+    pattern = "*." .. ext,
+    group = bin_files,
+    callback = xdg_open
+  })
+end

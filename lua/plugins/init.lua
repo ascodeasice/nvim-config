@@ -505,7 +505,12 @@ require('lazy').setup({
 			vim.o.foldlevelstart = 99
 		end,
 		config = function()
-			require('ufo').setup {}
+			-- use treesitter
+			require('ufo').setup({
+				provider_selector = function(bufnr, filetype, buftype)
+					return { 'treesitter', 'indent' }
+				end
+			})
 		end,
 	},
 	{
