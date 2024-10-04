@@ -274,7 +274,7 @@ local on_attach = function(_, bufnr)
     }
   end, '[T]ypescript add missing imports')
 
-  nmap('<leader>ri', function()
+  nmap('<leader>tu', function()
     vim.lsp.buf.code_action {
       context = {
         only = { 'source.removeUnusedImports.ts' }
@@ -951,3 +951,26 @@ for _, ext in ipairs(file_types) do
     callback = xdg_open
   })
 end
+
+-- SECTION: refactoring.nvim
+
+vim.keymap.set("x", "<leader>rf", function() require('refactoring').refactor('Extract Function') end,
+  { desc = 'Extract Function' })
+vim.keymap.set("x", "<leader>rF", function() require('refactoring').refactor('Extract Function To File') end,
+  { desc = 'Extract Function To File' })
+vim.keymap.set("x", "<leader>rv", function() require('refactoring').refactor('Extract Variable') end,
+  { desc = 'Extract Variable' })
+vim.keymap.set("n", "<leader>rI", function() require('refactoring').refactor('Inline Function') end,
+  { desc = 'Inline Function' })
+vim.keymap.set({ "n", "x" }, "<leader>ri", function() require('refactoring').refactor('Inline Variable') end,
+  { desc = 'Inline Variable' })
+-- Use in visual mode if normal is not working
+
+-- prompt for a refactor to apply when the remap is triggered
+vim.keymap.set(
+  { "n", "x" },
+  "<leader>rr",
+  function() require('refactoring').select_refactor() end,
+  { desc = "Select refactor method" }
+)
+-- Note that not all refactor support both normal and visual mode
