@@ -62,8 +62,8 @@ require('lazy').setup({
 			-- functions to recalculate list on edit
 			vim.keymap.set("n", ">>", ">><cmd>AutolistRecalculate<cr>")
 			vim.keymap.set("n", "<<", "<<<cmd>AutolistRecalculate<cr>")
-			vim.keymap.set("n", "dd", "dd<cmd>AutolistRecalculate<cr>")
-			vim.keymap.set("v", "d", "d<cmd>AutolistRecalculate<cr>")
+			-- vim.keymap.set("n", "dd", "dd<cmd>AutolistRecalculate<cr>")
+			-- vim.keymap.set("v", "d", "d<cmd>AutolistRecalculate<cr>")
 		end,
 	},
 	'jghauser/follow-md-links.nvim',
@@ -187,7 +187,7 @@ require('lazy').setup({
 					gitlab = { pattern = '^http[s]?://gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					stackoverflow = { pattern = '^http[s]?://stackoverflow%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					medium = { pattern = '^http[s]?://%w-%.?medium%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-					freedium = { pattern = '^http[s]?://%w-%.?freedium%.cfd/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					freedium = { pattern = '^http[s]?://%w-%.?freedium%.cfd/.*', icon = '󰯺 ', highlight = 'RenderMarkdownLink' },
 					googlesheet = { pattern = '^http[s]?://docs%.google%.com/spreadsheets/.*', icon = '󰧷 ', highlight = 'RenderMarkdownLink' },
 					googledoc = { pattern = '^http[s]?://docs%.google%.com/document/.*', icon = '󰈙 ', highlight = 'RenderMarkdownLink' },
 					moodle = { pattern = '^http[s]?://moodle%.ncku%.edu%.tw/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
