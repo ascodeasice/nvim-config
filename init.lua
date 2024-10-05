@@ -317,6 +317,12 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+
+  nmap("<C-f>", function()
+      vim.lsp.buf.format()
+      vim.api.nvim_command('write')
+    end,
+    "Format and save")
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
@@ -800,17 +806,17 @@ vim.api.nvim_create_autocmd('BufEnter', {
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
 
 -- format on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  desc = 'Format on Save',
-  -- ts and tsx are handled in another autocmd
-  callback = function()
-    if vim.bo.filetype == "curl" then
-      return
-    end
-    vim.lsp.buf.format()
-  end,
-})
-
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   desc = 'Format on Save',
+--   -- ts and tsx are handled in another autocmd
+--   callback = function()
+--     if vim.bo.filetype == "curl" then
+--       return
+--     end
+--     vim.lsp.buf.format()
+--   end,
+-- })
+--
 -- curl.nvim
 local curl = require("curl")
 curl.setup({})
@@ -1058,3 +1064,5 @@ require("dial.config").augends:register_group {
     augend.date.alias["%Y年%-m月%-d日"]
   },
 }
+
+vim.api.nvim_set_keymap("n","<leader>wt","<cmd>set wrap!<CR>",{desc="Wrap toggle"})

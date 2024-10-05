@@ -132,11 +132,12 @@ require('lazy').setup({
 				backend = "kitty",
 				integrations = {
 					markdown = {
+						-- NOTE: the image render position will not count wrapped lines, to see it in correct line number, set nowrap
 						-- enable again after https://github.com/3rd/image.nvim/issues/174 is fixed
-						enabled = false,
+						enabled = true,
 						clear_in_insert_mode = true,
 						download_remote_images = true,
-						only_render_image_at_cursor = false,
+						only_render_image_at_cursor = true,
 						filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
 					},
 				},
