@@ -1061,7 +1061,7 @@ require("dial.config").augends:register_group {
     augend.date.alias["%Y-%m-%d"],
     augend.date.alias["%m/%d"],
     augend.date.alias["%H:%M"],
-    augend.date.alias["%Y年%-m月%-d日"]
+    augend.date.alias["%Y年%-m月%-d日"],
   },
 }
 
