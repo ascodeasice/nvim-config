@@ -14,6 +14,26 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"epwalsh/obsidian.nvim",
+		version = "*",
+		lazy = true,
+		ft = "markdown",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		opts = {
+			workspaces = {
+				{
+					name = "gtd",
+					path = "~/gtd/reference",
+				},
+			},
+			ui = {
+				enable = false
+			}
+		},
+	},
+	{
 		"ThePrimeagen/refactoring.nvim",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
@@ -66,7 +86,7 @@ require('lazy').setup({
 			-- vim.keymap.set("v", "d", "d<cmd>AutolistRecalculate<cr>")
 		end,
 	},
-	'jghauser/follow-md-links.nvim',
+	-- 'jghauser/follow-md-links.nvim',
 	{
 		'rapan931/lasterisk.nvim'
 	},
@@ -219,12 +239,12 @@ require('lazy').setup({
 		config = function()
 			require('mini.surround').setup({
 				mappings = {
-					add = 'S', -- Add surrounding in Normal and Visual modes
-					delete = 'ds', -- Delete surrounding
-					find = 'Sf', -- Find surrounding (to the right)
+					add = 'S',        -- Add surrounding in Normal and Visual modes
+					delete = 'ds',    -- Delete surrounding
+					find = 'Sf',      -- Find surrounding (to the right)
 					find_left = 'SF', -- Find surrounding (to the left)
 					highlight = 'SH', -- Highlight surrounding
-					replace = 'cs', -- Replace surrounding
+					replace = 'cs',   -- Replace surrounding
 					update_n_lines = 'Sn', -- Update `n_lines`
 
 					suffix_last = '', -- Suffix to search with "prev" method
@@ -530,7 +550,7 @@ require('lazy').setup({
 	{ "mtdl9/vim-log-highlighting" },
 	{
 		"okuuva/auto-save.nvim",
-		cmd = "ASToggle", -- optional for lazy loading on command
+		cmd = "ASToggle",     -- optional for lazy loading on command
 		opts = {
 			debounce_delay = 5000, -- delay after which a pending save is executed
 		},
@@ -569,7 +589,7 @@ require('lazy').setup({
 		config = function()
 			require 'eyeliner'.setup {
 				highlight_on_key = true, -- show highlights only after keypress
-				dim = true -- dim all other characters if set to true (recommended!)
+				dim = true           -- dim all other characters if set to true (recommended!)
 			}
 		end,
 		condition = false -- temporary disable this plugin
@@ -942,7 +962,7 @@ require('lazy').setup({
 						return true
 					else
 						return not context.in_treesitter_capture("comment")
-						    and not context.in_syntax_group("Comment")
+								and not context.in_syntax_group("Comment")
 					end
 				end
 			}
