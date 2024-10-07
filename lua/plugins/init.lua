@@ -14,6 +14,19 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"hedyhli/outline.nvim",
+		lazy = true,
+		cmd = { "Outline", "OutlineOpen" },
+		keys = { -- Example mapping to toggle outline
+			{ "<leader>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
+		},
+		opts = {
+			keymaps={
+			}
+			-- Your setup opts here
+		},
+	},
+	{
 		"epwalsh/obsidian.nvim",
 		version = "*",
 		lazy = true,
@@ -30,7 +43,8 @@ require('lazy').setup({
 			},
 			ui = {
 				enable = false
-			}
+			},
+			-- NOTE: the mappings only work in obsidian vault
 		},
 	},
 	{
@@ -86,7 +100,7 @@ require('lazy').setup({
 			-- vim.keymap.set("v", "d", "d<cmd>AutolistRecalculate<cr>")
 		end,
 	},
-	-- 'jghauser/follow-md-links.nvim',
+	'jghauser/follow-md-links.nvim', -- used for places outside of obsidian vault
 	{
 		'rapan931/lasterisk.nvim'
 	},
