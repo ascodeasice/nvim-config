@@ -14,6 +14,27 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		'echasnovski/mini.move',
+		version = false,
+		config = function()
+			require("mini.move").setup({
+				mappings = {
+					-- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+					left = '<M-Left>',
+					right = '<M-Right>',
+					down = '<M-Down>',
+					up = '<M-Up>',
+
+					-- Move current line in Normal mode
+					line_left = '<M-Left>',
+					line_right = '<M-Right>',
+					line_down = '<M-Down>',
+					line_up = '<M-Up>',
+				},
+			})
+		end
+	},
+	{
 		"hedyhli/outline.nvim",
 		lazy = true,
 		cmd = { "Outline", "OutlineOpen" },
@@ -21,7 +42,7 @@ require('lazy').setup({
 			{ "<leader>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
 		},
 		opts = {
-			keymaps={
+			keymaps = {
 			}
 			-- Your setup opts here
 		},
@@ -371,7 +392,7 @@ require('lazy').setup({
 			signs = false,
 			highlight = {
 				multiline = false,
-				before = "fg",
+				-- before = "fg",
 				keyword = "fg"
 			},
 			search = {
