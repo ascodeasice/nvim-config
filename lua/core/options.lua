@@ -52,6 +52,8 @@ vim.opt.scrolloff = 8
 -- vim-sleuth probably handles most problem of tab
 vim.opt.tabstop = 2
 
+vim.o.wildmode = "longest:full,full" -- make nvim do completions like in bash
+
 -- luarocks
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"

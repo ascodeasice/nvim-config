@@ -1113,3 +1113,10 @@ require("dial.config").augends:register_group {
 }
 
 vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
+
+-- SECTION: obsidian.nvim
+
+vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianYesterday<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>ObsidianTomorrow<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>ObsidianNew<CR>", { noremap = true })

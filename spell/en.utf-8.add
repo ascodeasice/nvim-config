@@ -221,3 +221,9 @@ markor
 progn
 to
 dired
+eldoc
+autolist
+touchegg
+minibuffer
+edebug
+edebug
