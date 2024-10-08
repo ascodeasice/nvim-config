@@ -1120,3 +1120,4 @@ vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianYesterday<CR>", { norem
 vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>ObsidianTomorrow<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>ObsidianNew<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>og", "<cmd>ObsidianTags<CR>", { noremap = true })
