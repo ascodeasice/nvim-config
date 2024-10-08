@@ -65,6 +65,19 @@ require('lazy').setup({
 			ui = {
 				enable = false
 			},
+			note_id_func = function(title)
+				-- use title as file name if possible
+				local suffix = ""
+				if title ~= nil then
+					return title
+				else
+					-- If title is nil, just add 4 random uppercase letters to the suffix.
+					for _ = 1, 4 do
+						suffix = suffix .. string.char(math.random(65, 90))
+					end
+					return tostring(os.time()) .. "-" .. suffix
+				end
+			end
 			-- NOTE: the mappings only work in obsidian vault
 		},
 	},
@@ -309,8 +322,8 @@ require('lazy').setup({
 						output = { left = '{', right = '}' },
 					},
 
-					-- b[r]acket
-					['r'] = {
+					-- match "every brackets" in nvim-various-textobjs
+					['o'] = {
 						input = { '%[().-()%]' },
 						output = { left = '[', right = ']' },
 					},

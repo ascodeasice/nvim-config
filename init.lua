@@ -736,6 +736,35 @@ vim.keymap.set("n", "zp", function()
   require("ufo.preview"):peekFoldedLinesUnderCursor()
 end)
 
+-- return the max fold level of the buffer (for now doing the opposite and folding incrementally is unbounded)
+-- Also jarring if you start folding incrementally after opening all folds
+local function max_level()
+  -- return vim.wo.foldlevel -- find a way for this to return max fold level
+  return 0
+end
+
+---Set the fold level to the provided value and store it locally to the buffer
+---@param num integer the fold level to set
+local function set_fold(num)
+  -- vim.w.ufo_foldlevel = math.min(math.max(0, num), max_level()) -- when max_level is implemneted properly
+  vim.b.ufo_foldlevel = math.max(0, num)
+  require("ufo").closeFoldsWith(vim.b.ufo_foldlevel)
+end
+
+---Shift the current fold level by the provided amount
+---@param dir number positive or negative number to add to the current fold level to shift it
+local shift_fold = function(dir) set_fold((vim.b.ufo_foldlevel or max_level()) + dir) end
+
+-- when max_level is implemented properly
+-- vim.keymap.set("n", "zR", function() set_win_fold(max_level()) end, { desc = "Open all folds" })
+vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
+
+vim.keymap.set("n", "zM", function() set_fold(0) end, { desc = "Close all folds" })
+
+vim.keymap.set("n", "zr", function() shift_fold(vim.v.count == 0 and 1 or vim.v.count) end, { desc = "Fold less" })
+
+vim.keymap.set("n", "zm", function() shift_fold(-(vim.v.count == 0 and 1 or vim.v.count)) end, { desc = "Fold more" })
+
 -- next and prev fold
 vim.api.nvim_set_keymap('n', 'z<Up>', 'zk', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'z<Down>', 'zj', { noremap = true, silent = true })
@@ -948,7 +977,7 @@ local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
 
 -- open those with image.nvim
 -- "jpg", "jpeg", "webp", "png",
-local file_types = { "pdf", "mp3", "mp4", "xls", "xlsx", "xopp", "gif", "doc", "docx","webm" }
+local file_types = { "pdf", "mp3", "mp4", "xls", "xlsx", "xopp", "gif", "doc", "docx", "webm" }
 
 for _, ext in ipairs(file_types) do
   vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
@@ -1041,6 +1070,12 @@ require("dial.config").augends:register_group {
       preserve_case = true
     },
     augend.constant.new {
+      elements = { "up", "down" },
+      word = true,
+      cyclic = true,
+      preserve_case = true
+    },
+    augend.constant.new {
       elements = { "left", "right" },
       word = true,
       cyclic = true,
@@ -1048,6 +1083,18 @@ require("dial.config").augends:register_group {
     },
     augend.constant.new {
       elements = { "top", "bottom" },
+      word = true,
+      cyclic = true,
+      preserve_case = true
+    },
+    augend.constant.new {
+      elements = { "yes", "no" },
+      word = true,
+      cyclic = true,
+      preserve_case = true
+    },
+    augend.constant.new {
+      elements = { "prev", "next" },
       word = true,
       cyclic = true,
       preserve_case = true
@@ -1065,5 +1112,4 @@ require("dial.config").augends:register_group {
   },
 }
 
-vim.api.nvim_set_keymap("n","<leader>wt","<cmd>set wrap!<CR>",{desc="Wrap toggle"})
-
+vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
