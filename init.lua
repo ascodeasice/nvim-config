@@ -1099,6 +1099,12 @@ require("dial.config").augends:register_group {
       cyclic = true,
       preserve_case = true
     },
+    augend.constant.new {
+      elements = { "find", "read", "do", "write" },
+      word = true,
+      cyclic = true,
+      preserve_case = true
+    },
     augend.constant.alias.bool,
     augend.integer.alias.decimal,
     augend.integer.alias.binary,
