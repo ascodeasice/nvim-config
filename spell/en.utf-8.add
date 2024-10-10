@@ -227,3 +227,5 @@ touchegg
 minibuffer
 edebug
 edebug
+markdownlint
+whitespace

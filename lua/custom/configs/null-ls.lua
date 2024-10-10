@@ -14,7 +14,8 @@ local opts = {
 		}),
 		null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
 		null_ls.builtins.formatting.prettierd,
-		null_ls.builtins.diagnostics.actionlint
+		null_ls.builtins.diagnostics.actionlint,
+		null_ls.builtins.diagnostics.markdownlint,
 	}
 }
 return opts

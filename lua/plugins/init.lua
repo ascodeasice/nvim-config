@@ -77,7 +77,15 @@ require('lazy').setup({
 					end
 					return tostring(os.time()) .. "-" .. suffix
 				end
-			end
+			end,
+			mappings = {
+				["<cr>"] = {
+					action = function()
+						return require("obsidian").util.gf_passthrough()
+					end,
+					opts = { buffer = true, expr = true },
+				}
+			}
 			-- NOTE: the mappings only work in obsidian vault
 		},
 	},
