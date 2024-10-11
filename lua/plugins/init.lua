@@ -85,8 +85,18 @@ require('lazy').setup({
 					end,
 					opts = { buffer = true, expr = true },
 				}
-			}
+			},
 			-- NOTE: the mappings only work in obsidian vault
+			templates = {
+				folder = "templates",
+				date_format = "%Y-%m-%d",
+				time_format = "%H:%M",
+				-- A map for custom variables, the key should be the variable and the value a function
+				substitutions = {},
+			},
+			daily_notes = {
+				template = "daily-note"
+			}
 		},
 	},
 	{

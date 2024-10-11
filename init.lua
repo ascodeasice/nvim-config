@@ -1129,3 +1129,5 @@ vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>ObsidianNew<CR>", { noremap = t
 vim.api.nvim_set_keymap("n", "<leader>og", "<cmd>ObsidianTags<CR>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<leader>oe", ":ObsidianExtractNote<CR>", { noremap = true }) -- NOTE: <cmd> and : are different
 vim.api.nvim_set_keymap("n", "<leader>ob", "<cmd>ObsidianBacklinks<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>oN", "<cmd>ObsidianNewFromTemplate<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>oT", "<cmd>ObsidianTemplate<CR>", { noremap = true })

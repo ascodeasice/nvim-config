@@ -206,7 +206,6 @@ defun
 elisp
 treesitters
 tldr
-zettlekasten
 callout
 callouts
 rmarkdown
@@ -229,3 +228,9 @@ edebug
 edebug
 markdownlint
 whitespace
+zettelkasten
+virtualization
+eeprom
+histsize
+mischa
+submodule
