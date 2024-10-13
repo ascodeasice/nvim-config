@@ -234,3 +234,6 @@ eeprom
 histsize
 mischa
 submodule
+numa
+timesharing
+virtualized
