@@ -15,7 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
 	{
 		"3rd/diagram.nvim",
-		branch="feature/toggle",
+		branch = "feature/toggle",
 		dependencies = {
 			"3rd/image.nvim",
 		},
@@ -28,8 +28,8 @@ require('lazy').setup({
 				renderer_options = {
 					mermaid = {
 						theme = "dark",
-						background ="'#31353f'", -- nil | "transparent" | "white" | "#hex"
-						scale=2,
+						background = "'#31353f'", -- nil | "transparent" | "white" | "#hex"
+						scale = 2,
 					}
 				}
 			})
@@ -240,7 +240,6 @@ require('lazy').setup({
 				integrations = {
 					markdown = {
 						-- NOTE: the image render position will not count wrapped lines, to see it in correct line number, set nowrap
-						-- enable again after https://github.com/3rd/image.nvim/issues/174 is fixed
 						enabled = true,
 						clear_in_insert_mode = true,
 						download_remote_images = true,
