@@ -1115,6 +1115,8 @@ require("dial.config").augends:register_group {
     augend.date.alias["%m/%d"],
     augend.date.alias["%H:%M"],
     augend.date.alias["%Y年%-m月%-d日"],
+    augend.constant.alias.alpha,
+    augend.constant.alias.Alpha,
   },
 }
 
@@ -1122,12 +1124,19 @@ vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap 
 
 -- SECTION: obsidian.nvim
 
-vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianToday -1<CR>", { noremap = true,desc="Obsidian yesterday without working day" })
+vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianToday -1<CR>",
+  { noremap = true, desc = "Obsidian yesterday without working day" })
 vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>Obsidian +1<CR>", { noremap = true,desc="Obsidian tomorrow without working day"  })
+vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>Obsidian +1<CR>",
+  { noremap = true, desc = "Obsidian tomorrow without working day" })
 vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>ObsidianNew<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>og", "<cmd>ObsidianTags<CR>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<leader>oe", ":ObsidianExtractNote<CR>", { noremap = true }) -- NOTE: <cmd> and : are different
 vim.api.nvim_set_keymap("n", "<leader>ob", "<cmd>ObsidianBacklinks<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>oN", "<cmd>ObsidianNewFromTemplate<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>oT", "<cmd>ObsidianTemplate<CR>", { noremap = true })
+
+-- SECTION: diagram.nvim
+
+-- toggle diagram render for feature/toggle branch
+vim.api.nvim_set_keymap("n", "<leader>tD", "<cmd>Diagram toggle<CR>", { noremap = true })

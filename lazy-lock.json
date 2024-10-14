@@ -13,6 +13,7 @@
   "csvlens.nvim": { "branch": "main", "commit": "987375e2cf6399850f7f801b53b89c981ed652fa" },
   "curl.nvim": { "branch": "main", "commit": "e3e70d8b2cce6b45291a25156fbb50921e3ae941" },
   "debugprint.nvim": { "branch": "main", "commit": "aa2e6966e1caf57a80df293565bb669cc8dbe50d" },
+  "diagram.nvim": { "branch": "feature/toggle", "commit": "1022def2b5b2c70895e381f13a75abee6327a23c" },
   "dial.nvim": { "branch": "master", "commit": "ed4d6a5bbd5e479b4c4a3019d148561a2e6c1490" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "dressing.nvim": { "branch": "master", "commit": "1b7921eecc65af1baf8ac1dc06f0794934cbcfb2" },

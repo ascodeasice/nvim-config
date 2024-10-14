@@ -14,6 +14,28 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"3rd/diagram.nvim",
+		branch="feature/toggle",
+		dependencies = {
+			"3rd/image.nvim",
+		},
+		config = function()
+			require("diagram").setup({
+				integrations = {
+					require("diagram.integrations.markdown"),
+					require("diagram.integrations.neorg"),
+				},
+				renderer_options = {
+					mermaid = {
+						theme = "dark",
+						background ="'#31353f'", -- nil | "transparent" | "white" | "#hex"
+						scale=2,
+					}
+				}
+			})
+		end
+	},
+	{
 		'echasnovski/mini.move',
 		version = false,
 		config = function()
