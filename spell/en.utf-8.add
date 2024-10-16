@@ -244,3 +244,6 @@ mmdc
 chroot
 dockerfile
 dockerhub
+subgraph
+bashrc
+subshell
