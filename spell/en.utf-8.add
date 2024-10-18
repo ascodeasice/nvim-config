@@ -247,3 +247,5 @@ dockerhub
 subgraph
 bashrc
 subshell
+dest
+gitignore
