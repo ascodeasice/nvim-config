@@ -318,11 +318,6 @@ local on_attach = function(_, bufnr)
   end, '[W]orkspace [L]ist Folders')
 
 
-  nmap("<C-f>", function()
-      vim.lsp.buf.format()
-      vim.api.nvim_command('write')
-    end,
-    "Format and save")
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
@@ -551,6 +546,11 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 vim.keymap.set("n", "Q", "<cmd>q!<CR>")
 vim.keymap.set("n", "<leader>ff", vim.lsp.buf.format)
+vim.keymap.set("n", "<C-f>", function()
+    vim.lsp.buf.format()
+    vim.api.nvim_command('write')
+  end,
+  { desc = "Format and save" })
 
 -- for quickfix
 vim.keymap.set("n", "<C-Up>", "<cmd>cnext<CR>zz")
@@ -977,7 +977,7 @@ local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
 
 -- open those with image.nvim
 -- "jpg", "jpeg", "webp", "png",
-local file_types = { "pdf", "doc", "docx", "gif", "mkv" , "mp3", "mp4", "webm", "xls", "xlsx","xopp"}
+local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp" }
 
 for _, ext in ipairs(file_types) do
   vim.api.nvim_create_autocmd({ "BufReadCmd" }, {

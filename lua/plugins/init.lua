@@ -106,7 +106,13 @@ require('lazy').setup({
 						return require("obsidian").util.gf_passthrough()
 					end,
 					opts = { buffer = true, expr = true },
-				}
+				},
+				["<leader>ct"] = {
+					action = function()
+						return require("obsidian").util.toggle_checkbox()
+					end,
+					opts = { buffer = true },
+				},
 			},
 			-- NOTE: the mappings only work in obsidian vault
 			templates = {
@@ -160,7 +166,7 @@ require('lazy').setup({
 			vim.keymap.set("i", "<CR>", "<CR><cmd>AutolistNewBullet<cr>")
 			vim.keymap.set("n", "o", "o<cmd>AutolistNewBullet<cr>")
 			vim.keymap.set("n", "O", "O<cmd>AutolistNewBulletBefore<cr>")
-			vim.keymap.set("n", "<leader>ct", "<cmd>AutolistToggleCheckbox<cr><CR>") -- checkbox toggle
+			-- vim.keymap.set("n", "<leader>ct", "<cmd>AutolistToggleCheckbox<cr><CR>") -- checkbox toggle
 
 			-- cycle list types with dot-repeat
 			vim.keymap.set("n", "<leader>cn", require("autolist").cycle_next_dr, { expr = true })
