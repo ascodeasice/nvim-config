@@ -283,22 +283,6 @@ local on_attach = function(_, bufnr)
     }
   end, '[R]emove unused i[m]ports')
 
-  nmap('<leader>ca', function()
-    vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
-  end, '[C]ode [A]ction')
-
-  nmap('gd', function()
-    vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
-    require('telescope.builtin').lsp_definitions()
-  end, '[G]oto [D]efinition')
-  nmap('gD', function()
-    vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
-    require('telescope.builtin').lsp_type_definitions()
-  end, '[G]oto [D]efinition')
-  nmap('gR', function()
-    vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
-    require('telescope.builtin').lsp_references()
-  end, '[G]oto [R]eferences')
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
   -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -306,7 +290,6 @@ local on_attach = function(_, bufnr)
 
 
   -- See `:help K` for why this keymap
-  nmap('gh', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
@@ -426,6 +409,20 @@ lspconfig.ruff_lsp.setup {
     }
   }
 }
+
+require("lspconfig")["pyright"].setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        python = {
+            analysis = {
+                diagnosticSeverityOverrides = {
+                    reportUnusedExpression = "none",
+                },
+            },
+        },
+    },
+})
 
 
 lspconfig.jdtls.setup {}
@@ -1140,3 +1137,130 @@ vim.api.nvim_set_keymap("n", "<leader>oT", "<cmd>ObsidianTemplate<CR>", { norema
 
 -- toggle diagram render for feature/toggle branch
 vim.api.nvim_set_keymap("n", "<leader>tD", "<cmd>Diagram toggle<CR>", { noremap = true })
+
+-- SECTION: molten.nvim
+
+-- I find auto open annoying, keep in mind setting this option will require setting
+-- a keybind for `:noautocmd MoltenEnterOutput` to open the output again
+vim.g.molten_auto_open_output = false
+
+-- this guide will be using image.nvim
+-- Don't forget to setup and install the plugin if you want to view image outputs
+vim.g.molten_image_provider = "image.nvim"
+
+-- optional, I like wrapping. works for virt text and the output window
+vim.g.molten_wrap_output = true
+
+-- Output as virtual text. Allows outputs to always be shown, works with images, but can
+-- be buggy with longer images
+vim.g.molten_virt_text_output = true
+
+-- this will make it so the output shows up below the \`\`\` cell delimiter
+vim.g.molten_virt_lines_off_by_1 = true
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "MoltenInitPost",
+  callback = function()
+    vim.keymap.set("n", "<localleader>me", ":MoltenEvaluateOperator<CR>", { desc = "evaluate operator", silent = true })
+    vim.keymap.set("n", "<localleader>mo", ":noautocmd MoltenEnterOutput<CR>",
+      { desc = "open output window", silent = true })
+    vim.keymap.set("n", "<localleader>mr", ":MoltenReevaluateCell<CR>", { desc = "re-eval cell", silent = true })
+    vim.keymap.set("v", "<localleader>mv", ":<C-u>MoltenEvaluateVisual<CR>gv",
+      { desc = "execute visual selection", silent = true })
+    vim.keymap.set("n", "<localleader>mh", ":MoltenHideOutput<CR>", { desc = "close output window", silent = true })
+    vim.keymap.set("n", "<localleader>md", ":MoltenDelete<CR>", { desc = "delete Molten cell", silent = true })
+
+    -- if you work with html outputs:
+    vim.keymap.set("n", "<localleader>mx", ":MoltenOpenInBrowser<CR>", { desc = "open output in browser", silent = true })
+  end,
+})
+
+-- SECTION: lsp remap
+-- NOTE: move lsp remap outside of on_attach so that quarto.nvim can use them even if no lsp is attached through lspconfig
+
+vim.keymap.set("n", '<leader>ca', function()
+  vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
+end, { desc = '[C]ode [A]ction' })
+
+vim.keymap.set("n", 'gd', function()
+  vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
+  require('telescope.builtin').lsp_definitions()
+end, { desc = '[G]oto [D]efinition' })
+
+vim.keymap.set("n", 'gD', function()
+  vim.api.nvim_feedkeys("mR", "n", false); -- mark as reference
+  require('telescope.builtin').lsp_type_definitions()
+end, { desc = '[G]oto type [D]efinition' })
+vim.keymap.set("n", 'gR', function()
+  vim.api.nvim_feedkeys("mD", "n", false); -- mark as definition
+  require('telescope.builtin').lsp_references()
+end, { desc = '[G]oto [R]eferences' })
+vim.keymap.set("n", 'gh', vim.lsp.buf.hover, { desc = 'Hover Documentation' })
+
+-- SECTION quarto.nvim
+
+local runner = require("quarto.runner")
+-- these did not overlap with refactoring.nvim
+vim.keymap.set("n", "<localleader>rc", runner.run_cell,  { desc = "run cell", silent = true })
+vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
+vim.keymap.set("n", "<localleader>rA", runner.run_all,   { desc = "run all cells", silent = true })
+vim.keymap.set("n", "<localleader>rl", runner.run_line,  { desc = "run line", silent = true })
+vim.keymap.set("v", "<localleader>r",  runner.run_range, { desc = "run visual range", silent = true })
+vim.keymap.set("n", "<localleader>RA", function()
+  runner.run_all(true)
+end, { desc = "run all cells of all languages", silent = true })
+
+-- Provide a command to create a blank new Python notebook
+-- note: the metadata is needed for Jupytext to understand how to parse the notebook.
+-- if you use another language than Python, you should change it in the template.
+local default_notebook = [[
+  {
+    "cells": [
+     {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ""
+      ]
+     }
+    ],
+    "metadata": {
+     "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+     },
+     "language_info": {
+      "codemirror_mode": {
+        "name": "ipython"
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3"
+     }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 5
+  }
+]]
+
+local function new_notebook(filename)
+  local path = filename .. ".ipynb"
+  local file = io.open(path, "w")
+  if file then
+    file:write(default_notebook)
+    file:close()
+    vim.cmd("edit " .. path)
+  else
+    print("Error: Could not open new notebook file for writing.")
+  end
+end
+
+vim.api.nvim_create_user_command('NewNotebook', function(opts)
+  new_notebook(opts.args)
+end, {
+  nargs = 1,
+  complete = 'file'
+})

@@ -14,6 +14,45 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"quarto-dev/quarto-nvim",
+		dependencies = {
+			"jmbuhr/otter.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		ft = { "quarto", "markdown" },
+		config = function()
+			require("quarto").setup({
+				lspFeatures = {
+					-- NOTE: put whatever languages you want here:
+					languages = { "r", "python", "rust" },
+					chunks = "all",
+					diagnostics = {
+						enabled = true,
+						triggers = { "BufWritePost" },
+					},
+					completion = {
+						enabled = true,
+					},
+				},
+				codeRunner = {
+					enabled = true,
+					default_method = "molten",
+				},
+			})
+		end
+	},
+	{
+		"benlubas/molten-nvim",
+		version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
+		dependencies = { "3rd/image.nvim" },
+		build = ":UpdateRemotePlugins",
+		init = function()
+			-- these are examples, not defaults. Please see the readme
+			vim.g.molten_image_provider = "image.nvim"
+			vim.g.molten_output_win_max_height = 20
+		end,
+	},
+	{
 		"3rd/diagram.nvim",
 		branch = "feature/toggle",
 		dependencies = {
@@ -255,7 +294,10 @@ require('lazy').setup({
 				},
 				editor_only_render_when_focused = true, -- auto show/hide images when the editor gains/looses focus
 				tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
-				max_height_window_percentage = 50,
+				max_height_window_percentage = math.huge, -- this is necessary for a good experience (molten.nvim)
+				max_width_window_percentage = math.huge,
+				max_width = 100,                      -- tweak to preference
+				max_height = 12,                      -- ^
 				hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", },
 			})
 		end
@@ -380,6 +422,13 @@ require('lazy').setup({
 	{
 		"GCBallesteros/jupytext.nvim",
 		config = true,
+		config = function()
+			require("jupytext").setup({
+				style = "markdown",
+				output_extension = "md",
+				force_ft = "markdown",
+			})
+		end
 		-- Depending on your nvim distro or config you may need to make the loading not lazy
 		-- lazy=false,
 	},
