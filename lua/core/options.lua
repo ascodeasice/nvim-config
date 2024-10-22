@@ -2,6 +2,9 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- use system clipboard
+vim.opt.clipboard:append('unnamedplus')
+
 -- show both relative and absolute line number
 vim.o.number = true
 vim.wo.relativenumber = true
