@@ -159,7 +159,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin", "clojure", "commonlisp", "dockerfile","yaml" },
+    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin", "clojure", "commonlisp", "dockerfile", "yaml" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -411,17 +411,17 @@ lspconfig.ruff_lsp.setup {
 }
 
 require("lspconfig")["pyright"].setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        python = {
-            analysis = {
-                diagnosticSeverityOverrides = {
-                    reportUnusedExpression = "none",
-                },
-            },
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    python = {
+      analysis = {
+        diagnosticSeverityOverrides = {
+          reportUnusedExpression = "none",
         },
+      },
     },
+  },
 })
 
 
@@ -1201,11 +1201,11 @@ vim.keymap.set("n", 'gh', vim.lsp.buf.hover, { desc = 'Hover Documentation' })
 
 local runner = require("quarto.runner")
 -- these did not overlap with refactoring.nvim
-vim.keymap.set("n", "<localleader>rc", runner.run_cell,  { desc = "run cell", silent = true })
+vim.keymap.set("n", "<localleader>rc", runner.run_cell, { desc = "run cell", silent = true })
 vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
-vim.keymap.set("n", "<localleader>rA", runner.run_all,   { desc = "run all cells", silent = true })
-vim.keymap.set("n", "<localleader>rl", runner.run_line,  { desc = "run line", silent = true })
-vim.keymap.set("v", "<localleader>r",  runner.run_range, { desc = "run visual range", silent = true })
+vim.keymap.set("n", "<localleader>rA", runner.run_all, { desc = "run all cells", silent = true })
+vim.keymap.set("n", "<localleader>rl", runner.run_line, { desc = "run line", silent = true })
+vim.keymap.set("v", "<localleader>r", runner.run_range, { desc = "run visual range", silent = true })
 vim.keymap.set("n", "<localleader>RA", function()
   runner.run_all(true)
 end, { desc = "run all cells of all languages", silent = true })

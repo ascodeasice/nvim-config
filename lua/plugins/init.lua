@@ -346,6 +346,9 @@ require('lazy').setup({
 					googledoc = { pattern = '^http[s]?://docs%.google%.com/document/.*', icon = '󰈙 ', highlight = 'RenderMarkdownLink' },
 					moodle = { pattern = '^http[s]?://moodle%.ncku%.edu%.tw/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					ncku = { pattern = '^http[s]?://.*ncku%.edu%.tw[/]?.*', icon = '󱆀 ', highlight = 'RenderMarkdownLink' },
+					docker = { pattern = '^http[s]?://.*docker%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					pypi = { pattern = '^http[s]?://.*pypi%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					npm = { pattern = '^http[s]?://.*npmjs%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {

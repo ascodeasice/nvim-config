@@ -255,3 +255,5 @@ noto
 matplotlib
 psql
 perf
+tablename
+ipython
