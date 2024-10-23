@@ -806,8 +806,7 @@ require('lazy').setup({
 			"rcarriga/nvim-dap-ui"
 		},
 		config = function(_, opts)
-			local path = " /home/leo/anaconda3/bin/python "
-			require("dap-python").setup(path)
+			require("dap-python").setup("python") -- use global python
 		end
 	},
 	{
