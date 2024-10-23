@@ -353,6 +353,11 @@ require('lazy').setup({
 			},
 			pipe_table = {
 				row = 'TSRainbowRed',
+			},
+			latex = {
+				highlight = 'DiagnosticInfo',
+				top_pad = 1,
+				bottom_pad = 1,
 			}
 		},
 		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
