@@ -263,3 +263,13 @@ cmus
 faillock
 sochastic
 randint
+groupadd
+getent
+useradd
+passwd
+cursorline
+couldn
+argc
+argv
+atoi
+plotly

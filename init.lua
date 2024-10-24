@@ -52,6 +52,7 @@ require('telescope').setup {
   },
   pickers = {
     find_files = {
+      -- NOTE: this is a way to not ignore any file unless specified here
       find_command = {
         "rg",
         "--no-ignore",
@@ -61,6 +62,10 @@ require('telescope').setup {
         "!**/node_modules/*",
         "-g",
         "!**/.git/*",
+        "-g",
+        "!**/venv/*",
+        "-g",
+        "!**/.*cache/*",
       },
     },
   },
@@ -159,7 +164,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin", "clojure", "commonlisp", "dockerfile", "yaml","latex" },
+    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin", "clojure", "commonlisp", "dockerfile", "yaml", "latex" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -974,7 +979,7 @@ local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
 
 -- open those with image.nvim
 -- "jpg", "jpeg", "webp", "png",
-local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp" }
+local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp", "pptx", "ppt" }
 
 for _, ext in ipairs(file_types) do
   vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
