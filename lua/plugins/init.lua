@@ -333,12 +333,12 @@ require('lazy').setup({
 				hyperlink = ' ',
 				custom = {
 					youtube = { pattern = '^http[s]?://www%.youtube%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-					github = { pattern = '^http[s]?://github%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					github = { pattern = '^http[s]?://.*github%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					directory = { pattern = "^[^https].*/$", icon = ' ', highlight = 'RenderMarkdownLink' },
 					pdf = { pattern = ".*%.pdf[>]?$", icon = ' ', highlight = 'RenderMarkdownLink' },
 					md = { pattern = ".*%.md$", icon = '󰽛 ', highlight = 'RenderMarkdownLink' },
 					reddit = { pattern = '^http[s]?://www%.reddit%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-					gitlab = { pattern = '^http[s]?://gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					gitlab = { pattern = '^http[s]?://.*gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					stackoverflow = { pattern = '^http[s]?://stackoverflow%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					medium = { pattern = '^http[s]?://%w-%.?medium%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					freedium = { pattern = '^http[s]?://%w-%.?freedium%.cfd/.*', icon = '󰯺 ', highlight = 'RenderMarkdownLink' },
@@ -349,7 +349,7 @@ require('lazy').setup({
 					docker = { pattern = '^http[s]?://.*docker%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					pypi = { pattern = '^http[s]?://.*pypi%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					npm = { pattern = '^http[s]?://.*npmjs%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-					npm = { pattern = '^http[s]?://.*archlinux%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					arch = { pattern = '^http[s]?://.*archlinux%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
