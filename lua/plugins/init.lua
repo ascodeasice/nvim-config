@@ -350,6 +350,7 @@ require('lazy').setup({
 					pypi = { pattern = '^http[s]?://.*pypi%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					npm = { pattern = '^http[s]?://.*npmjs%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					arch = { pattern = '^http[s]?://.*archlinux%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					figma = { pattern = '^http[s]?://.*figma%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
