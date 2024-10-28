@@ -509,7 +509,7 @@ require('lazy').setup({
 			highlight = {
 				multiline = false,
 				-- before = "fg",
-				-- keyword = "fg"
+				keyword = "fg"
 			},
 			search = {
 				command = "rg",
