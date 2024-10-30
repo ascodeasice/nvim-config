@@ -284,3 +284,5 @@ warpd
 termux
 tensorflow
 prebuilt
+sessionmaker
+crontab

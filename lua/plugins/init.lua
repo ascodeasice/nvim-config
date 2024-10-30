@@ -351,6 +351,8 @@ require('lazy').setup({
 					npm = { pattern = '^http[s]?://.*npmjs%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					arch = { pattern = '^http[s]?://.*archlinux%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					figma = { pattern = '^http[s]?://.*figma%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					localhost = { pattern = '^http://localhost.*', icon = '󰋜 ', highlight = 'RenderMarkdownLink' },
+					localhost_ip = { pattern = '^http://127%.0%.0%.1.*', icon = '󰋜 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
