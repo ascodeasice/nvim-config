@@ -286,3 +286,9 @@ tensorflow
 prebuilt
 sessionmaker
 crontab
+dockerize
+buildx
+dockerignore
+stdin
+stderr
+stdout
