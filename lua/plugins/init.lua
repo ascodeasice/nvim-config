@@ -306,6 +306,19 @@ require('lazy').setup({
 	{
 		'MeanderingProgrammer/render-markdown.nvim',
 		opts = {
+			anti_conceal = {
+				enabled=true,
+				ignore = {
+					head_background = true,
+					code_background = true,
+					code_border = false,
+					dash = true,
+					bullet = true,
+					quote = true,
+					table_border = true,
+					callout = true,
+				}
+			},
 			render_modes = { 'n', 'i', 'c' },
 			heading = {
 				position = 'inline',
@@ -328,6 +341,11 @@ require('lazy').setup({
 				left_pad = 2,
 				right_pad = 4,
 				width = 'block',
+			},
+			checkbox = {
+				custom = {
+					important = { raw = '[!]', rendered = '󰓎 ', highlight = 'DiagnosticWarn' },
+				},
 			},
 			link = {
 				hyperlink = ' ',

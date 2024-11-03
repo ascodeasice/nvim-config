@@ -292,3 +292,7 @@ dockerignore
 stdin
 stderr
 stdout
+lubu
+stackoverflow
+pipx
+posix
