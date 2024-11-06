@@ -14,6 +14,10 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		'jbyuki/nabla.nvim',
+		event = "VeryLazy",
+	},
+	{
 		"quarto-dev/quarto-nvim",
 		dependencies = {
 			"jmbuhr/otter.nvim",
@@ -307,7 +311,7 @@ require('lazy').setup({
 		'MeanderingProgrammer/render-markdown.nvim',
 		opts = {
 			anti_conceal = {
-				enabled=true,
+				enabled = true,
 				ignore = {
 					head_background = true,
 					code_background = true,
@@ -379,10 +383,17 @@ require('lazy').setup({
 				row = 'TSRainbowRed',
 			},
 			latex = {
+				enabled = false,
 				highlight = 'DiagnosticInfo',
 				top_pad = 1,
 				bottom_pad = 1,
-			}
+			},
+			win_options = {
+				conceallevel = {
+					default = vim.api.nvim_get_option_value("conceallevel", {}),
+					rendered = 2, -- <- especially this, so that both nabla.nvim and this play nice
+				},
+			},
 		},
 		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
 	},

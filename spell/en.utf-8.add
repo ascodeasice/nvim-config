@@ -298,3 +298,5 @@ pipx
 posix
 microkernel
 pyenv
+opencv
+scikit

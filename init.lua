@@ -164,7 +164,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin", "clojure", "commonlisp", "dockerfile", "yaml", "latex", "css" ,"fish"},
+    ensure_installed = { 'html', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown', "kotlin", "clojure", "commonlisp", "dockerfile", "yaml", "latex", "css", "fish" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -829,8 +829,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*.md',
   group = augroup,
   callback = function()
-    -- only set conceal level to 2 in markdown files
-    vim.opt.conceallevel = 2;
+    require("nabla").enable_virt({ autogen = true })
   end
 })
 
@@ -1269,3 +1268,11 @@ end, {
   nargs = 1,
   complete = 'file'
 })
+
+-- SECTION: nabla.nvim
+
+vim.keymap.set('n', '<leader>nt', function()
+  require('nabla').toggle_virt({
+    autogen = true
+  })
+end, { desc = 'Nable Toggle' })
