@@ -829,7 +829,26 @@ vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*.md',
   group = augroup,
   callback = function()
-    require("nabla").enable_virt({ autogen = true })
+    -- enable_virt would set nowrap
+    local old_wrap = vim.wo.wrap
+    require("nabla").enable_virt()
+    vim.wo.wrap = old_wrap
+  end
+})
+
+
+vim.api.nvim_create_autocmd('InsertLeave', {
+  pattern = '*.md',
+  group = augroup,
+  callback = function()
+    -- write the autogen by myself without changing wrap
+    if require('nabla').is_virt_enabled() then
+      -- enable_virt would set nowrap
+      local old_wrap = vim.wo.wrap
+      require("nabla").disable_virt()
+      require("nabla").enable_virt()
+      vim.wo.wrap = old_wrap
+    end
   end
 })
 
@@ -1272,9 +1291,10 @@ end, {
 -- SECTION: nabla.nvim
 
 vim.keymap.set('n', '<leader>nt', function()
-  require('nabla').toggle_virt({
-    autogen = true
-  })
+  -- enable_virt would set nowrap
+  local old_wrap = vim.wo.wrap
+  require('nabla').toggle_virt()
+  vim.wo.wrap = old_wrap
 end, { desc = 'Nable Toggle' })
 
 -- SECTION: zen-mode.nvim
