@@ -1276,3 +1276,7 @@ vim.keymap.set('n', '<leader>nt', function()
     autogen = true
   })
 end, { desc = 'Nable Toggle' })
+
+-- SECTION: zen-mode.nvim
+
+vim.keymap.set('n', '<M-z>', '<cmd>ZenMode<CR>')

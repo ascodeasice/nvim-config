@@ -38,6 +38,23 @@ end
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+	-- Lua
+	{
+		"folke/zen-mode.nvim",
+		opts = {
+			window = {
+				width = .85,
+				options={
+					signcolumn = "no", -- disable signcolumn
+					cursorcolumn = false, -- disable cursor column
+					foldcolumn = "0", -- disable fold column
+				}
+			},
+			plugins = {
+				tmux = { enabled = true },
+			} -- disables the tmux statusline
+		}
+	},
 	{
 		'jbyuki/nabla.nvim',
 		event = "VeryLazy",
@@ -697,7 +714,7 @@ require('lazy').setup({
 							"%=",
 							function(args)
 								if vim.v.virtnum < 0 then
-									return '-'
+									return ' '
 								elseif vim.v.virtnum > 0 and (vim.wo.number or vim.wo.relativenumber) then
 									local num_wraps = get_num_wraps()
 
