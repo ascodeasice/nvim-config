@@ -1147,7 +1147,7 @@ vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap 
 vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianToday -1<CR>",
   { noremap = true, desc = "Obsidian yesterday without working day" })
 vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>Obsidian +1<CR>",
+vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>ObsidianToday +1<CR>",
   { noremap = true, desc = "Obsidian tomorrow without working day" })
 vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>ObsidianNew<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>og", "<cmd>ObsidianTags<CR>", { noremap = true })
