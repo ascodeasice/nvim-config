@@ -364,7 +364,7 @@ local lspconfig = require("lspconfig")
 mason_lspconfig.setup {
   ensure_installed = {
     'lua_ls',
-    'ruff_lsp',
+    -- 'ruff_lsp',
     -- 'tsserver',
     'pyright',
     'clangd',
@@ -406,15 +406,15 @@ lspconfig.pyright.setup {
   }
 }
 
-lspconfig.ruff_lsp.setup {
-  init_options = {
-    settings = {
-      -- Any extra CLI arguments for `ruff` go here.
-      args = {},
-    }
-  }
-}
-
+-- lspconfig.ruff_lsp.setup {
+--   init_options = {
+--     settings = {
+--       -- Any extra CLI arguments for `ruff` go here.
+--       args = {},
+--     }
+--   }
+-- }
+--
 require("lspconfig")["pyright"].setup({
   on_attach = on_attach,
   capabilities = capabilities,
