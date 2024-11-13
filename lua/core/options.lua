@@ -20,7 +20,7 @@ vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
 vim.wo.number = true -- Make line numbers default
-vim.o.mouse = 'a'    -- Enable mouse mode
+vim.o.mouse = 'n'     -- Enable mouse for scrolling and clicking
 
 -- Enable break indent
 vim.o.breakindent = true
