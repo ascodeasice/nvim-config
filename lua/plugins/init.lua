@@ -44,7 +44,7 @@ require('lazy').setup({
 		opts = {
 			window = {
 				width = .85,
-				options={
+				options = {
 					signcolumn = "no", -- disable signcolumn
 					cursorcolumn = false, -- disable cursor column
 					foldcolumn = "0", -- disable fold column
@@ -325,7 +325,7 @@ require('lazy').setup({
 	{
 		"3rd/image.nvim",
 		event = "VeryLazy",
-		branch="feat/toggle-rendering",
+		branch = "feat/toggle-rendering",
 		config = function()
 			require("image").setup({
 				backend = "kitty",
@@ -436,7 +436,11 @@ require('lazy').setup({
 					default = vim.api.nvim_get_option_value("conceallevel", {}),
 					rendered = 2, -- <- especially this, so that both nabla.nvim and this play nice
 				},
+				showbreak = { default = '', rendered = '  ' },
+				breakindent = { default = false, rendered = true },
+				breakindentopt = { default = '', rendered = '' },
 			},
+			quote = { repeat_linebreak = true },
 		},
 		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
 	},
