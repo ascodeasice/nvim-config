@@ -449,6 +449,7 @@ require('lazy').setup({
 					suffix_next = '', -- Suffix to search with "next" method
 				},
 				custom_surroundings = {
+
 					-- python [f]-string
 					['f'] = {
 						input = { 'f"{' .. '().-()' .. '}"' },
@@ -487,6 +488,16 @@ require('lazy').setup({
 					['O'] = {
 						input = { '%*%*().-()%*%*' },
 						output = { left = '**', right = '**' },
+					},
+					-- tick
+					['t'] = {
+						input = { '`().-()`' },
+						output = { left = '`', right = '`' },
+					},
+					-- markdown code block
+					['C'] = {
+						input = { '```.-\n().-()\n```' }, -- remove the language if exists
+						output = { left = '```\n', right = '\n```' },
 					},
 				},
 
