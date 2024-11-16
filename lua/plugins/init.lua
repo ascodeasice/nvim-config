@@ -506,6 +506,16 @@ require('lazy').setup({
 						output = { left = '[', right = ']' },
 					},
 					-- TODO: c/C for single line/multiline comment function, use function to return type
+					-- backlink
+					['D'] = {
+						input = { '%[%[' .. '().-()' .. '%]%]' },
+						output = { left = '[[', right = ']]' },
+					},
+					-- markdown bold
+					['O'] = {
+						input = { '%*%*().-()%*%*' },
+						output = { left = '**', right = '**' },
+					},
 				},
 
 			})
