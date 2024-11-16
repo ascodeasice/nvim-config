@@ -444,6 +444,7 @@ local ls = require("luasnip")
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
+local f = ls.function_node
 -- ts, tsx, jsx also loads this
 ls.add_snippets("javascript", {
   s("menv", { t("import.meta.env.") }),
@@ -482,11 +483,18 @@ ls.add_snippets("typescriptreact", {
 })
 
 ls.add_snippets("markdown", {
-    -- action tag
-    s("do", t("`do` ")),
-    s("write", t("`write` ")),
-    s("find", t("`find` ")),
-    s("read", t("`read` "))
+  -- action tag
+  s("do", t("`do` ")),
+  s("write", t("`write` ")),
+  s("find", t("`find` ")),
+  s("read", t("`read` ")),
+  -- date tag
+  s("dt", {
+    t("`"),
+    f(function() return os.date("%Y-%m-%d") end, {}),
+    i(1),
+    t("` "),
+  }),
 })
 
 luasnip.config.setup {}
