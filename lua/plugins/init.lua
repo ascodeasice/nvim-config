@@ -413,9 +413,6 @@ require('lazy').setup({
 					default = vim.api.nvim_get_option_value("conceallevel", {}),
 					rendered = 2, -- <- especially this, so that both nabla.nvim and this play nice
 				},
-				showbreak = { default = '', rendered = '  ' },
-				breakindent = { default = false, rendered = true },
-				breakindentopt = { default = '', rendered = '' },
 			},
 			quote = { repeat_linebreak = true },
 		},
