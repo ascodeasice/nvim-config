@@ -481,6 +481,14 @@ ls.add_snippets("typescriptreact", {
   }),
 })
 
+ls.add_snippets("markdown", {
+    -- action tag
+    s("do", t("`do` ")),
+    s("write", t("`write` ")),
+    s("find", t("`find` ")),
+    s("read", t("`read` "))
+})
+
 luasnip.config.setup {}
 luasnip.filetype_extend('typescript', { 'javascript' })
 luasnip.filetype_extend('typescriptreact', { 'javascript' })
