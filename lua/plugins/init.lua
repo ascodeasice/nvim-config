@@ -401,6 +401,8 @@ require('lazy').setup({
 					github = { pattern = '^http[s]?://.*github%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					directory = { pattern = "^[^https].*/$", icon = ' ', highlight = 'RenderMarkdownLink' },
 					pdf = { pattern = ".*%.pdf[>]?$", icon = ' ', highlight = 'RenderMarkdownLink' },
+					ppt = { pattern = ".*%.ppt[>]?$", icon = '󱎐 ', highlight = 'RenderMarkdownLink' },
+					pptx = { pattern = ".*%.pptx[>]?$", icon = '󱎐 ', highlight = 'RenderMarkdownLink' },
 					mp4 = { pattern = ".*%.mp4[>]?$", icon = '󰎁 ', highlight = 'RenderMarkdownLink' },
 					mkv = { pattern = ".*%.mkv[>]?$", icon = '󰎁 ', highlight = 'RenderMarkdownLink' },
 					md = { pattern = ".*%.md$", icon = '󰽛 ', highlight = 'RenderMarkdownLink' },
