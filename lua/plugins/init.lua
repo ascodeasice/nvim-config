@@ -52,6 +52,9 @@ require('lazy').setup({
 			},
 			plugins = {
 				tmux = { enabled = true },
+				twilight = {
+					enabled = false
+				},
 			} -- disables the tmux statusline
 		}
 	},
