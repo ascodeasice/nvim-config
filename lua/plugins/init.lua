@@ -749,7 +749,10 @@ require('lazy').setup({
 	{
 		"chrisgrieser/nvim-various-textobjs",
 		lazy = false,
-		opts = { useDefaultKeymaps = true },
+		opts = {
+			useDefaultKeymaps = true,
+			lookForwardBig = 30
+		},
 	},
 	{ "chrisgrieser/nvim-spider",       lazy = true },
 	{
