@@ -498,6 +498,13 @@ ls.add_snippets("markdown", {
   }),
 })
 
+ls.add_snippets("python", {
+  s("fe", {
+    t("for "), i(1, "i"), t(", "), i(2, "val"), t(" in enumerate("), i(3, "arr"), t("):"),
+    t({ "", "    " }), i(4, "print(i, val)")
+  })
+})
+
 luasnip.config.setup {}
 luasnip.filetype_extend('typescript', { 'javascript' })
 luasnip.filetype_extend('typescriptreact', { 'javascript' })
