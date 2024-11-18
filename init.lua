@@ -485,6 +485,7 @@ ls.add_snippets("typescriptreact", {
 ls.add_snippets("markdown", {
   -- action tag
   s("do", t("`do` ")),
+  s("plan", t("`plan` ")),
   s("write", t("`write` ")),
   s("find", t("`find` ")),
   s("read", t("`read` ")),
@@ -1136,7 +1137,7 @@ require("dial.config").augends:register_group {
       preserve_case = true
     },
     augend.constant.new {
-      elements = { "find", "read", "do", "write" },
+      elements = { "plan", "find", "read", "do", "write" },
       word = true,
       cyclic = true,
       preserve_case = true
