@@ -489,8 +489,8 @@ require('lazy').setup({
 						input = { '%*%*().-()%*%*' },
 						output = { left = '**', right = '**' },
 					},
-					-- tick
-					['t'] = {
+					-- [i]nline code
+					['i'] = {
 						input = { '`().-()`' },
 						output = { left = '`', right = '`' },
 					},
