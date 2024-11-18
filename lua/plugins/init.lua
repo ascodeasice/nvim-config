@@ -248,7 +248,23 @@ require('lazy').setup({
 		event = "VeryLazy",
 		opts = {
 			-- add options here
-			-- or leave it empty to use the default settings
+			filetypes = {
+				markdown = {
+					template = function(context)
+					  -- 取得檔案名稱，去掉副檔名
+					  local file_name_no_ext = context.file_name_no_ext
+					  -- 將底線和破折號替換為空格
+					  file_name_no_ext = file_name_no_ext:gsub("_", " "):gsub("-", " ")
+					  -- 返回格式化的 Markdown 鏈接
+					  return "![" .. file_name_no_ext .. context.cursor .. "](" .. context.file_path .. ")"
+					end
+				},
+			},
+			dirs = {
+				['/home/leo/blog'] = {
+					dir_path = 'static'
+				}
+			},
 		},
 		keys = {
 			-- suggested keymap
