@@ -237,7 +237,10 @@ require('lazy').setup({
 		end
 	},
 	{
-		'bullets-vim/bullets.vim'
+		'kaymmm/bullets.nvim',
+		config = function()
+			require('Bullets').setup()
+		end
 	},
 	'jghauser/follow-md-links.nvim', -- used for places outside of obsidian vault
 	{
@@ -251,12 +254,12 @@ require('lazy').setup({
 			filetypes = {
 				markdown = {
 					template = function(context)
-					  -- 取得檔案名稱，去掉副檔名
-					  local file_name_no_ext = context.file_name_no_ext
-					  -- 將底線和破折號替換為空格
-					  file_name_no_ext = file_name_no_ext:gsub("_", " "):gsub("-", " ")
-					  -- 返回格式化的 Markdown 鏈接
-					  return "![" .. file_name_no_ext .. context.cursor .. "](" .. context.file_path .. ")"
+						-- 取得檔案名稱，去掉副檔名
+						local file_name_no_ext = context.file_name_no_ext
+						-- 將底線和破折號替換為空格
+						file_name_no_ext = file_name_no_ext:gsub("_", " "):gsub("-", " ")
+						-- 返回格式化的 Markdown 鏈接
+						return "![" .. file_name_no_ext .. context.cursor .. "](" .. context.file_path .. ")"
 					end
 				},
 			},
