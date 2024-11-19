@@ -848,34 +848,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
   end,
 })
 
-local augroup = vim.api.nvim_create_augroup('markdown', {})
-vim.api.nvim_create_autocmd('BufEnter', {
-  pattern = '*.md',
-  group = augroup,
-  callback = function()
-    -- enable_virt would set nowrap
-    local old_wrap = vim.wo.wrap
-    require("nabla").enable_virt()
-    vim.wo.wrap = old_wrap
-  end
-})
-
-
-vim.api.nvim_create_autocmd('InsertLeave', {
-  pattern = '*.md',
-  group = augroup,
-  callback = function()
-    -- write the autogen by myself without changing wrap
-    if require('nabla').is_virt_enabled() then
-      -- enable_virt would set nowrap
-      local old_wrap = vim.wo.wrap
-      require("nabla").disable_virt()
-      require("nabla").enable_virt()
-      vim.wo.wrap = old_wrap
-    end
-  end
-})
-
 vim.keymap.set('n', '<leader>tr', MiniTrailspace.trim) -- trim trailing space
 
 -- format on save
