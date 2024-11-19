@@ -1154,13 +1154,12 @@ require("dial.config").augends:register_group {
     augend.integer.alias.binary,
     augend.integer.alias.octal,
     augend.integer.alias.hex,
+    augend.semver.alias.semver,
     augend.date.alias["%Y/%m/%d"],
     augend.date.alias["%Y-%m-%d"],
     augend.date.alias["%m/%d"],
     augend.date.alias["%H:%M"],
     augend.date.alias["%Y年%-m月%-d日"],
-    augend.constant.alias.alpha,
-    augend.constant.alias.Alpha,
   },
 }
 
