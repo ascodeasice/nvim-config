@@ -421,6 +421,8 @@ require('lazy').setup({
 					figma = { pattern = '^http[s]?://.*figma%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					localhost = { pattern = '^http://localhost.*', icon = '󰋜 ', highlight = 'RenderMarkdownLink' },
 					localhost_ip = { pattern = '^http://127%.0%.0%.1.*', icon = '󰋜 ', highlight = 'RenderMarkdownLink' },
+					googledrive = { pattern = '^http[s]?://drive%.google%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					googlemap = { pattern = '^http[s]?://www%.google%.com/maps/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
