@@ -489,12 +489,20 @@ ls.add_snippets("markdown", {
   s("write", t("`write` ")),
   s("find", t("`find` ")),
   s("read", t("`read` ")),
-  -- date tag
+  -- date task
   s("dt", {
-    t("`"),
+    t("- [ ] `"),
     f(function() return os.date("%Y-%m-%d") end, {}),
     i(1),
     t("` "),
+  }),
+  -- project tag, wikilink of current file
+  s("pt", {
+    t("[["),
+    f(function()
+      return vim.fn.expand("%:t:r") -- current file base name
+    end, {}),
+    t("]] "),
   }),
 })
 
