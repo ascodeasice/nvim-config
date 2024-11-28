@@ -201,6 +201,12 @@ require('lazy').setup({
 					end,
 					opts = { buffer = true },
 				},
+				["<C-c>"] = {
+					action = function()
+						return require("obsidian").util.toggle_checkbox()
+					end,
+					opts = { buffer = true },
+				},
 			},
 			-- NOTE: the mappings only work in obsidian vault
 			templates = {
