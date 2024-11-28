@@ -489,9 +489,9 @@ ls.add_snippets("markdown", {
   s("write", t("`write` ")),
   s("find", t("`find` ")),
   s("read", t("`read` ")),
-  -- date task
+  -- date tag
   s("dt", {
-    t("- [ ] `"),
+    t("`"),
     f(function() return os.date("%Y-%m-%d") end, {}),
     i(1),
     t("` "),
