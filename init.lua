@@ -504,6 +504,18 @@ ls.add_snippets("markdown", {
     end, {}),
     t("]] "),
   }),
+  -- gtd contexts
+  s("an", {
+    t("`@anywhere` ")
+  }),
+  s("ou", {
+    t("`@out"),
+    i(1),
+    t("` ")
+  }),
+  s("vi", {
+    t("`@video` ")
+  }),
 })
 
 ls.add_snippets("python", {
