@@ -1159,6 +1159,18 @@ vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap 
 
 -- SECTION: obsidian.nvim
 
+
+vim.api.nvim_set_keymap("n", "<leader>ow", "<cmd>lua CreateNextSevenDaysNotes()<CR>",
+  { noremap = true, desc = "Obsidian notes for next 7 days" })
+
+function CreateNextSevenDaysNotes()
+  local start_day = 1 -- 從明天開始
+  local days = 6      -- 生成未來六天的筆記
+  for i = start_day, start_day + days - 1 do
+    vim.cmd(string.format("ObsidianToday +%d", i))
+  end
+end
+
 vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianToday -1<CR>",
   { noremap = true, desc = "Obsidian yesterday without working day" })
 vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { noremap = true })
