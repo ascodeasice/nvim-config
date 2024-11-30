@@ -516,6 +516,9 @@ ls.add_snippets("markdown", {
   s("vi", {
     t("`@video` ")
   }),
+  s("as", {
+    t("`@async` ")
+  }),
 })
 
 ls.add_snippets("python", {
