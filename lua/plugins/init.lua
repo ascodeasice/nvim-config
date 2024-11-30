@@ -104,6 +104,7 @@ require('lazy').setup({
 	{
 		"3rd/diagram.nvim",
 		branch = "feature/toggle",
+		enabled=false,
 		dependencies = {
 			"3rd/image.nvim",
 		},
@@ -331,6 +332,7 @@ require('lazy').setup({
 		"3rd/image.nvim",
 		event = "VeryLazy",
 		branch = "feat/toggle-rendering",
+		enabled = false,
 		config = function()
 			require("image").setup({
 				backend = "kitty",
