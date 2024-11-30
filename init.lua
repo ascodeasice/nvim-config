@@ -508,7 +508,7 @@ ls.add_snippets("markdown", {
   s("an", {
     t("`@anywhere` ")
   }),
-  s("ou", {
+  s("out", {
     t("`@out"),
     i(1),
     t("` ")
