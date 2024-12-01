@@ -496,12 +496,6 @@ require('lazy').setup({
 						output = { left = '[', right = ']()' },
 					},
 
-					-- markdown [i]mage
-					['i'] = {
-						input = { '!%[' .. '().-()' .. '%]%(%)' },
-						output = { left = '![', right = ']()' },
-					},
-
 					['B'] = {
 						input = { '{' .. '().-()' .. '}' },
 						output = { left = '{', right = '}' },
@@ -525,6 +519,10 @@ require('lazy').setup({
 					},
 					-- [i]nline code
 					['i'] = {
+						input = { '`().-()`' },
+						output = { left = '`', right = '`' },
+					},
+					['I'] = {
 						input = { '`().-()`' },
 						output = { left = '`', right = '`' },
 					},
