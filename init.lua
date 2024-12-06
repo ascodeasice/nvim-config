@@ -1039,7 +1039,7 @@ local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
 
 -- open those with image.nvim
 -- "jpg", "jpeg", "webp", "png",
-local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp", "pptx", "ppt",
+local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp", "pptx", "ppt","wav",
   "jpg", "jpeg", "webp", "png",
 }
 
