@@ -750,6 +750,7 @@ vim.keymap.set("n", "<leader>dO", require("dap").step_out)
 vim.keymap.set("n", "<leader>dB", require("dap").step_back)
 vim.keymap.set("n", "<leader>dr", require("dap").restart)
 vim.keymap.set("n", "<leader>ds", require("dap").close) -- dap stop
+vim.keymap.set("n", "<leader>dv", '<cmd>DapVirtualTextToggle<CR>') -- dap stop
 
 require("codesnap").setup({
   mac_window_bar = false,

@@ -38,7 +38,12 @@ end
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
-	-- Lua
+	{
+		'theHamsta/nvim-dap-virtual-text',
+		config = function()
+			require('nvim-dap-virtual-text').setup()
+		end
+	},
 	{
 		"folke/zen-mode.nvim",
 		opts = {
@@ -104,7 +109,7 @@ require('lazy').setup({
 	{
 		"3rd/diagram.nvim",
 		branch = "feature/toggle",
-		enabled=false,
+		enabled = false,
 		dependencies = {
 			"3rd/image.nvim",
 		},
