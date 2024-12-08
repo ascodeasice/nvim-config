@@ -251,7 +251,10 @@ require('lazy').setup({
 	{
 		'kaymmm/bullets.nvim',
 		config = function()
-			require('Bullets').setup()
+			require('Bullets').setup({
+				outline_levels = { 'ROM', 'ABC', 'num', 'abc', 'rom', 'std-' }
+			}
+			)
 		end
 	},
 	'jghauser/follow-md-links.nvim', -- used for places outside of obsidian vault
