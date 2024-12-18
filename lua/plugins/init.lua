@@ -428,6 +428,7 @@ require('lazy').setup({
 					freedium = { pattern = '^http[s]?://%w-%.?freedium%.cfd/.*', icon = '󰯺 ', highlight = 'RenderMarkdownLink' },
 					googlesheet = { pattern = '^http[s]?://docs%.google%.com/spreadsheets/.*', icon = '󰧷 ', highlight = 'RenderMarkdownLink' },
 					googledoc = { pattern = '^http[s]?://docs%.google%.com/document/.*', icon = '󰈙 ', highlight = 'RenderMarkdownLink' },
+					googleform = { pattern = '^http[s]?://docs%.google%.com/forms/.*', icon = '󱐁 ', highlight = 'RenderMarkdownLink' },
 					moodle = { pattern = '^http[s]?://moodle%.ncku%.edu%.tw/.*', icon = '󰂺 ', highlight = 'RenderMarkdownLink' },
 					ncku = { pattern = '^http[s]?://.*ncku%.edu%.tw[/]?.*', icon = '󱆀 ', highlight = 'RenderMarkdownLink' },
 					docker = { pattern = '^http[s]?://.*docker%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
