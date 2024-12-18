@@ -220,8 +220,8 @@ require('lualine').setup {
   sections = {
     lualine_a = { 'mode' },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'filename' },
-    lualine_x = { 'another_item',
+    lualine_c = { 'filename'},
+    lualine_x = { require("recorder").recordingStatus  ,'another_item',
       {
         "harpoon2",
         indicators = { "n", "e", "i", "o" },
@@ -231,7 +231,7 @@ require('lualine').setup {
     },
     -- TODO: make it only show time and username
     lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
-    lualine_z = { 'selectioncount', 'location' }
+    lualine_z = { 'selectioncount', 'location'}
   },
   inactive_sections = {
     lualine_a = {},
@@ -1366,10 +1366,10 @@ end, { desc = 'Nable Toggle' })
 vim.keymap.set('n', '<M-z>', '<cmd>ZenMode<CR>')
 
 -- for some reason, they do not work in visual mode
-vim.keymap.set({'n','v'}, '<M-down>', function()
+vim.keymap.set({ 'n', 'v' }, '<M-down>', function()
   require('mini.move').move_line('down')
 end)
 
-vim.keymap.set({'n','v'}, '<M-up>', function()
+vim.keymap.set({ 'n', 'v' }, '<M-up>', function()
   require('mini.move').move_line('up')
 end)

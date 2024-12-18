@@ -39,6 +39,15 @@ end
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"chrisgrieser/nvim-recorder",
+		opts = {
+			lessNotifications = true,
+			mapping = {
+				playMacro = "@"
+			}
+		}, -- required even with default settings, since it calls `setup()`
+	},
+	{
 		'theHamsta/nvim-dap-virtual-text',
 		config = function()
 			require('nvim-dap-virtual-text').setup()
