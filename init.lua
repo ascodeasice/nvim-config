@@ -1364,3 +1364,12 @@ end, { desc = 'Nable Toggle' })
 -- SECTION: zen-mode.nvim
 
 vim.keymap.set('n', '<M-z>', '<cmd>ZenMode<CR>')
+
+-- for some reason, they do not work in visual mode
+vim.keymap.set({'n','v'}, '<M-down>', function()
+  require('mini.move').move_line('down')
+end)
+
+vim.keymap.set({'n','v'}, '<M-up>', function()
+  require('mini.move').move_line('up')
+end)

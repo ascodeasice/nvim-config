@@ -138,8 +138,8 @@ require('lazy').setup({
 					-- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
 					left = '<M-Left>',
 					right = '<M-Right>',
-					down = '<M-Down>',
-					up = '<M-Up>',
+					down = '<M-j>',
+					up = '<M-k>',
 
 					-- Move current line in Normal mode
 					line_left = '<M-Left>',
