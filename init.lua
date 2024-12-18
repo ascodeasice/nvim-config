@@ -432,6 +432,13 @@ require("lspconfig")["pyright"].setup({
 
 lspconfig.jdtls.setup {}
 
+-- NOTE: this is needed for kotlin ls
+lspconfig.kotlin_language_server.setup({
+  init_options = {
+    storagePath = require('lspconfig/util').path.join(vim.env.XDG_DATA_HOME, "nvim-data"),
+  },
+})
+
 -- lspconfig.emmet_language_server.setup({})
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -650,28 +657,28 @@ vim.keymap.set("n", "<leader>tt", "<cmd>tab split<CR>") -- open fullscreen in ne
 
 -- smarter gx, forward seeking url, if not found, select all url inside buffer with menu
 vim.keymap.set("n", "gx", function()
-	require("various-textobjs").url()
-	local foundURL = vim.fn.mode():find("v")
-	if foundURL then
-		vim.cmd.normal('"zy')
-		local url = vim.fn.getreg("z")
-		vim.ui.open(url)
-	else
-		-- find all URLs in buffer
-		local urlPattern = require("various-textobjs.charwise-textobjs").urlPattern
-		local bufText = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
-		local urls = {}
-		for url in bufText:gmatch(urlPattern) do
-			table.insert(urls, url)
-		end
-		if #urls == 0 then return end
+  require("various-textobjs").url()
+  local foundURL = vim.fn.mode():find("v")
+  if foundURL then
+    vim.cmd.normal('"zy')
+    local url = vim.fn.getreg("z")
+    vim.ui.open(url)
+  else
+    -- find all URLs in buffer
+    local urlPattern = require("various-textobjs.charwise-textobjs").urlPattern
+    local bufText = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+    local urls = {}
+    for url in bufText:gmatch(urlPattern) do
+      table.insert(urls, url)
+    end
+    if #urls == 0 then return end
 
-		-- select one, use a plugin like dressing.nvim for nicer UI for
-		-- `vim.ui.select`
-		vim.ui.select(urls, { prompt = "Select URL:" }, function(choice)
-			if choice then vim.ui.open(choice) end
-		end)
-	end
+    -- select one, use a plugin like dressing.nvim for nicer UI for
+    -- `vim.ui.select`
+    vim.ui.select(urls, { prompt = "Select URL:" }, function(choice)
+      if choice then vim.ui.open(choice) end
+    end)
+  end
 end, { desc = "URL Opener" })
 
 --configure set flutter tool setup
@@ -749,7 +756,7 @@ vim.keymap.set("n", "<leader>di", require("dap").step_into)
 vim.keymap.set("n", "<leader>dO", require("dap").step_out)
 vim.keymap.set("n", "<leader>dB", require("dap").step_back)
 vim.keymap.set("n", "<leader>dr", require("dap").restart)
-vim.keymap.set("n", "<leader>ds", require("dap").close) -- dap stop
+vim.keymap.set("n", "<leader>ds", require("dap").close)            -- dap stop
 vim.keymap.set("n", "<leader>dv", '<cmd>DapVirtualTextToggle<CR>') -- dap stop
 
 require("codesnap").setup({
@@ -1040,7 +1047,8 @@ local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
 
 -- open those with image.nvim
 -- "jpg", "jpeg", "webp", "png",
-local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp", "pptx", "ppt","wav",
+local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp", "pptx", "ppt",
+  "wav",
   "jpg", "jpeg", "webp", "png",
 }
 
