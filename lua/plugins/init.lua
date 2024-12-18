@@ -479,13 +479,13 @@ require('lazy').setup({
 		config = function()
 			require('mini.surround').setup({
 				mappings = {
-					add = 'S',        -- Add surrounding in Normal and Visual modes
+					add = 's',        -- Add surrounding in Normal and Visual modes
 					delete = 'ds',    -- Delete surrounding
-					find = 'Sf',      -- Find surrounding (to the right)
-					find_left = 'SF', -- Find surrounding (to the left)
-					highlight = 'SH', -- Highlight surrounding
+					find = 'sf',      -- Find surrounding (to the right)
+					find_left = 'sF', -- Find surrounding (to the left)
+					highlight = 'sh', -- Highlight surrounding
 					replace = 'cs',   -- Replace surrounding
-					update_n_lines = 'Sn', -- Update `n_lines`
+					update_n_lines = 'sn', -- Update `n_lines`
 
 					suffix_last = '', -- Suffix to search with "prev" method
 					suffix_next = '', -- Suffix to search with "next" method
@@ -855,7 +855,7 @@ require('lazy').setup({
 		event = "VeryLazy",
 		-- stylua: ignore
 		keys = {
-			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+			{ "S", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
 			{ "R", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
 		},
 		opts = {
