@@ -43,7 +43,7 @@ require('lazy').setup({
 		opts = {
 			lessNotifications = true,
 			mapping = {
-				playMacro = "@"
+				playMacro = "M" -- I don't use global mark
 			}
 		}, -- required even with default settings, since it calls `setup()`
 	},
