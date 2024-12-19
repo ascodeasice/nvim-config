@@ -220,8 +220,8 @@ require('lualine').setup {
   sections = {
     lualine_a = { 'mode' },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'filename'},
-    lualine_x = { require("recorder").recordingStatus  ,'another_item',
+    lualine_c = { 'filename' },
+    lualine_x = { require("recorder").recordingStatus, 'another_item',
       {
         "harpoon2",
         indicators = { "n", "e", "i", "o" },
@@ -231,7 +231,7 @@ require('lualine').setup {
     },
     -- TODO: make it only show time and username
     lualine_y = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
-    lualine_z = { 'selectioncount', 'location'}
+    lualine_z = { 'selectioncount', 'location' }
   },
   inactive_sections = {
     lualine_a = {},
@@ -1373,3 +1373,7 @@ end)
 vim.keymap.set({ 'n', 'v' }, '<M-up>', function()
   require('mini.move').move_line('up')
 end)
+
+-- bold text with control b
+vim.keymap.set({ 'n' }, '<C-b>', 'siwO', { remap = true })
+vim.keymap.set({ 'v' }, '<C-b>', 'sO', { remap = true })
