@@ -450,6 +450,7 @@ require('lazy').setup({
 					localhost_ip = { pattern = '^http://127%.0%.0%.1.*', icon = '󰋜 ', highlight = 'RenderMarkdownLink' },
 					googledrive = { pattern = '^http[s]?://drive%.google%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					googlemap = { pattern = '^http[s]?://www%.google%.com/maps/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
+					googlemap2 = { pattern = '^http[s]?://maps%.app%.goo%.gl/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
