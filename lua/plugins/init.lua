@@ -452,6 +452,7 @@ require('lazy').setup({
 					googlemap = { pattern = '^http[s]?://www%.google%.com/maps/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
 					googlemap2 = { pattern = '^http[s]?://maps%.app%.goo%.gl/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
 					colab = { pattern = '^http[s]?://colab%.research%.google%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					android = { pattern = '^http[s]?://developer%.android%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
