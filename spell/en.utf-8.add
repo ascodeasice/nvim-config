@@ -366,3 +366,5 @@ laplacian
 keypoints
 keypoint
 fifo
+colab
+deque

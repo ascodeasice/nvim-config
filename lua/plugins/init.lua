@@ -45,7 +45,7 @@ require('lazy').setup({
 			mapping = {
 				playMacro = "M" -- I don't use global mark
 			}
-		}, -- required even with default settings, since it calls `setup()`
+		},              -- required even with default settings, since it calls `setup()`
 	},
 	{
 		'theHamsta/nvim-dap-virtual-text',
@@ -153,8 +153,8 @@ require('lazy').setup({
 					-- Move current line in Normal mode
 					line_left = '<M-Left>',
 					line_right = '<M-Right>',
-					line_down = '<M-Down>',
-					line_up = '<M-Up>',
+					line_down = '<M-j>',
+					line_up = '<M-k>',
 				},
 			})
 		end
@@ -451,6 +451,7 @@ require('lazy').setup({
 					googledrive = { pattern = '^http[s]?://drive%.google%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					googlemap = { pattern = '^http[s]?://www%.google%.com/maps/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
 					googlemap2 = { pattern = '^http[s]?://maps%.app%.goo%.gl/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
+					colab = { pattern = '^http[s]?://colab%.research%.google%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
