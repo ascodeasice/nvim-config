@@ -515,7 +515,7 @@ require('lazy').setup({
 
 					-- markdown [l]ink
 					['l'] = {
-						input = { '%[().-()%]%(%)' },
+						input = { '%[().-()%]%(.-%)' }, -- remove the url, only keep the text
 						output = { left = '[', right = ']()' },
 					},
 
