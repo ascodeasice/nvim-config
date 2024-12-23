@@ -1377,3 +1377,11 @@ end)
 -- bold text with control b
 vim.keymap.set({ 'n' }, '<C-b>', 'siwO', { remap = true })
 vim.keymap.set({ 'v' }, '<C-b>', 'sO', { remap = true })
+
+
+-- autocmd for exit full screen
+vim.api.nvim_create_autocmd("VimLeave", {
+  callback = function()
+    os.execute("tmux resize-pane -Z") -- try to exit full screen of tmux
+  end,
+})
