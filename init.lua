@@ -177,7 +177,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "yaml" },
+    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -341,6 +341,11 @@ require('mason-lspconfig').setup()
 --
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
+
+local mason_registry = require('mason-registry')
+local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
+    '/node_modules/@vue/language-server'
+
 local servers = {
   clangd = {},
   marksman = {},
@@ -349,6 +354,19 @@ local servers = {
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
+  ts_ls = {
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    init_options = {
+      plugins = {
+        {
+          name = '@vue/typescript-plugin',
+          location = vue_language_server_path,
+          languages = { 'vue' },
+        },
+      },
+    },
+  },
+  volar = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -399,6 +417,7 @@ mason_lspconfig.setup_handlers {
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
+      init_options = (servers[server_name] or {}).init_options,
     }
   end,
 }
@@ -889,9 +908,9 @@ vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
 require('nvim-ts-autotag').setup({
   opts = {
     -- Defaults
-    enable_close = true,          -- Auto close tags
-    enable_rename = true,         -- Auto rename pairs of tags
-    enable_close_on_slash = false -- Auto close on trailing </
+    enable_close = true,         -- Auto close tags
+    enable_rename = true,        -- Auto rename pairs of tags
+    enable_close_on_slash = true -- Auto close on trailing </
   },
 })
 
