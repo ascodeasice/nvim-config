@@ -5,6 +5,19 @@ require('core.autocmds')
 -- plugins managed with lazy.nvim
 require('plugins')
 
+
+local function is_tmux_fullscreen()
+  -- 使用 `tmux display-message` 來判斷是否全螢幕
+  local same_width = vim.fn.system("tmux display-message -p '#{?#{==:#{pane_width},#{window_width}},1,0}'")
+  local same_height = vim.fn.system("tmux display-message -p '#{?#{==:#{pane_height},#{window_height}},1,0}'")
+  -- 去除結尾換行符號
+  same_width = same_width:gsub("%s+", "")
+  same_height = same_height:gsub("%s+", "")
+  -- 返回布林值
+  return same_width == "1" and same_height == "1"
+end
+
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -164,7 +177,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go" , "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "yaml"},
+    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "yaml" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -1048,7 +1061,7 @@ local bin_files = vim.api.nvim_create_augroup("binFiles", { clear = true })
 -- open those with image.nvim
 -- "jpg", "jpeg", "webp", "png",
 local file_types = { "pdf", "doc", "docx", "gif", "mkv", "mp3", "mp4", "webm", "xls", "xlsx", "xopp", "pptx", "ppt",
-  "wav",
+  "wav", "rar",
   "jpg", "jpeg", "webp", "png",
 }
 
@@ -1382,7 +1395,10 @@ vim.keymap.set({ 'v' }, '<C-b>', 'sO', { remap = true })
 -- autocmd for exit full screen
 vim.api.nvim_create_autocmd("VimLeave", {
   callback = function()
-    os.execute("tmux resize-pane -Z") -- try to exit full screen of tmux
+    -- is full screen in nvim, and not opened from yazi (which will have another fullscreen hook)
+    if os.getenv("NVIM_FULL_SCREEN") and is_tmux_fullscreen() then
+      os.execute("tmux resize-pane -Z") -- try to exit full screen of tmux
+    end
   end,
 })
 
@@ -1404,4 +1420,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end
   end,
 })
-
