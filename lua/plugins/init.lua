@@ -454,6 +454,8 @@ require('lazy').setup({
 					google_map2 = { pattern = '^http[s]?://maps%.app%.goo%.gl/.*', icon = '󰍎 ', highlight = 'RenderMarkdownLink' },
 					colab = { pattern = '^http[s]?://colab%.research%.google%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					android = { pattern = '^http[s]?://developer%.android%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					taobao = { pattern = '^http[s]?://.*%.taobao%.com/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
+					taobao2 = { pattern = '^http[s]?://.*%.tb%.cn/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
