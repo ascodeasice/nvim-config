@@ -391,6 +391,7 @@ require('lazy').setup({
 				}
 			},
 			render_modes = { 'n', 'i', 'c' },
+			html = { comment = { conceal = false } },
 			heading = {
 				position = 'inline',
 				backgrounds = {
@@ -403,7 +404,7 @@ require('lazy').setup({
 				},
 				-- icons = { "󰬺", " 󰬻", "  󰬼", "   󰬽", "    󰬾", "     󰬿", },
 				-- icons = { "󰬺", "󰬻", "󰬼", "󰬽", "󰬾", "󰬿", },
-				icons = { "", "", "", "", "", "", },
+				icons = { "  ", "  ", "  ", "  ", "  ", "  ", },
 				-- left_pad = 1,
 				sign = false
 			},
