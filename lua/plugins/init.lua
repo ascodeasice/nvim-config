@@ -39,6 +39,9 @@ end
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		'monkoose/matchparen.nvim'
+	},
+	{
 		"chrisgrieser/nvim-recorder",
 		opts = {
 			lessNotifications = true,

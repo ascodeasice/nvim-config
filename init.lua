@@ -656,8 +656,7 @@ vim.keymap.set(
   "oif err != nil {<CR>}<Esc>Oreturn err<Esc>"
 )
 
-vim.keymap.set("n", "K", "%")
-vim.keymap.set("v", "K", "%")
+vim.keymap.set({"n","v"}, "K", "%", {remap=true})
 
 -- save remap
 function Save_file()
