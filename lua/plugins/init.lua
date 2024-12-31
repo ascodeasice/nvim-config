@@ -460,6 +460,7 @@ require('lazy').setup({
 					android = { pattern = '^http[s]?://developer%.android%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					taobao = { pattern = '^http[s]?://.*%.taobao%.com/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
 					taobao2 = { pattern = '^http[s]?://.*%.tb%.cn/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
+					shorturl = { pattern = '^http[s]?://reurl%.cc[/]?.*', icon = '󰌷 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
