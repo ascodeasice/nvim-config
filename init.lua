@@ -1224,6 +1224,7 @@ require("dial.config").augends:register_group {
 }
 
 vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
+vim.api.nvim_set_keymap("n", "<esc>", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
 
 -- SECTION: obsidian.nvim
 
