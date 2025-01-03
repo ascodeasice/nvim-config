@@ -57,6 +57,10 @@ vim.opt.tabstop = 2
 
 vim.o.wildmode = "longest:full,full" -- make nvim do completions like in bash
 
+
+-- hide other diagnostic for tiny-inline-diagnostics.nvim
+vim.diagnostic.config({ virtual_text = false })
+
 -- luarocks
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
