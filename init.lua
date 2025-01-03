@@ -656,7 +656,7 @@ vim.keymap.set(
   "oif err != nil {<CR>}<Esc>Oreturn err<Esc>"
 )
 
-vim.keymap.set({"n","v"}, "K", "%", {remap=true})
+vim.keymap.set({ "n", "v" }, "K", "%", { remap = true })
 
 -- save remap
 function Save_file()
@@ -1439,3 +1439,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end
   end,
 })
+
+
+vim.keymap.set("n", "<leader>u", "mzlblgueh~`z") -- switch case of word
