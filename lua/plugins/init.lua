@@ -1226,8 +1226,8 @@ require('lazy').setup({
 					end,
 					['<CR>'] = cmp.mapping.confirm({ select = true }),
 					["<Tab>"] = cmp.mapping(function(fallback)
-						if require("luasnip").expand_or_locally_jumpable() then
-							require("luasnip").expand_or_jump()
+						if require("luasnip").jumpable(1) then
+							require("luasnip").jump(1)
 						else
 							fallback()
 						end
