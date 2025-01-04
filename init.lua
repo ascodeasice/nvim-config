@@ -1439,4 +1439,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 
-vim.keymap.set("n", "<leader>u", "mzlblgueh~`z") -- switch case of word
+vim.keymap.set("n", "<leader>u", function()
+  local col = vim.fn.col(".")
+  local line_end = vim.fn.col("$") - 1
+
+  -- if cursor is in line end, do not move right
+  if col == line_end then
+    vim.cmd("normal! mzblgueh~`z")
+  else
+    vim.cmd("normal! mzlblgueh~`z")
+  end
+end) -- switch case of word
