@@ -39,6 +39,15 @@ end
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		'tzachar/highlight-undo.nvim',
+		keys = { { "u" }, { "<C-r>" } },
+		config = function()
+			require('highlight-undo').setup({
+				duration = 200,
+			})
+		end
+	},
+	{
 		"rachartier/tiny-inline-diagnostic.nvim",
 		event = "VeryLazy", -- Or `LspAttach`
 		priority = 1000,  -- needs to be loaded in first
