@@ -543,6 +543,12 @@ ls.add_snippets("markdown", {
     end, {}),
     t("]] "),
   }),
+  -- wikilink
+  s("wl", {
+    t("[["),
+    i(1),
+    t("]] "),
+  }),
   -- gtd contexts
   s("an", {
     t("`@anywhere` ")
@@ -561,6 +567,7 @@ ls.add_snippets("markdown", {
 })
 
 ls.add_snippets("python", {
+  -- for enumerate
   s("fe", {
     t("for "), i(1, "i"), t(", "), i(2, "val"), t(" in enumerate("), i(3, "arr"), t("):"),
     t({ "", "    " }), i(4, "print(i, val)")
@@ -615,7 +622,7 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "K", "%",{remap=true})
+vim.keymap.set("n", "K", "%", { remap = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
