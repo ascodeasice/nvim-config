@@ -447,7 +447,7 @@ require('lazy').setup({
 					ncku = { pattern = '^http[s]?://.*ncku%.edu%.tw[/]?.*', icon = '󱆀 ', highlight = 'RenderMarkdownLink' },
 					docker = { pattern = '^http[s]?://.*docker%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					pypi = { pattern = '^http[s]?://.*pypi%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-					chatgpt = { pattern = '^http[s]?://.*chatgpt%.com/.*', icon = '󰭻 ', highlight = 'RenderMarkdownLink' },
+					chatgpt = { pattern = '^http[s]?://.*chatgpt%.com/.*', icon = '󰚩 ', highlight = 'RenderMarkdownLink' },
 					npm = { pattern = '^http[s]?://.*npmjs%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					arch = { pattern = '^http[s]?://.*archlinux%.org/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					figma = { pattern = '^http[s]?://.*figma%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
@@ -461,6 +461,7 @@ require('lazy').setup({
 					taobao = { pattern = '^http[s]?://.*%.taobao%.com/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
 					taobao2 = { pattern = '^http[s]?://.*%.tb%.cn/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
 					shorturl = { pattern = '^http[s]?://reurl%.cc[/]?.*', icon = '󰌷 ', highlight = 'RenderMarkdownLink' },
+					mattermost = { pattern = '^http[s]?://mm%.dev%..*/.*', icon = '󰭻 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
