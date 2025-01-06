@@ -472,6 +472,7 @@ require('lazy').setup({
 					taobao2 = { pattern = '^http[s]?://.*%.tb%.cn/.*', icon = '󰒚 ', highlight = 'RenderMarkdownLink' },
 					shorturl = { pattern = '^http[s]?://reurl%.cc[/]?.*', icon = '󰌷 ', highlight = 'RenderMarkdownLink' },
 					mattermost = { pattern = '^http[s]?://mm%.dev%..*/.*', icon = '󰭻 ', highlight = 'RenderMarkdownLink' },
+					canva = { pattern = '^http[s]?://www%.canva%.com/.*', icon = '󰐩 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
