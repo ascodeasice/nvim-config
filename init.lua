@@ -1003,7 +1003,6 @@ end, { desc = "Previous TODO/FIX comment" })
 
 -- oil.nvim
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-vim.keymap.set("n", "<C-b>", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<leader>-", require('oil').toggle_float)
 vim.keymap.set("n", "_", function()
   require('oil').open(vim.loop.cwd())
@@ -1412,9 +1411,12 @@ vim.keymap.set({ 'n', 'v' }, '<M-up>', function()
   require('mini.move').move_line('up')
 end)
 
--- bold text with control b
+-- make text bold
 vim.keymap.set({ 'n' }, '<C-b>', 'siwO', { remap = true })
 vim.keymap.set({ 'v' }, '<C-b>', 'sO', { remap = true })
+-- make text link with url in register
+vim.keymap.set({ 'n' }, '<C-l>', 'siwlEP', { remap = true })
+vim.keymap.set({ 'v' }, '<C-l>', 'slf)P', { remap = true })
 
 
 -- autocmd for exit full screen
