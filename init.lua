@@ -616,7 +616,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.keymap.set("n", "<leader>hh", ":set hlsearch!<CR>")
+vim.keymap.set("n", "<leader>h", ":set hlsearch!<CR>",{silent=true})
 -- remaps
 vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
