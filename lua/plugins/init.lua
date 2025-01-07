@@ -473,6 +473,7 @@ require('lazy').setup({
 					shorturl = { pattern = '^http[s]?://reurl%.cc[/]?.*', icon = '󰌷 ', highlight = 'RenderMarkdownLink' },
 					mattermost = { pattern = '^http[s]?://mm%.dev%..*/.*', icon = '󰭻 ', highlight = 'RenderMarkdownLink' },
 					canva = { pattern = '^http[s]?://www%.canva%.com/.*', icon = '󰐩 ', highlight = 'RenderMarkdownLink' },
+					discord = { pattern = '^http[s]?://discord%.com/.*', icon = '󰙯 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
