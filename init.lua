@@ -616,7 +616,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.keymap.set("n", "<leader>h", ":set hlsearch!<CR>",{silent=true})
+vim.keymap.set("n", "<leader>h", ":set hlsearch!<CR>", { silent = true })
 -- remaps
 vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
@@ -887,27 +887,6 @@ vim.api.nvim_set_keymap('n', 'z<Up>', 'zk', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'z<Down>', 'zj', { noremap = true, silent = true })
 
 -- disable auto completion in telescope
-
--- store recent five registers in neio
-
--- move registers between them
-local function move_registers()
-  vim.fn.setreg('o', vim.fn.getreg('i'))
-  vim.fn.setreg('i', vim.fn.getreg('e'))
-  vim.fn.setreg('e', vim.fn.getreg('n'))
-  vim.fn.setreg('n', vim.fn.getreg('0')) -- NOTE: 0 is default copy register)
-end
-
--- 自動命令組：每次複製、刪除和改變寄存器內容後自動調用 move_registers 函數
-local yank_augroup = vim.api.nvim_create_augroup('YankToRegisters', { clear = true })
-
-
-vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
-  callback = function()
-    move_registers()
-  end,
-  group = yank_augroup,
-})
 
 -- nvim-ts-autotag
 require('nvim-ts-autotag').setup({
