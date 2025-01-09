@@ -887,15 +887,34 @@ require('lazy').setup({
 		-- this is equalent to setup({}) function
 	},
 	{
+		"ascodeasice/flash-zh.nvim",
+		event = "VeryLazy",
+		dependencies = "folke/flash.nvim",
+		keys = { {
+			"S",
+			mode = { "n", "x", "o" },
+			function()
+				require("flash-zh").jump({
+					chinese_only = false
+				})
+			end,
+			desc = "Flash between Chinese"
+		} }
+	},
+	{
 		"folke/flash.nvim",
 		event = "VeryLazy",
 		-- stylua: ignore
 		keys = {
-			{ "S", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+			-- { "S", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
 			{ "R", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
 		},
 		opts = {
 			modes = {
+				highlight = {
+					backdrop = false,
+					matches = false
+				},
 				search = {
 					enabled = true
 				},
