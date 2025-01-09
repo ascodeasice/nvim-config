@@ -474,6 +474,7 @@ require('lazy').setup({
 					mattermost = { pattern = '^http[s]?://mm%.dev%..*/.*', icon = '󰭻 ', highlight = 'RenderMarkdownLink' },
 					canva = { pattern = '^http[s]?://www%.canva%.com/.*', icon = '󰐩 ', highlight = 'RenderMarkdownLink' },
 					discord = { pattern = '^http[s]?://discord%.com/.*', icon = '󰙯 ', highlight = 'RenderMarkdownLink' },
+					web_archive = { pattern = '^http[s]?://web%.archive%.org%/.*', icon = '󰀼 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {

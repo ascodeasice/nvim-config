@@ -549,6 +549,12 @@ ls.add_snippets("markdown", {
     i(1),
     t("]] "),
   }),
+  -- inline code, easier to type than code, less possible to get wrong snippet
+  s("in", {
+    t("`"),
+    i(1),
+    t("` "),
+  }),
   -- gtd contexts
   s("an", {
     t("`@anywhere` ")
@@ -622,7 +628,7 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "K", "%", { remap = true })
+vim.keymap.set({ "n", "x" }, "K", "%", { remap = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
