@@ -444,6 +444,7 @@ require('lazy').setup({
 					mp4 = { pattern = ".*%.mp4[>]?$", icon = '󰎁 ', highlight = 'RenderMarkdownLink' },
 					mkv = { pattern = ".*%.mkv[>]?$", icon = '󰎁 ', highlight = 'RenderMarkdownLink' },
 					md = { pattern = ".*%.md$", icon = '󰽛 ', highlight = 'RenderMarkdownLink' },
+					hackmd = { pattern = "https://hackmd%.io/.*", icon = '󰏫 ', highlight = 'RenderMarkdownLink' },
 					ithome = { pattern = '^http[s]?://.*%.ithome%.com%.tw/.*', icon = '幫|', highlight = 'RenderMarkdownLink' },
 					reddit = { pattern = '^http[s]?://www%.reddit%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					gitlab = { pattern = '^http[s]?://.*gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
