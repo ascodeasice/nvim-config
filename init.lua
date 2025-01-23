@@ -1493,3 +1493,10 @@ vim.on_key(function(char)
     vim.cmd.normal("zv") -- after closing folds, keep the *current* fold open
   end
 end, vim.api.nvim_create_namespace("auto_pause_folds"))
+
+vim.keymap.set(
+  "n",
+  "<C-t>",
+  require('obfuscate').toggle,
+  { desc = "Toggle Obfuscate", noremap = true, silent = true }
+)

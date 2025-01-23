@@ -38,6 +38,7 @@ end
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+	{ "https://github.com/ck-zhang/obfuscate.nvim" },
 	{
 		'tzachar/highlight-undo.nvim',
 		keys = { { "u" }, { "<C-r>" } },
@@ -843,7 +844,7 @@ require('lazy').setup({
 			lookForwardBig = 30
 		},
 	},
-	{ "chrisgrieser/nvim-spider",       lazy = true },
+	{ "chrisgrieser/nvim-spider",                  lazy = true },
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
