@@ -479,6 +479,7 @@ require('lazy').setup({
 					canva = { pattern = '^http[s]?://www%.canva%.com/.*', icon = '󰐩 ', highlight = 'RenderMarkdownLink' },
 					discord = { pattern = '^http[s]?://discord%.com/.*', icon = '󰙯 ', highlight = 'RenderMarkdownLink' },
 					web_archive = { pattern = '^http[s]?://web%.archive%.org%/.*', icon = '󰀼 ', highlight = 'RenderMarkdownLink' },
+					kubernetes = { pattern = '^http[s]?://kubernetes%.io/.*', icon = '󱃾 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {

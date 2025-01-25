@@ -392,3 +392,6 @@ stringified
 hackmd
 lifecycle
 mvvm
+kustomize
+jsonnet
+kubelet
