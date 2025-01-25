@@ -395,3 +395,4 @@ mvvm
 kustomize
 jsonnet
 kubelet
+kubectl
