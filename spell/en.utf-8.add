@@ -396,3 +396,6 @@ kustomize
 jsonnet
 kubelet
 kubectl
+endswith
+minikube
+yaml
