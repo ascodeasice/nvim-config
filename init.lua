@@ -1514,3 +1514,27 @@ vim.keymap.set(
   require('obfuscate').toggle,
   { desc = "Toggle Obfuscate", noremap = true, silent = true }
 )
+
+-- autozz
+-- https://www.reddit.com/r/neovim/comments/1iejf9q/nvimautocenter_auto_zz_when_inserting/
+
+--- Center when inserting
+vim.api.nvim_create_autocmd('InsertEnter', {
+  callback = function()
+    local debounce = 8
+    if vim.fn.abs(vim.fn.line('.') - math.floor(vim.fn.line('w0') + vim.fn.winheight(0) / 2)) >= debounce then
+      vim.cmd('norm! zz')
+    end
+  end,
+})
+
+-- Keep it centered while hitting <CR> if past debounce
+vim.keymap.set('i', '<CR>',
+  function()
+    local debounce = 8
+    if vim.fn.abs(vim.fn.line('.') - math.floor(vim.fn.line('w0') + vim.fn.winheight(0) / 2)) >= debounce then
+      return '<CR><cmd>norm! zz<CR>'
+    end
+    return '<CR>'
+  end, { expr = true }
+)
