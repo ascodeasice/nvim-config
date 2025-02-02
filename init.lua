@@ -691,7 +691,8 @@ function Save_file()
   end
 end
 
-vim.keymap.set({ 'n', 'i', 'v' }, '<C-s>', '<Cmd>lua Save_file()<CR>', {
+-- save without message
+vim.keymap.set({ 'n', 'i', 'v' }, '<C-s>', '<Cmd>silent write<CR>', {
   noremap = true,
   silent = true,
 })

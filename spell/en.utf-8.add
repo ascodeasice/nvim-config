@@ -399,3 +399,5 @@ kubectl
 endswith
 minikube
 yaml
+dataclass
+shouldn
