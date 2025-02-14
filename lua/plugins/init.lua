@@ -481,6 +481,7 @@ require('lazy').setup({
 					web_archive = { pattern = '^http[s]?://web%.archive%.org%/.*', icon = '󰀼 ', highlight = 'RenderMarkdownLink' },
 					kubernetes = { pattern = '^http[s]?://kubernetes%.io/.*', icon = '󱃾 ', highlight = 'RenderMarkdownLink' },
 					dcard = { pattern = '^http[s]?://.*%.dcard%.tw/.*', icon = '󱁶 ', highlight = 'RenderMarkdownLink' },
+					notion = { pattern = '^http[s]?://.*%.notion%.so/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
