@@ -177,7 +177,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "diff", "xml", "csv","ruby" },
+    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "diff", "xml", "csv","ruby", "make" },
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
     -- Install languages synchronously (only applied to `ensure_installed`)
