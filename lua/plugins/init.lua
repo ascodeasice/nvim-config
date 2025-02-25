@@ -139,7 +139,8 @@ require('lazy').setup({
 		build = ":UpdateRemotePlugins",
 		init = function()
 			-- these are examples, not defaults. Please see the readme
-			vim.g.molten_image_provider = "image.nvim"
+			-- NOTE: use this only if image.nvim is installed
+			-- vim.g.molten_image_provider = "image.nvim"
 			vim.g.molten_output_win_max_height = 20
 		end,
 	},
