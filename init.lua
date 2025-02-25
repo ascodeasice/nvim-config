@@ -177,7 +177,7 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "diff", "xml", "csv","ruby", "make" },
+    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "diff", "xml", "csv", "ruby", "make" },
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
     -- Install languages synchronously (only applied to `ensure_installed`)
@@ -197,7 +197,41 @@ vim.defer_fn(function()
         node_decremental = '<M-space>',
       },
     },
-    textobjects = {},
+    textobjects = {
+      move = {
+        enable = true,
+        set_jumps = false, -- you can change this if you want.
+        goto_next_start = {
+          --- ... other keymaps
+          ["]c"] = { query = "@code_cell.inner", desc = "next code block" },
+        },
+        goto_previous_start = {
+          --- ... other keymaps
+          ["[c"] = { query = "@code_cell.inner", desc = "previous code block" },
+        },
+      },
+      select = {
+        enable = true,
+        lookahead = true, -- you can change this if you want
+        keymaps = {
+          --- ... other keymaps
+          ["ic"] = { query = "@code_cell.inner", desc = "in block" },
+          ["ac"] = { query = "@code_cell.outer", desc = "around block" },
+        },
+      },
+      swap = { -- Swap only works with code blocks that are under the same
+        -- markdown header
+        enable = true,
+        swap_next = {
+          --- ... other keymap
+          ["<leader>scl"] = "@code_cell.outer",
+        },
+        swap_previous = {
+          --- ... other keymap
+          ["<leader>sch"] = "@code_cell.outer",
+        },
+      },
+    }
   }
 end, 0)
 
@@ -1538,3 +1572,36 @@ vim.keymap.set('i', '<CR>',
     return '<CR>'
   end, { expr = true }
 )
+
+local function keys(str)
+  return function()
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(str, true, false, true), "m", true)
+  end
+end
+
+local hydra = require("hydra")
+hydra({
+  name = "QuartoNavigator",
+  hint = [[
+      _j_/_k_: move down/up  _r_: run cell
+      _l_: run line  _R_: run above
+      ^^     _<esc>_/_q_: exit ]],
+  config = {
+    color = "pink",
+    invoke_on_body = true,
+    -- hint = {
+    --   border = "rounded",       -- you can change the border if you want
+    -- },
+  },
+  mode = { "n" },
+  body = "<localleader>j",   -- this is the key that triggers the hydra
+  heads = {
+    { "j",     keys("]c") },
+    { "k",     keys("[c") },
+    { "r",     ":QuartoSend<CR>" },
+    { "l",     ":QuartoSendLine<CR>" },
+    { "R",     ":QuartoSendAbove<CR>" },
+    { "<esc>", nil,                   { exit = true } },
+    { "q",     nil,                   { exit = true } },
+  },
+})

@@ -38,6 +38,7 @@ end
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+	{ "nvimtools/hydra.nvim" },
 	{ "https://github.com/ck-zhang/obfuscate.nvim" },
 	{
 		'tzachar/highlight-undo.nvim',
@@ -56,7 +57,7 @@ require('lazy').setup({
 			require('tiny-inline-diagnostic').setup({
 				preset = "nonerdfont",
 				options = {
-					show_source=true,
+					show_source = true,
 					multiple_diag_under_cursor = true,
 					multilines = true,
 				}
@@ -854,7 +855,7 @@ require('lazy').setup({
 			}
 		},
 	},
-	{ "chrisgrieser/nvim-spider",                  lazy = true },
+	{ "chrisgrieser/nvim-spider",       lazy = true },
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
