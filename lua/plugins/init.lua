@@ -364,8 +364,8 @@ require('lazy').setup({
 	{
 		"3rd/image.nvim",
 		event = "VeryLazy",
-		branch = "feat/toggle-rendering",
-		enabled = false,
+		-- branch = "feat/toggle-rendering",
+		enabled = true,
 		config = function()
 			require("image").setup({
 				backend = "kitty",

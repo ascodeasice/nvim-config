@@ -203,11 +203,19 @@ vim.defer_fn(function()
         set_jumps = false, -- you can change this if you want.
         goto_next_start = {
           --- ... other keymaps
-          ["]c"] = { query = "@code_cell.inner", desc = "next code block" },
+          ["]b"] = { query = "@code_cell.inner", desc = "next code block" },
         },
         goto_previous_start = {
           --- ... other keymaps
-          ["[c"] = { query = "@code_cell.inner", desc = "previous code block" },
+          ["[b"] = { query = "@code_cell.inner", desc = "previous code block" },
+        },
+        goto_next_end = {
+          --- ... other keymaps
+          ["]B"] = { query = "@code_cell.inner", desc = "next code block end" },
+        },
+        goto_previous_end = {
+          --- ... other keymaps
+          ["[B"] = { query = "@code_cell.inner", desc = "previous code block end" },
         },
       },
       select = {
@@ -215,8 +223,8 @@ vim.defer_fn(function()
         lookahead = true, -- you can change this if you want
         keymaps = {
           --- ... other keymaps
-          ["ic"] = { query = "@code_cell.inner", desc = "in block" },
-          ["ac"] = { query = "@code_cell.outer", desc = "around block" },
+          ["ib"] = { query = "@code_cell.inner", desc = "in block" },
+          ["ab"] = { query = "@code_cell.outer", desc = "around block" },
         },
       },
       swap = { -- Swap only works with code blocks that are under the same
@@ -224,11 +232,11 @@ vim.defer_fn(function()
         enable = true,
         swap_next = {
           --- ... other keymap
-          ["<leader>scl"] = "@code_cell.outer",
+          ["<leader>sbl"] = "@code_cell.outer",
         },
         swap_previous = {
           --- ... other keymap
-          ["<leader>sch"] = "@code_cell.outer",
+          ["<leader>sbh"] = "@code_cell.outer",
         },
       },
     }
@@ -1303,7 +1311,7 @@ vim.g.molten_auto_open_output = false
 -- this guide will be using image.nvim
 -- Don't forget to setup and install the plugin if you want to view image outputs
 -- NOTE: use this if we enable image.nvim
--- vim.g.molten_image_provider = "image.nvim"
+vim.g.molten_image_provider = "image.nvim"
 
 -- optional, I like wrapping. works for virt text and the output window
 vim.g.molten_wrap_output = true
@@ -1314,6 +1322,9 @@ vim.g.molten_virt_text_output = true
 
 -- this will make it so the output shows up below the \`\`\` cell delimiter
 vim.g.molten_virt_lines_off_by_1 = true
+
+-- NOTE: which kernel to use will automatically be asked before running a cell if set up properly (creating kernel, installing prerequisite packages)
+vim.keymap.set("n", "<localleader>MI", ":MoltenInit<CR>", { desc = "init molten", silent = true })
 
 vim.api.nvim_create_autocmd("User", {
   pattern = "MoltenInitPost",
@@ -1583,8 +1594,9 @@ local hydra = require("hydra")
 hydra({
   name = "QuartoNavigator",
   hint = [[
-      _j_/_k_: move down/up  _r_: run cell
-      _l_: run line  _R_: run above
+      _j_/_k_: move down/up _J_/_K_: move to end
+      _R_: run above _r_: run cell
+      _l_: run line
       ^^     _<esc>_/_q_: exit ]],
   config = {
     color = "pink",
@@ -1596,8 +1608,10 @@ hydra({
   mode = { "n" },
   body = "<localleader>j",   -- this is the key that triggers the hydra
   heads = {
-    { "j",     keys("]c") },
-    { "k",     keys("[c") },
+    { "j",     keys("]b") },
+    { "k",     keys("[b") },
+    { "J",     keys("]B") },
+    { "K",     keys("[b]B") }, -- somehow using [B won't work
     { "r",     ":QuartoSend<CR>" },
     { "l",     ":QuartoSendLine<CR>" },
     { "R",     ":QuartoSendAbove<CR>" },
