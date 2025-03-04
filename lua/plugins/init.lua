@@ -365,7 +365,7 @@ require('lazy').setup({
 		"3rd/image.nvim",
 		event = "VeryLazy",
 		-- branch = "feat/toggle-rendering",
-		enabled = true,
+		enabled = false,
 		config = function()
 			require("image").setup({
 				backend = "kitty",
@@ -592,7 +592,6 @@ require('lazy').setup({
 	},
 	{
 		"GCBallesteros/jupytext.nvim",
-		config = true,
 		config = function()
 			require("jupytext").setup({
 				style = "markdown",

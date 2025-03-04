@@ -417,3 +417,8 @@ pinout
 entrypoint
 toolchain
 miniconda
+preprocess
+overfitting
+argmax
+ollama
+muay
