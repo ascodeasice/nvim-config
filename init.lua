@@ -203,19 +203,19 @@ vim.defer_fn(function()
         set_jumps = false, -- you can change this if you want.
         goto_next_start = {
           --- ... other keymaps
-          ["]b"] = { query = "@code_cell.inner", desc = "next code block" },
+          ["]c"] = { query = "@code_cell.inner", desc = "next code block" },
         },
         goto_previous_start = {
           --- ... other keymaps
-          ["[b"] = { query = "@code_cell.inner", desc = "previous code block" },
+          ["[c"] = { query = "@code_cell.inner", desc = "previous code block" },
         },
         goto_next_end = {
           --- ... other keymaps
-          ["]B"] = { query = "@code_cell.inner", desc = "next code block end" },
+          ["]C"] = { query = "@code_cell.inner", desc = "next code block end" },
         },
         goto_previous_end = {
           --- ... other keymaps
-          ["[B"] = { query = "@code_cell.inner", desc = "previous code block end" },
+          ["[C"] = { query = "@code_cell.inner", desc = "previous code block end" },
         },
       },
       select = {
@@ -223,8 +223,8 @@ vim.defer_fn(function()
         lookahead = true, -- you can change this if you want
         keymaps = {
           --- ... other keymaps
-          ["ib"] = { query = "@code_cell.inner", desc = "in block" },
-          ["ab"] = { query = "@code_cell.outer", desc = "around block" },
+          ["ic"] = { query = "@code_cell.inner", desc = "in block" },
+          ["ac"] = { query = "@code_cell.outer", desc = "around block" },
         },
       },
       swap = { -- Swap only works with code blocks that are under the same
@@ -1611,10 +1611,10 @@ hydra({
   mode = { "n" },
   body = "<localleader>j",   -- this is the key that triggers the hydra
   heads = {
-    { "j",     keys("]b") },
-    { "k",     keys("[b") },
-    { "J",     keys("]B") },
-    { "K",     keys("[b]B") }, -- somehow using [B won't work
+    { "j",     keys("]c") },
+    { "k",     keys("[c") },
+    { "J",     keys("]C") },
+    { "K",     keys("[c]C") }, -- somehow using [B won't work
     { "r",     ":QuartoSend<CR>" },
     { "l",     ":QuartoSendLine<CR>" },
     { "R",     ":QuartoSendAbove<CR>" },
