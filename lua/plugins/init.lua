@@ -879,6 +879,8 @@ require('lazy').setup({
 		opts = {
 			save_path = "~/Pictures",
 			has_breadcrumbs = false,
+			bg_x_padding = 0,
+			bg_y_padding = 0,
 		},
 	},
 	{ "mtdl9/vim-log-highlighting" },
