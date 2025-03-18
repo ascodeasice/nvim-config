@@ -43,6 +43,9 @@ require('lazy').setup({
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
 		},
+		opts={
+			dynamic_scale=0.8,
+		}
 	},
 	{ "nvimtools/hydra.nvim" },
 	{ "https://github.com/ck-zhang/obfuscate.nvim" },
