@@ -38,6 +38,12 @@ end
 
 -- [[ Configure plugins ]]
 require('lazy').setup({
+	{
+		'Thiago4532/mdmath.nvim',
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+		},
+	},
 	{ "nvimtools/hydra.nvim" },
 	{ "https://github.com/ck-zhang/obfuscate.nvim" },
 	{
@@ -103,6 +109,7 @@ require('lazy').setup({
 	},
 	{
 		'jbyuki/nabla.nvim',
+		enabled=false,
 		event = "VeryLazy",
 	},
 	{
