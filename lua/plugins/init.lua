@@ -43,8 +43,8 @@ require('lazy').setup({
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
 		},
-		opts={
-			dynamic_scale=0.8,
+		opts = {
+			dynamic_scale = 0.8,
 		}
 	},
 	{ "nvimtools/hydra.nvim" },
@@ -112,7 +112,7 @@ require('lazy').setup({
 	},
 	{
 		'jbyuki/nabla.nvim',
-		enabled=false,
+		enabled = false,
 		event = "VeryLazy",
 	},
 	{
@@ -151,7 +151,11 @@ require('lazy').setup({
 		init = function()
 			-- these are examples, not defaults. Please see the readme
 			-- NOTE: use this only if image.nvim is installed
-			-- vim.g.molten_image_provider = "image.nvim"
+			local has_image, _ = pcall(require, "image")
+
+			if has_image then
+				vim.g.molten_image_provider = "image.nvim"
+			end
 			vim.g.molten_output_win_max_height = 20
 		end,
 	},
