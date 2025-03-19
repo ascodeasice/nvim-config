@@ -61,7 +61,7 @@ require('lazy').setup({
 	{
 		"rachartier/tiny-inline-diagnostic.nvim",
 		event = "VeryLazy", -- Or `LspAttach`
-		priority = 1000,  -- needs to be loaded in first
+		priority = 1000, -- needs to be loaded in first
 		config = function()
 			require('tiny-inline-diagnostic').setup({
 				preset = "nonerdfont",
@@ -83,7 +83,7 @@ require('lazy').setup({
 			mapping = {
 				playMacro = "M" -- I don't use global mark
 			}
-		},              -- required even with default settings, since it calls `setup()`
+		},  -- required even with default settings, since it calls `setup()`
 	},
 	{
 		'theHamsta/nvim-dap-virtual-text',
@@ -98,14 +98,22 @@ require('lazy').setup({
 				width = .85,
 				options = {
 					signcolumn = "no", -- disable signcolumn
+					number = false, -- disable number column
+					relativenumber = false, -- disable relative numbers
+					cursorline = false, -- disable cursorline
 					cursorcolumn = false, -- disable cursor column
 					foldcolumn = "0", -- disable fold column
+					list = false, -- disable whitespace characters
 				}
 			},
 			plugins = {
 				tmux = { enabled = true },
 				twilight = {
 					enabled = true
+				},
+				kitty = {
+					enabled = true,
+					font = "+4", -- font size increment
 				},
 			} -- disables the tmux statusline
 		}
@@ -311,7 +319,8 @@ require('lazy').setup({
 						local file_name_no_ext = context.file_name_no_ext
 						-- 將底線和破折號替換為空格
 						file_name_no_ext = file_name_no_ext:gsub("_", " "):gsub("-", " ")
-						return "![" .. file_name_no_ext .. context.cursor .. "](" .. context.file_path .. ")"
+						return "![" ..
+						file_name_no_ext .. context.cursor .. "](" .. context.file_path .. ")"
 					end
 				},
 			},
@@ -323,7 +332,8 @@ require('lazy').setup({
 						-- 將底線和破折號替換為空格
 						file_name_no_ext = file_name_no_ext:gsub("_", " "):gsub("-", " ")
 						-- NOTE: hugo uses / directly following file name inside static directory
-						return "![" .. file_name_no_ext .. context.cursor .. "](/" .. context.file_name .. ")"
+						return "![" ..
+						file_name_no_ext .. context.cursor .. "](/" .. context.file_name .. ")"
 					end
 				}
 			},
@@ -397,8 +407,8 @@ require('lazy').setup({
 				tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
 				max_height_window_percentage = math.huge, -- this is necessary for a good experience (molten.nvim)
 				max_width_window_percentage = math.huge,
-				max_width = 100,                      -- tweak to preference
-				max_height = 12,                      -- ^
+				max_width = 100, -- tweak to preference
+				max_height = 12, -- ^
 				hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", },
 			})
 		end
@@ -539,12 +549,12 @@ require('lazy').setup({
 		config = function()
 			require('mini.surround').setup({
 				mappings = {
-					add = 's',        -- Add surrounding in Normal and Visual modes
-					delete = 'ds',    -- Delete surrounding
-					find = 'sf',      -- Find surrounding (to the right)
+					add = 's', -- Add surrounding in Normal and Visual modes
+					delete = 'ds', -- Delete surrounding
+					find = 'sf', -- Find surrounding (to the right)
 					find_left = 'sF', -- Find surrounding (to the left)
 					highlight = 'sh', -- Highlight surrounding
-					replace = 'cs',   -- Replace surrounding
+					replace = 'cs', -- Replace surrounding
 					update_n_lines = 'sn', -- Update `n_lines`
 
 					suffix_last = '', -- Suffix to search with "prev" method
@@ -900,7 +910,7 @@ require('lazy').setup({
 	{ "mtdl9/vim-log-highlighting" },
 	{
 		"okuuva/auto-save.nvim",
-		cmd = "ASToggle",     -- optional for lazy loading on command
+		cmd = "ASToggle", -- optional for lazy loading on command
 		opts = {
 			debounce_delay = 5000, -- delay after which a pending save is executed
 		},
@@ -958,7 +968,7 @@ require('lazy').setup({
 		config = function()
 			require 'eyeliner'.setup {
 				highlight_on_key = true, -- show highlights only after keypress
-				dim = true           -- dim all other characters if set to true (recommended!)
+				dim = true -- dim all other characters if set to true (recommended!)
 			}
 		end,
 		condition = false -- temporary disable this plugin
