@@ -1625,23 +1625,32 @@ hydra({
 
 -- 定義函式來運行 `sdcv` 並顯示翻譯結果
 function TranslateWithSdcv()
-    -- 獲取視覺模式選取的文字
-    local _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
-    local _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
-    local lines = vim.fn.getline(csrow, cerow)
+    local mode = vim.fn.mode()
 
-    -- 只取選取範圍內的文字
-    if #lines == 0 then
-        return
-    elseif #lines == 1 then
-        lines[1] = string.sub(lines[1], cscol, cecol)
+    -- 取得要翻譯的文字
+    local selected_text = ""
+
+    if mode == "v" or mode == "V" then
+        -- **視覺模式 (Visual Mode) 下的處理**
+        local _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
+        local _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
+        local lines = vim.fn.getline(csrow, cerow)
+
+        -- 只取選取範圍內的文字
+        if #lines == 0 then
+            return
+        elseif #lines == 1 then
+            lines[1] = string.sub(lines[1], cscol, cecol)
+        else
+            lines[1] = string.sub(lines[1], cscol)
+            lines[#lines] = string.sub(lines[#lines], 1, cecol)
+        end
+
+        selected_text = table.concat(lines, " ")
     else
-        lines[1] = string.sub(lines[1], cscol)
-        lines[#lines] = string.sub(lines[#lines], 1, cecol)
+        -- **普通模式 (Normal Mode) 下的處理**
+        selected_text = vim.fn.expand("<cword>") -- 取得游標下的單字
     end
-
-    -- 合併選取的文字
-    local selected_text = table.concat(lines, " ")
 
     -- 避免選取空白時報錯
     if selected_text == "" then
@@ -1658,5 +1667,9 @@ function TranslateWithSdcv()
     vim.api.nvim_echo({ { result, "Normal" } }, false, {})
 end
 
--- 綁定快捷鍵，在 visual mode 下按 <leader>d 查詢選取的文字並自動退出視覺模式
+-- **快捷鍵綁定**
+-- 視覺模式 (Visual Mode) 下按 <leader>T 查詢選取的文字，並自動退出視覺模式
 vim.api.nvim_set_keymap("v", "<leader>T", "<Esc>:lua TranslateWithSdcv()<CR>", { noremap = true, silent = true })
+
+-- 普通模式 (Normal Mode) 下按 <leader>T 查詢游標下的單字
+vim.api.nvim_set_keymap("n", "<leader>T", ":lua TranslateWithSdcv()<CR>", { noremap = true, silent = true })

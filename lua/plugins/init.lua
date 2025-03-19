@@ -526,7 +526,7 @@ require('lazy').setup({
 		config = function()
 			require('mini.splitjoin').setup({
 				mappings = {
-					toggle = '<leader>T',
+					toggle = '<leader>to',
 					split = '<leader>ts',
 					join = '<leader>tj',
 				},
