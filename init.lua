@@ -25,8 +25,8 @@ end
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
--- vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
--- vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
@@ -1622,3 +1622,41 @@ hydra({
     { "q",     nil,                   { exit = true } },
   },
 })
+
+-- 定義函式來運行 `sdcv` 並顯示翻譯結果
+function TranslateWithSdcv()
+    -- 獲取視覺模式選取的文字
+    local _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
+    local _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
+    local lines = vim.fn.getline(csrow, cerow)
+
+    -- 只取選取範圍內的文字
+    if #lines == 0 then
+        return
+    elseif #lines == 1 then
+        lines[1] = string.sub(lines[1], cscol, cecol)
+    else
+        lines[1] = string.sub(lines[1], cscol)
+        lines[#lines] = string.sub(lines[#lines], 1, cecol)
+    end
+
+    -- 合併選取的文字
+    local selected_text = table.concat(lines, " ")
+
+    -- 避免選取空白時報錯
+    if selected_text == "" then
+        print("No text selected.")
+        return
+    end
+
+    -- 執行 `sdcv` 命令並獲取結果
+    local handle = io.popen("sdcv -n " .. vim.fn.shellescape(selected_text))
+    local result = handle:read("*a")
+    handle:close()
+
+    -- 顯示翻譯結果（使用浮動視窗）
+    vim.api.nvim_echo({ { result, "Normal" } }, false, {})
+end
+
+-- 綁定快捷鍵，在 visual mode 下按 <leader>d 查詢選取的文字並自動退出視覺模式
+vim.api.nvim_set_keymap("v", "<leader>T", "<Esc>:lua TranslateWithSdcv()<CR>", { noremap = true, silent = true })
