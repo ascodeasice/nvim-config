@@ -1673,3 +1673,5 @@ vim.api.nvim_set_keymap("v", "<leader>T", "<Esc>:lua TranslateWithSdcv()<CR>", {
 
 -- 普通模式 (Normal Mode) 下按 <leader>T 查詢游標下的單字
 vim.api.nvim_set_keymap("n", "<leader>T", ":lua TranslateWithSdcv()<CR>", { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap("n","<leader>z","<cmd>ZenMode<CR>",{noremap=true,silent=true})
