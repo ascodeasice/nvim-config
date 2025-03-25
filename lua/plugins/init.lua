@@ -628,6 +628,17 @@ require('lazy').setup({
 						input = { '```.-\n().-()\n```' }, -- remove the language if exists
 						output = { left = '```\n', right = '\n```' },
 					},
+
+					-- full width
+					['[']={
+						input = { '「' .. '().-()' .. '」' },
+						output = { left = '「', right = '」' },
+					},
+
+					['(']={
+						input = { '（' .. '().-()' .. '）' },
+						output = { left = '（', right = '）' },
+					},
 				},
 
 			})
