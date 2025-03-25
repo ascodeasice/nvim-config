@@ -39,6 +39,24 @@ end
 -- [[ Configure plugins ]]
 require('lazy').setup({
 	{
+		"folke/snacks.nvim",
+		priority = 1000,
+		lazy = false,
+		---@type snacks.Config
+		opts = {
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+			bigfile = { enabled = true },
+			image = { enabled = true },
+			scratch = { enabled = true },
+		},
+		keys = {
+			{ "<leader>.", function() Snacks.scratch() end,        desc = "Toggle Scratch Buffer" },
+			{ "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
+		}
+	},
+	{
 		'Thiago4532/mdmath.nvim',
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
@@ -1354,7 +1372,7 @@ require('lazy').setup({
 		lazy = false,
 		config = function()
 			require('tabout').setup {
-				completion = true,       -- if the tabkey is used in a completion pum
+				completion = true, -- if the tabkey is used in a completion pum
 			}
 		end,
 		dependencies = { -- These are optional
