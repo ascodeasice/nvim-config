@@ -48,7 +48,12 @@ require('lazy').setup({
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
 			bigfile = { enabled = true },
-			image = { enabled = true },
+			image = {
+				enabled = true,
+				math = {
+					enabled = false
+				},
+			},
 			scratch = { enabled = true },
 		},
 		keys = {
@@ -630,12 +635,12 @@ require('lazy').setup({
 					},
 
 					-- full width
-					['[']={
+					['['] = {
 						input = { '「' .. '().-()' .. '」' },
 						output = { left = '「', right = '」' },
 					},
 
-					['(']={
+					['('] = {
 						input = { '（' .. '().-()' .. '）' },
 						output = { left = '（', right = '）' },
 					},
