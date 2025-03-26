@@ -500,7 +500,7 @@ require('lazy').setup({
 					reddit = { pattern = '^http[s]?://www%.reddit%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					gitlab = { pattern = '^http[s]?://.*gitlab%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					stackoverflow = { pattern = '^http[s]?://stackoverflow%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
-					medium = { pattern = '^http[s]?://%w-%.?medium%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
+					medium = { pattern = '^http[s]?://.*%.?medium%.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					freedium = { pattern = '^http[s]?://%w-%.?freedium%.cfd/.*', icon = '󰯺 ', highlight = 'RenderMarkdownLink' },
 					google_sheet = { pattern = '^http[s]?://docs%.google%.com/spreadsheets/.*', icon = '󰧷 ', highlight = 'RenderMarkdownLink' },
 					google_doc = { pattern = '^http[s]?://docs%.google%.com/document/.*', icon = '󰈙 ', highlight = 'RenderMarkdownLink' },
