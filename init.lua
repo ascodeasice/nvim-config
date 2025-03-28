@@ -611,7 +611,7 @@ ls.add_snippets("markdown", {
   }),
   -- inline latex formula
   s("$", {
-    t("$"),
+    t({ "<!-- prettier-ignore -->", "$" }),
     i(1),
     t("$ "),
   }),
