@@ -609,6 +609,12 @@ ls.add_snippets("markdown", {
     i(1),
     t("` "),
   }),
+  -- inline latex formula
+  s("$", {
+    t("$"),
+    i(1),
+    t("$ "),
+  }),
   -- gtd contexts
   s("an", {
     t("`@anywhere` ")
@@ -624,6 +630,33 @@ ls.add_snippets("markdown", {
   s("as", {
     t("`@async` ")
   }),
+  -- SECTION: latex in markdown
+  -- fraction
+  s("frac", {
+    t("\\frac{"), i(1), t("}{"), i(2), t("}"), i(0)
+  }),
+
+  -- sum snippet: \sum_{i=1}^{n}
+  s("sum", {
+    t("\\sum_{"), i(1, "i=1"), t("}^{"), i(2, "n"), t("} "),
+    i(0)
+  }),
+
+  -- subscript: _{...}
+  s("_", {
+    t("_{"), i(1), t("}"), i(0)
+  }),
+
+  -- superscript: ^{...}
+  s("^", {
+    t("^{"), i(1), t("}"), i(0)
+  }),
+
+  -- integral: \int_{a}^{b}
+  s("int", {
+    t("\\int_{"), i(1, "a"), t("}^{"), i(2, "b"), t("} "), i(0)
+  }),
+
 })
 
 ls.add_snippets("python", {
@@ -1608,7 +1641,7 @@ hydra({
     -- },
   },
   mode = { "n" },
-  body = "<localleader>j",   -- this is the key that triggers the hydra
+  body = "<localleader>j", -- this is the key that triggers the hydra
   heads = {
     { "j",     keys("]c") },
     { "k",     keys("[c") },
@@ -1624,46 +1657,46 @@ hydra({
 
 -- 定義函式來運行 `sdcv` 並顯示翻譯結果
 function TranslateWithSdcv()
-    local mode = vim.fn.mode()
+  local mode = vim.fn.mode()
 
-    -- 取得要翻譯的文字
-    local selected_text = ""
+  -- 取得要翻譯的文字
+  local selected_text = ""
 
-    if mode == "v" or mode == "V" then
-        -- **視覺模式 (Visual Mode) 下的處理**
-        local _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
-        local _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
-        local lines = vim.fn.getline(csrow, cerow)
+  if mode == "v" or mode == "V" then
+    -- **視覺模式 (Visual Mode) 下的處理**
+    local _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
+    local _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
+    local lines = vim.fn.getline(csrow, cerow)
 
-        -- 只取選取範圍內的文字
-        if #lines == 0 then
-            return
-        elseif #lines == 1 then
-            lines[1] = string.sub(lines[1], cscol, cecol)
-        else
-            lines[1] = string.sub(lines[1], cscol)
-            lines[#lines] = string.sub(lines[#lines], 1, cecol)
-        end
-
-        selected_text = table.concat(lines, " ")
+    -- 只取選取範圍內的文字
+    if #lines == 0 then
+      return
+    elseif #lines == 1 then
+      lines[1] = string.sub(lines[1], cscol, cecol)
     else
-        -- **普通模式 (Normal Mode) 下的處理**
-        selected_text = vim.fn.expand("<cword>") -- 取得游標下的單字
+      lines[1] = string.sub(lines[1], cscol)
+      lines[#lines] = string.sub(lines[#lines], 1, cecol)
     end
 
-    -- 避免選取空白時報錯
-    if selected_text == "" then
-        print("No text selected.")
-        return
-    end
+    selected_text = table.concat(lines, " ")
+  else
+    -- **普通模式 (Normal Mode) 下的處理**
+    selected_text = vim.fn.expand("<cword>") -- 取得游標下的單字
+  end
 
-    -- 執行 `sdcv` 命令並獲取結果
-    local handle = io.popen("sdcv -n " .. vim.fn.shellescape(selected_text))
-    local result = handle:read("*a")
-    handle:close()
+  -- 避免選取空白時報錯
+  if selected_text == "" then
+    print("No text selected.")
+    return
+  end
 
-    -- 顯示翻譯結果（使用浮動視窗）
-    vim.api.nvim_echo({ { result, "Normal" } }, false, {})
+  -- 執行 `sdcv` 命令並獲取結果
+  local handle = io.popen("sdcv -n " .. vim.fn.shellescape(selected_text))
+  local result = handle:read("*a")
+  handle:close()
+
+  -- 顯示翻譯結果（使用浮動視窗）
+  vim.api.nvim_echo({ { result, "Normal" } }, false, {})
 end
 
 -- **快捷鍵綁定**
@@ -1673,4 +1706,4 @@ vim.api.nvim_set_keymap("v", "<leader>T", "<Esc>:lua TranslateWithSdcv()<CR>", {
 -- 普通模式 (Normal Mode) 下按 <leader>T 查詢游標下的單字
 vim.api.nvim_set_keymap("n", "<leader>T", ":lua TranslateWithSdcv()<CR>", { noremap = true, silent = true })
 
-vim.api.nvim_set_keymap("n","<leader>z","<cmd>ZenMode<CR>",{noremap=true,silent=true})
+vim.api.nvim_set_keymap("n", "<leader>z", "<cmd>ZenMode<CR>", { noremap = true, silent = true })
