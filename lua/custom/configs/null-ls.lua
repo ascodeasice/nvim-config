@@ -16,7 +16,7 @@ local opts = {
 		null_ls.builtins.formatting.prettierd,
 		null_ls.builtins.diagnostics.actionlint,
 		null_ls.builtins.diagnostics.markdownlint.with({
-			extra_args = { "--disable", "MD013", "--" },
+			extra_args = { "--disable", "MD013",  "--disable", "MD041", "--" },
 		}),
 	}
 }
