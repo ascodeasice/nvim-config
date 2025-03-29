@@ -1626,35 +1626,35 @@ local function keys(str)
   end
 end
 
-local hydra = require("hydra")
-hydra({
-  name = "QuartoNavigator",
-  hint = [[
-      _j_/_k_: move down/up _J_/_K_: move to end
-      _R_: run above _r_: run cell
-      _l_: run line
-      ^^     _<esc>_/_q_: exit ]],
-  config = {
-    color = "pink",
-    invoke_on_body = true,
-    -- hint = {
-    --   border = "rounded",       -- you can change the border if you want
-    -- },
-  },
-  mode = { "n" },
-  body = "<localleader>j", -- this is the key that triggers the hydra
-  heads = {
-    { "j",     keys("]c") },
-    { "k",     keys("[c") },
-    { "J",     keys("]C") },
-    { "K",     keys("[c]C") }, -- somehow using [B won't work
-    { "r",     ":QuartoSend<CR>" },
-    { "l",     ":QuartoSendLine<CR>" },
-    { "R",     ":QuartoSendAbove<CR>" },
-    { "<esc>", nil,                   { exit = true } },
-    { "q",     nil,                   { exit = true } },
-  },
-})
+-- local hydra = require("hydra")
+-- hydra({
+--   name = "QuartoNavigator",
+--   hint = [[
+--       _j_/_k_: move down/up _J_/_K_: move to end
+--       _R_: run above _r_: run cell
+--       _l_: run line
+--       ^^     _<esc>_/_q_: exit ]],
+--   config = {
+--     color = "pink",
+--     invoke_on_body = true,
+--     -- hint = {
+--     --   border = "rounded",       -- you can change the border if you want
+--     -- },
+--   },
+--   mode = { "n" },
+--   body = "<localleader>j", -- this is the key that triggers the hydra
+--   heads = {
+--     { "j",     keys("]c") },
+--     { "k",     keys("[c") },
+--     { "J",     keys("]C") },
+--     { "K",     keys("[c]C") }, -- somehow using [B won't work
+--     { "r",     ":QuartoSend<CR>" },
+--     { "l",     ":QuartoSendLine<CR>" },
+--     { "R",     ":QuartoSendAbove<CR>" },
+--     { "<esc>", nil,                   { exit = true } },
+--     { "q",     nil,                   { exit = true } },
+--   },
+-- })
 
 -- 定義函式來運行 `sdcv` 並顯示翻譯結果
 function TranslateWithSdcv()
