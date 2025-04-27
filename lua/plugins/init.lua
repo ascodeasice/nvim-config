@@ -534,6 +534,7 @@ require('lazy').setup({
 					notion = { pattern = '^http[s]?://.*%.notion%.site/.*', icon = '󰬕 ', highlight = 'RenderMarkdownLink' },
 					wikipedia = { pattern = '^http[s]?://.*%.wikipedia.org/.*', icon = '󰖬 ', highlight = 'RenderMarkdownLink' },
 					arxiv = { pattern = '^http[s]?://arxiv.org/.*', icon = '󰂕 ', highlight = 'RenderMarkdownLink' },
+					kaggle = { pattern = '^http[s]?://www%.kaggle.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
