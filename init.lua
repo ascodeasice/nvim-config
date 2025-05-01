@@ -1722,3 +1722,6 @@ vim.api.nvim_set_keymap("v", "<leader>T", "<Esc>:lua TranslateWithSdcv()<CR>", {
 vim.api.nvim_set_keymap("n", "<leader>T", ":lua TranslateWithSdcv()<CR>", { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap("n", "<leader>z", "<cmd>ZenMode<CR>", { noremap = true, silent = true })
+
+
+require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })

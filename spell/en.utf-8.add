@@ -442,3 +442,5 @@ mcpo
 xremap
 uuid
 uuid
+classmethods
+staticmethod
