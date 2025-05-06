@@ -446,3 +446,5 @@ classmethods
 staticmethod
 laravel
 termwind
+asyncio
+pathlib

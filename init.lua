@@ -458,20 +458,6 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
-lspconfig.harper_ls.setup {
-  settings = {
-    ["harper-ls"] = {
-      linters = {
-        SpellCheck = false,
-        ToDoHyphen = false,
-      },
-      markdown = {
-        IgnoreLinkTitle = true,
-      }
-    }
-  }
-}
-
 lspconfig.pyright.setup {
   on_attach = on_attach,
   settings = {
