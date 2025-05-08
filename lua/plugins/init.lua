@@ -314,7 +314,8 @@ require('lazy').setup({
 		'nvim-treesitter/nvim-treesitter-context',
 		config = function()
 			require('treesitter-context').setup({
-				mode = 'topline'
+				mode = 'topline',
+				max_lines = 5,
 			})
 		end
 	},
