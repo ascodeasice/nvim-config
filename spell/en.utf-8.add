@@ -448,3 +448,7 @@ laravel
 termwind
 asyncio
 pathlib
+sqlite
+fetchone
+webui
+webui

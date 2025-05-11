@@ -1,6 +1,7 @@
 require('core.options') -- Vim options
 require('core.keymaps')
 require('core.autocmds')
+require('week_show')
 
 -- plugins managed with lazy.nvim
 require('plugins')
