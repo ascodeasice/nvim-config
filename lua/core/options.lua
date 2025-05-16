@@ -2,8 +2,22 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- use system clipboard
-vim.opt.clipboard:append('unnamedplus')
+-- use system clipboard with autocmd to be faster
+-- https://www.reddit.com/r/neovim/comments/17ieyn2/comment/kd9vt97/
+vim.opt.clipboard = ""
+
+-- sync with system clipboard on focus
+vim.api.nvim_create_autocmd({ "FocusGained" }, {
+  pattern = { "*" },
+  command = [[call setreg("@", getreg("+"))]],
+})
+
+
+  -- sync with system clipboard on focus
+  vim.api.nvim_create_autocmd({ "FocusLost" }, {
+    pattern = { "*" },
+    command = [[call setreg("+", getreg("@"))]],
+  })
 
 -- show both relative and absolute line number
 vim.o.number = true
