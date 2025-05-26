@@ -537,6 +537,7 @@ require('lazy').setup({
 					arxiv = { pattern = '^http[s]?://arxiv.org/.*', icon = '󰂕 ', highlight = 'RenderMarkdownLink' },
 					kaggle = { pattern = '^http[s]?://www%.kaggle.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					laravel = { pattern = '^http[s]?://laravel.com/.*', icon = '󰫐 ', highlight = 'RenderMarkdownLink' },
+					mockoon = { pattern = '^http[s]?://mockoon.com/.*', icon = '󱂛 ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
