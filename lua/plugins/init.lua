@@ -538,6 +538,7 @@ require('lazy').setup({
 					kaggle = { pattern = '^http[s]?://www%.kaggle.com/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 					laravel = { pattern = '^http[s]?://laravel.com/.*', icon = '󰫐 ', highlight = 'RenderMarkdownLink' },
 					mockoon = { pattern = '^http[s]?://mockoon.com/.*', icon = '󱂛 ', highlight = 'RenderMarkdownLink' },
+					hugging_face = { pattern = '^http[s]?://huggingface.co/.*', icon = ' ', highlight = 'RenderMarkdownLink' },
 				}
 			},
 			pipe_table = {
