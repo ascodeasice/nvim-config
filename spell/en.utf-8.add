@@ -491,3 +491,6 @@ dataframe
 mixin
 deliverability
 burndown
+keyscan
+savepoint
+signup
