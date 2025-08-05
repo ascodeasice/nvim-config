@@ -783,7 +783,13 @@ require('lazy').setup({
 	},
 	{
 		"andrewferrier/debugprint.nvim",
-		opts = {},
+		opts = {
+			keymaps = {
+				normal = {
+					delete_debug_prints = "g?D",
+				}
+			}
+		},
 		dependencies = {
 			-- "echasnovski/mini.nvim"   -- Needed for :ToggleCommentDebugPrints (not needed for NeoVim 0.10+)
 		},
