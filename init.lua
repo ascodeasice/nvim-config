@@ -72,6 +72,7 @@ require('telescope').setup {
         "--no-ignore",
         "--hidden",
         "--files",
+        "--follow", -- follow symlink
         "-g",
         "!**/node_modules/*",
         "-g",
