@@ -49,7 +49,10 @@ require('lazy').setup({
 			-- refer to the configuration section below
 			bigfile = { enabled = true },
 			image = {
-				enabled = false,
+				doc={
+					enabled = true,
+					inline=false,
+				},
 				math = {
 					enabled = false
 				},
