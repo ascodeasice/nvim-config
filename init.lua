@@ -1327,7 +1327,13 @@ end
 
 local function format_number_for_base(value, base)
   if base == 2 then
-    return "0b" .. tostring(vim.fn.printf("%b", value))
+    local bits = tostring(vim.fn.printf("%b", value))
+    local remainder = #bits % 4
+    if remainder ~= 0 then
+      bits = string.rep("0", 4 - remainder) .. bits
+    end
+
+    return "0b" .. bits
   end
 
   if base == 8 then
@@ -1348,7 +1354,7 @@ local function format_grouped_binary(value)
     bits = string.rep("0", 4 - remainder) .. bits
   end
 
-  return "0b" .. bits:gsub("(%d%d%d%d)", "%1 "):gsub("%s$", "")
+  return "0b" .. bits:gsub("(%d%d%d%d)", "%1'"):gsub("'$", "")
 end
 
 local function base_name(base)
