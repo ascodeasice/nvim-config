@@ -1303,6 +1303,108 @@ require("dial.config").augends:register_group {
   },
 }
 
+local function parse_prefixed_number(text)
+  local lowered = text:lower()
+  if lowered:match("^0b[01]+$") then
+    return 2, tonumber(lowered:sub(3), 2)
+  end
+
+  if lowered:match("^0o[0-7]+$") then
+    return 8, tonumber(lowered:sub(3), 8)
+  end
+
+  if lowered:match("^0x[%da-f]+$") then
+    return 16, tonumber(lowered:sub(3), 16)
+  end
+
+  if lowered:match("^%d+$") then
+    return 10, tonumber(lowered, 10)
+  end
+
+  return nil
+end
+
+local function format_number_for_base(value, base)
+  if base == 2 then
+    return "0b" .. tostring(vim.fn.printf("%b", value))
+  end
+
+  if base == 8 then
+    return "0o" .. tostring(vim.fn.printf("%o", value))
+  end
+
+  return "0x" .. tostring(vim.fn.printf("%X", value))
+end
+
+local function cycle_number_base(text)
+  local current_base, value = parse_prefixed_number(text)
+  if not current_base then
+    return nil
+  end
+
+  local next_base = ({
+    [2] = 8,
+    [8] = 16,
+    [16] = 2,
+    [10] = 16,
+  })[current_base]
+
+  return format_number_for_base(value, next_base)
+end
+
+local function replace_current_word_with_base_cycle()
+  local line = vim.api.nvim_get_current_line()
+  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local col = vim.api.nvim_win_get_cursor(0)[2] + 1
+
+  local start_col = col
+  while start_col > 1 and line:sub(start_col - 1, start_col - 1):match("[%w_]") do
+    start_col = start_col - 1
+  end
+
+  local end_col = col
+  while end_col <= #line and line:sub(end_col, end_col):match("[%w_]") do
+    end_col = end_col + 1
+  end
+
+  local target = line:sub(start_col, end_col - 1)
+  local replacement = cycle_number_base(target)
+  if not replacement then
+    vim.notify("Target must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
+    return
+  end
+
+  vim.api.nvim_buf_set_text(0, row, start_col - 1, row, end_col - 1, { replacement })
+end
+
+local function replace_visual_selection_with_base_cycle()
+  local start_pos = vim.fn.getpos("'<")
+  local end_pos = vim.fn.getpos("'>")
+  local start_row = start_pos[2] - 1
+  local start_col = start_pos[3] - 1
+  local end_row = end_pos[2] - 1
+  local end_col = end_pos[3]
+
+  local selected = vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
+  local target = table.concat(selected, "\n")
+  local replacement = cycle_number_base(target)
+  if not replacement then
+    vim.notify("Selection must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
+    return
+  end
+
+  vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { replacement })
+end
+
+vim.keymap.set({ "n", "v" }, "<leader>xb", function()
+  if vim.fn.mode():match("[vV\22]") then
+    replace_visual_selection_with_base_cycle()
+    return
+  end
+
+  replace_current_word_with_base_cycle()
+end, { desc = "Cycle number base" })
+
 vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
 vim.api.nvim_set_keymap("n", "<esc>", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
 
