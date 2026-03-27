@@ -1357,6 +1357,15 @@ local function format_grouped_binary(value)
   return "0b" .. bits:gsub("(%d%d%d%d)", "%1'"):gsub("'$", "")
 end
 
+local function bit_count(value)
+  local bits = tostring(vim.fn.printf("%b", value))
+  return #bits
+end
+
+local function byte_count(value)
+  return math.max(1, math.ceil(bit_count(value) / 8))
+end
+
 local function base_name(base)
   return ({
     [2] = "binary",
@@ -1488,6 +1497,8 @@ local function build_number_preview_lines(text)
   return {
     string.format("Input: %s", vim.trim(text)),
     string.format("Detected: %s", base_name(base)),
+    string.format("Bits:    %d", bit_count(value)),
+    string.format("Bytes:   %d", byte_count(value)),
     "",
     string.format("Binary:  %s", format_grouped_binary(value)),
     string.format("Decimal: %s", format_number_for_base(value, 10)),
