@@ -1303,6 +1303,8 @@ require("dial.config").augends:register_group {
   },
 }
 
+local number_tools = require("custom.number_tools")
+
 local function parse_prefixed_number(text)
   local trimmed = vim.trim(text)
   local lowered = trimmed:lower()
@@ -1320,7 +1322,7 @@ local function parse_prefixed_number(text)
     return 16, tonumber(lowered:sub(3), 16)
   end
 
-  if lowered:match("^%d+$") then
+  if lowered:match("^%-?%d+$") then
     return 10, tonumber(lowered, 10)
   end
 
@@ -1402,6 +1404,22 @@ local function bit_count(value, input_bits)
     return #input_bits
   end
 
+  if value < 0 then
+    if value >= -(2 ^ 7) then
+      return 8
+    end
+
+    if value >= -(2 ^ 15) then
+      return 16
+    end
+
+    if value >= -(2 ^ 31) then
+      return 32
+    end
+
+    return 64
+  end
+
   local bits = tostring(vim.fn.printf("%b", value))
   return #bits
 end
@@ -1419,17 +1437,16 @@ local function base_name(base)
   })[base] or "unknown"
 end
 
-local function convert_number_base(text, target_base)
-  local _, value = parse_prefixed_number(text)
-  if value == nil then
-    return nil
-  end
+local exact_uint64_from_bits
+local format_grouped_binary_bits
+local format_hex_from_bits
 
-  return format_number_for_base(value, target_base)
+local function convert_number_base(text, target_base)
+  return number_tools.convert_number_base(text, target_base)
 end
 
 local function is_number_token_char(char)
-  return char:match("[%w_']") ~= nil
+  return number_tools.is_number_token_char(char)
 end
 
 local function replace_current_word_with_base(target_base)
@@ -1488,6 +1505,7 @@ if ffi_ok then
   ffi.cdef[[
     typedef union { float f; uint8_t b[4]; } NumberPreviewFloat32;
     typedef union { double d; uint8_t b[8]; } NumberPreviewFloat64;
+    typedef union { uint64_t u; int64_t i; uint8_t b[8]; } NumberPreviewInt64;
   ]]
 end
 
@@ -1515,16 +1533,24 @@ local function float_bits_from_bytes(bytes, byte_count)
   return table.concat(chunks)
 end
 
+local function normalize_bits_to_width(bits, width)
+  if #bits > width then
+    return bits:sub(#bits - width + 1)
+  end
+
+  if #bits < width then
+    return string.rep("0", width - #bits) .. bits
+  end
+
+  return bits
+end
+
 local function bytes_from_bit_string(bits, width)
   if not bits then
     return nil
   end
 
-  if #bits > width then
-    bits = bits:sub(#bits - width + 1)
-  elseif #bits < width then
-    bits = string.rep("0", width - #bits) .. bits
-  end
+  bits = normalize_bits_to_width(bits, width)
 
   local bytes = {}
   for i = 1, width, 8 do
@@ -1532,6 +1558,74 @@ local function bytes_from_bit_string(bits, width)
   end
 
   return bytes
+end
+
+format_grouped_binary_bits = function(bits)
+  return "0b" .. bits:gsub("(%d%d%d%d)", "%1'"):gsub("'$", "")
+end
+
+format_hex_from_bits = function(bits)
+  local padded = bits
+  local remainder = #padded % 4
+  if remainder ~= 0 then
+    padded = string.rep("0", 4 - remainder) .. padded
+  end
+
+  return "0x" .. padded:gsub("....", function(chunk)
+    return tostring(vim.fn.printf("%X", tonumber(chunk, 2)))
+  end)
+end
+
+exact_uint64_from_bits = function(bits)
+  if not ffi_ok or #bits > 64 then
+    return nil
+  end
+
+  local bytes = bytes_from_bit_string(bits, 64)
+  local int_union = ffi.new("NumberPreviewInt64")
+  for i = 1, #bytes do
+    int_union.b[#bytes - i] = bytes[i]
+  end
+
+  return tostring(int_union.u)
+end
+
+local function exact_int64_from_bits(bits)
+  if not ffi_ok or #bits > 64 then
+    return nil
+  end
+
+  local bytes = bytes_from_bit_string(bits, 64)
+  local int_union = ffi.new("NumberPreviewInt64")
+  for i = 1, #bytes do
+    int_union.b[#bytes - i] = bytes[i]
+  end
+
+  return tostring(int_union.i)
+end
+
+local function unsigned_from_bits(bits, width)
+  local normalized = normalize_bits_to_width(bits, width)
+  if width < 64 then
+    return tostring(tonumber(normalized, 2))
+  end
+
+  return exact_uint64_from_bits(normalized) or "unavailable"
+end
+
+local function signed_from_bits(bits, width)
+  local normalized = normalize_bits_to_width(bits, width)
+  if width < 64 then
+    local unsigned = tonumber(normalized, 2)
+    local sign_bit = 2 ^ (width - 1)
+    if unsigned >= sign_bit then
+      return tostring(unsigned - (2 ^ width))
+    end
+
+    return tostring(unsigned)
+  end
+
+  return exact_int64_from_bits(normalized) or "unavailable"
 end
 
 local function format_float_parts(bits, exponent_bits, mantissa_bits, bias)
@@ -1631,47 +1725,7 @@ local function interpret_bits_as_float64(bits)
 end
 
 local function build_number_preview_lines(text)
-  local base, value = parse_prefixed_number(text)
-  if value == nil then
-    return nil
-  end
-
-  local input_bits = extract_input_bits(text, base)
-  local float32_value, float32_bits = represent_as_float32(value)
-  local float64_value, float64_bits = represent_as_float64(value)
-
-  if input_bits then
-    float32_value = interpret_bits_as_float32(input_bits)
-    if #input_bits <= 32 then
-      float64_value = float32_value
-    else
-      float64_value = interpret_bits_as_float64(input_bits)
-    end
-  end
-
-  return {
-    string.format("Input: %s", vim.trim(text)),
-    string.format("Detected: %s", base_name(base)),
-    string.format("Bits:    %d", bit_count(value, input_bits)),
-    string.format("Bytes:   %d", byte_count(value, input_bits)),
-    "",
-    string.format("Binary:  %s", format_grouped_binary(value)),
-    string.format("Decimal: %s", format_number_for_base(value, 10)),
-    string.format("Hex:     %s", format_number_for_base(value, 16)),
-    "",
-    string.format("uint8:   %s", wrap_unsigned(value, 8)),
-    string.format("int8:    %s", wrap_signed(value, 8)),
-    string.format("uint16:  %s", wrap_unsigned(value, 16)),
-    string.format("int16:   %s", wrap_signed(value, 16)),
-    string.format("uint32:  %s", wrap_unsigned(value, 32)),
-    string.format("int32:   %s", wrap_signed(value, 32)),
-    string.format("uint64:  %s", wrap_unsigned(value, 64)),
-    string.format("int64:   %s", wrap_signed(value, 64)),
-    string.format("float32: %s", float32_value),
-    string.format("f32bits: %s", format_float_parts(float32_bits, 8, 23, 127)),
-    string.format("float64: %s", float64_value),
-    string.format("f64bits: %s", format_float_parts(float64_bits, 11, 52, 1023)),
-  }
+  return number_tools.build_number_preview_lines(text)
 end
 
 local function open_number_preview(lines)
