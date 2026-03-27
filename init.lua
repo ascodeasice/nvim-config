@@ -1306,8 +1306,10 @@ require("dial.config").augends:register_group {
 local function parse_prefixed_number(text)
   local trimmed = vim.trim(text)
   local lowered = trimmed:lower()
-  if lowered:match("^0b[01]+$") then
-    return 2, tonumber(lowered:sub(3), 2)
+  local binary_digits = lowered:match("^0b([01][01'_ ]*)$")
+  if binary_digits then
+    local normalized = binary_digits:gsub("[ '_]", "")
+    return 2, tonumber(normalized, 2)
   end
 
   if lowered:match("^0o[0-7]+$") then
@@ -1320,6 +1322,44 @@ local function parse_prefixed_number(text)
 
   if lowered:match("^%d+$") then
     return 10, tonumber(lowered, 10)
+  end
+
+  return nil
+end
+
+local function extract_input_bits(text, base)
+  local trimmed = vim.trim(text)
+  local lowered = trimmed:lower()
+
+  if base == 2 then
+    local digits = lowered:match("^0b(.+)$")
+    if not digits then
+      return nil
+    end
+
+    return digits:gsub("[ '_]", "")
+  end
+
+  if base == 8 then
+    local digits = lowered:match("^0o([0-7]+)$")
+    if not digits then
+      return nil
+    end
+
+    return digits:gsub(".", function(digit)
+      return tostring(vim.fn.printf("%03b", tonumber(digit, 8)))
+    end)
+  end
+
+  if base == 16 then
+    local digits = lowered:match("^0x([%da-f]+)$")
+    if not digits then
+      return nil
+    end
+
+    return digits:gsub(".", function(digit)
+      return tostring(vim.fn.printf("%04b", tonumber(digit, 16)))
+    end)
   end
 
   return nil
@@ -1357,13 +1397,17 @@ local function format_grouped_binary(value)
   return "0b" .. bits:gsub("(%d%d%d%d)", "%1'"):gsub("'$", "")
 end
 
-local function bit_count(value)
+local function bit_count(value, input_bits)
+  if input_bits then
+    return #input_bits
+  end
+
   local bits = tostring(vim.fn.printf("%b", value))
   return #bits
 end
 
-local function byte_count(value)
-  return math.max(1, math.ceil(bit_count(value) / 8))
+local function byte_count(value, input_bits)
+  return math.max(1, math.ceil(bit_count(value, input_bits) / 8))
 end
 
 local function base_name(base)
@@ -1384,18 +1428,22 @@ local function convert_number_base(text, target_base)
   return format_number_for_base(value, target_base)
 end
 
+local function is_number_token_char(char)
+  return char:match("[%w_']") ~= nil
+end
+
 local function replace_current_word_with_base(target_base)
   local line = vim.api.nvim_get_current_line()
   local row = vim.api.nvim_win_get_cursor(0)[1] - 1
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1
 
   local start_col = col
-  while start_col > 1 and line:sub(start_col - 1, start_col - 1):match("[%w_]") do
+  while start_col > 1 and is_number_token_char(line:sub(start_col - 1, start_col - 1)) do
     start_col = start_col - 1
   end
 
   local end_col = col
-  while end_col <= #line and line:sub(end_col, end_col):match("[%w_]") do
+  while end_col <= #line and is_number_token_char(line:sub(end_col, end_col)) do
     end_col = end_col + 1
   end
 
@@ -1438,8 +1486,8 @@ local ffi_ok, ffi = pcall(require, "ffi")
 
 if ffi_ok then
   ffi.cdef[[
-    typedef union { uint32_t u; float f; } NumberPreviewFloat32;
-    typedef union { uint64_t u; double d; } NumberPreviewFloat64;
+    typedef union { float f; uint8_t b[4]; } NumberPreviewFloat32;
+    typedef union { double d; uint8_t b[8]; } NumberPreviewFloat64;
   ]]
 end
 
@@ -1458,6 +1506,72 @@ local function wrap_unsigned(value, bits)
   return value % modulo
 end
 
+local function float_bits_from_bytes(bytes, byte_count)
+  local chunks = {}
+  for i = byte_count - 1, 0, -1 do
+    chunks[#chunks + 1] = tostring(vim.fn.printf("%08b", bytes[i]))
+  end
+
+  return table.concat(chunks)
+end
+
+local function bytes_from_bit_string(bits, width)
+  if not bits then
+    return nil
+  end
+
+  if #bits > width then
+    bits = bits:sub(#bits - width + 1)
+  elseif #bits < width then
+    bits = string.rep("0", width - #bits) .. bits
+  end
+
+  local bytes = {}
+  for i = 1, width, 8 do
+    bytes[#bytes + 1] = tonumber(bits:sub(i, i + 7), 2)
+  end
+
+  return bytes
+end
+
+local function format_float_parts(bits, exponent_bits, mantissa_bits, bias)
+  if not bits then
+    return "unavailable"
+  end
+
+  local sign = bits:sub(1, 1)
+  local exponent = bits:sub(2, 1 + exponent_bits)
+  local mantissa = bits:sub(2 + exponent_bits, 1 + exponent_bits + mantissa_bits)
+  local exponent_raw = tonumber(exponent, 2)
+  local mantissa_raw = tonumber(mantissa, 2)
+  local max_exponent = (2 ^ exponent_bits) - 1
+  local exponent_value
+
+  if exponent_raw == 0 then
+    if mantissa_raw == 0 then
+      exponent_value = "zero"
+    else
+      exponent_value = tostring(1 - bias) .. " sub"
+    end
+  elseif exponent_raw == max_exponent then
+    if mantissa_raw == 0 then
+      exponent_value = "inf"
+    else
+      exponent_value = "nan"
+    end
+  else
+    exponent_value = tostring(exponent_raw - bias)
+  end
+
+  return string.format(
+    "s:%s e:%s (%s) m:%s",
+    sign,
+    exponent,
+    exponent_value,
+    mantissa:gsub("(%d%d%d%d)", "%1'"):gsub("'$", "")
+  )
+end
+
 local function wrap_signed(value, bits)
   local unsigned = wrap_unsigned(value, bits)
   local sign_bit = 2 ^ (bits - 1)
@@ -1468,23 +1582,51 @@ local function wrap_signed(value, bits)
   return unsigned
 end
 
-local function interpret_float32(value)
+local function represent_as_float32(value)
   if not ffi_ok then
-    return "unavailable"
+    return "unavailable", nil
   end
 
   local float_union = ffi.new("NumberPreviewFloat32")
-  float_union.u = wrap_unsigned(value, 32)
-  return tostring(float_union.f)
+  float_union.f = tonumber(value)
+  return tostring(float_union.f), float_bits_from_bytes(float_union.b, 4)
 end
 
-local function interpret_float64(value)
+local function represent_as_float64(value)
   if not ffi_ok then
-    return "unavailable"
+    return "unavailable", nil
   end
 
   local float_union = ffi.new("NumberPreviewFloat64")
-  float_union.u = wrap_unsigned(value, 64)
+  float_union.d = tonumber(value)
+  return tostring(float_union.d), float_bits_from_bytes(float_union.b, 8)
+end
+
+local function interpret_bits_as_float32(bits)
+  if not ffi_ok or not bits then
+    return "unavailable"
+  end
+
+  local bytes = bytes_from_bit_string(bits, 32)
+  local float_union = ffi.new("NumberPreviewFloat32")
+  for i = 1, #bytes do
+    float_union.b[#bytes - i] = bytes[i]
+  end
+
+  return tostring(float_union.f)
+end
+
+local function interpret_bits_as_float64(bits)
+  if not ffi_ok or not bits then
+    return "unavailable"
+  end
+
+  local bytes = bytes_from_bit_string(bits, 64)
+  local float_union = ffi.new("NumberPreviewFloat64")
+  for i = 1, #bytes do
+    float_union.b[#bytes - i] = bytes[i]
+  end
+
   return tostring(float_union.d)
 end
 
@@ -1494,11 +1636,24 @@ local function build_number_preview_lines(text)
     return nil
   end
 
+  local input_bits = extract_input_bits(text, base)
+  local float32_value, float32_bits = represent_as_float32(value)
+  local float64_value, float64_bits = represent_as_float64(value)
+
+  if input_bits then
+    float32_value = interpret_bits_as_float32(input_bits)
+    if #input_bits <= 32 then
+      float64_value = float32_value
+    else
+      float64_value = interpret_bits_as_float64(input_bits)
+    end
+  end
+
   return {
     string.format("Input: %s", vim.trim(text)),
     string.format("Detected: %s", base_name(base)),
-    string.format("Bits:    %d", bit_count(value)),
-    string.format("Bytes:   %d", byte_count(value)),
+    string.format("Bits:    %d", bit_count(value, input_bits)),
+    string.format("Bytes:   %d", byte_count(value, input_bits)),
     "",
     string.format("Binary:  %s", format_grouped_binary(value)),
     string.format("Decimal: %s", format_number_for_base(value, 10)),
@@ -1512,8 +1667,10 @@ local function build_number_preview_lines(text)
     string.format("int32:   %s", wrap_signed(value, 32)),
     string.format("uint64:  %s", wrap_unsigned(value, 64)),
     string.format("int64:   %s", wrap_signed(value, 64)),
-    string.format("float32: %s", interpret_float32(value)),
-    string.format("float64: %s", interpret_float64(value)),
+    string.format("float32: %s", float32_value),
+    string.format("f32bits: %s", format_float_parts(float32_bits, 8, 23, 127)),
+    string.format("float64: %s", float64_value),
+    string.format("f64bits: %s", format_float_parts(float64_bits, 11, 52, 1023)),
   }
 end
 
@@ -1566,12 +1723,12 @@ local function current_word_text()
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1
 
   local start_col = col
-  while start_col > 1 and line:sub(start_col - 1, start_col - 1):match("[%w_]") do
+  while start_col > 1 and is_number_token_char(line:sub(start_col - 1, start_col - 1)) do
     start_col = start_col - 1
   end
 
   local end_col = col
-  while end_col <= #line and line:sub(end_col, end_col):match("[%w_]") do
+  while end_col <= #line and is_number_token_char(line:sub(end_col, end_col)) do
     end_col = end_col + 1
   end
 
