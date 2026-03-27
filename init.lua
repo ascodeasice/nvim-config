@@ -1333,26 +1333,23 @@ local function format_number_for_base(value, base)
     return "0o" .. tostring(vim.fn.printf("%o", value))
   end
 
+  if base == 10 then
+    return tostring(value)
+  end
+
   return "0x" .. tostring(vim.fn.printf("%X", value))
 end
 
-local function cycle_number_base(text)
-  local current_base, value = parse_prefixed_number(text)
-  if not current_base then
+local function convert_number_base(text, target_base)
+  local _, value = parse_prefixed_number(text)
+  if value == nil then
     return nil
   end
 
-  local next_base = ({
-    [2] = 8,
-    [8] = 16,
-    [16] = 2,
-    [10] = 16,
-  })[current_base]
-
-  return format_number_for_base(value, next_base)
+  return format_number_for_base(value, target_base)
 end
 
-local function replace_current_word_with_base_cycle()
+local function replace_current_word_with_base(target_base)
   local line = vim.api.nvim_get_current_line()
   local row = vim.api.nvim_win_get_cursor(0)[1] - 1
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1
@@ -1368,7 +1365,7 @@ local function replace_current_word_with_base_cycle()
   end
 
   local target = line:sub(start_col, end_col - 1)
-  local replacement = cycle_number_base(target)
+  local replacement = convert_number_base(target, target_base)
   if not replacement then
     vim.notify("Target must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
     return
@@ -1377,7 +1374,7 @@ local function replace_current_word_with_base_cycle()
   vim.api.nvim_buf_set_text(0, row, start_col - 1, row, end_col - 1, { replacement })
 end
 
-local function replace_visual_selection_with_base_cycle()
+local function replace_visual_selection_with_base(target_base)
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
   local start_row = start_pos[2] - 1
@@ -1387,7 +1384,7 @@ local function replace_visual_selection_with_base_cycle()
 
   local selected = vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
   local target = table.concat(selected, "\n")
-  local replacement = cycle_number_base(target)
+  local replacement = convert_number_base(target, target_base)
   if not replacement then
     vim.notify("Selection must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
     return
@@ -1396,14 +1393,26 @@ local function replace_visual_selection_with_base_cycle()
   vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { replacement })
 end
 
-vim.keymap.set({ "n", "v" }, "<leader>xb", function()
+local function convert_number_base_for_target(target_base)
   if vim.fn.mode():match("[vV\22]") then
-    replace_visual_selection_with_base_cycle()
+    replace_visual_selection_with_base(target_base)
     return
   end
 
-  replace_current_word_with_base_cycle()
-end, { desc = "Cycle number base" })
+  replace_current_word_with_base(target_base)
+end
+
+vim.keymap.set({ "n", "v" }, "<leader>xb", function()
+  convert_number_base_for_target(2)
+end, { desc = "Convert number to binary" })
+
+vim.keymap.set({ "n", "v" }, "<leader>xd", function()
+  convert_number_base_for_target(10)
+end, { desc = "Convert number to decimal" })
+
+vim.keymap.set({ "n", "v" }, "<leader>xx", function()
+  convert_number_base_for_target(16)
+end, { desc = "Convert number to hex" })
 
 vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
 vim.api.nvim_set_keymap("n", "<esc>", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
