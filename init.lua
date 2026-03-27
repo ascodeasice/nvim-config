@@ -1304,7 +1304,8 @@ require("dial.config").augends:register_group {
 }
 
 local function parse_prefixed_number(text)
-  local lowered = text:lower()
+  local trimmed = vim.trim(text)
+  local lowered = trimmed:lower()
   if lowered:match("^0b[01]+$") then
     return 2, tonumber(lowered:sub(3), 2)
   end
@@ -1338,6 +1339,25 @@ local function format_number_for_base(value, base)
   end
 
   return "0x" .. tostring(vim.fn.printf("%X", value))
+end
+
+local function format_grouped_binary(value)
+  local bits = tostring(vim.fn.printf("%b", value))
+  local remainder = #bits % 4
+  if remainder ~= 0 then
+    bits = string.rep("0", 4 - remainder) .. bits
+  end
+
+  return "0b" .. bits:gsub("(%d%d%d%d)", "%1 "):gsub("%s$", "")
+end
+
+local function base_name(base)
+  return ({
+    [2] = "binary",
+    [8] = "octal",
+    [10] = "decimal",
+    [16] = "hex",
+  })[base] or "unknown"
 end
 
 local function convert_number_base(text, target_base)
@@ -1393,6 +1413,180 @@ local function replace_visual_selection_with_base(target_base)
   vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { replacement })
 end
 
+local number_preview = {
+  augroup = vim.api.nvim_create_augroup("NumberPreviewPopup", { clear = true }),
+  bufnr = nil,
+  winid = nil,
+}
+
+local ffi_ok, ffi = pcall(require, "ffi")
+
+if ffi_ok then
+  ffi.cdef[[
+    typedef union { uint32_t u; float f; } NumberPreviewFloat32;
+    typedef union { uint64_t u; double d; } NumberPreviewFloat64;
+  ]]
+end
+
+local function close_number_preview()
+  if number_preview.winid and vim.api.nvim_win_is_valid(number_preview.winid) then
+    vim.api.nvim_win_close(number_preview.winid, true)
+  end
+
+  number_preview.winid = nil
+  number_preview.bufnr = nil
+  pcall(vim.api.nvim_clear_autocmds, { group = number_preview.augroup })
+end
+
+local function wrap_unsigned(value, bits)
+  local modulo = 2 ^ bits
+  return value % modulo
+end
+
+local function wrap_signed(value, bits)
+  local unsigned = wrap_unsigned(value, bits)
+  local sign_bit = 2 ^ (bits - 1)
+  if unsigned >= sign_bit then
+    return unsigned - (2 ^ bits)
+  end
+
+  return unsigned
+end
+
+local function interpret_float32(value)
+  if not ffi_ok then
+    return "unavailable"
+  end
+
+  local float_union = ffi.new("NumberPreviewFloat32")
+  float_union.u = wrap_unsigned(value, 32)
+  return tostring(float_union.f)
+end
+
+local function interpret_float64(value)
+  if not ffi_ok then
+    return "unavailable"
+  end
+
+  local float_union = ffi.new("NumberPreviewFloat64")
+  float_union.u = wrap_unsigned(value, 64)
+  return tostring(float_union.d)
+end
+
+local function build_number_preview_lines(text)
+  local base, value = parse_prefixed_number(text)
+  if value == nil then
+    return nil
+  end
+
+  return {
+    string.format("Input: %s", vim.trim(text)),
+    string.format("Detected: %s", base_name(base)),
+    "",
+    string.format("Binary:  %s", format_grouped_binary(value)),
+    string.format("Decimal: %s", format_number_for_base(value, 10)),
+    string.format("Hex:     %s", format_number_for_base(value, 16)),
+    "",
+    string.format("uint8:   %s", wrap_unsigned(value, 8)),
+    string.format("int8:    %s", wrap_signed(value, 8)),
+    string.format("uint16:  %s", wrap_unsigned(value, 16)),
+    string.format("int16:   %s", wrap_signed(value, 16)),
+    string.format("uint32:  %s", wrap_unsigned(value, 32)),
+    string.format("int32:   %s", wrap_signed(value, 32)),
+    string.format("uint64:  %s", wrap_unsigned(value, 64)),
+    string.format("int64:   %s", wrap_signed(value, 64)),
+    string.format("float32: %s", interpret_float32(value)),
+    string.format("float64: %s", interpret_float64(value)),
+  }
+end
+
+local function open_number_preview(lines)
+  close_number_preview()
+
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  local width = 0
+  for _, line in ipairs(lines) do
+    width = math.max(width, vim.fn.strdisplaywidth(line))
+  end
+
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+  vim.bo[bufnr].bufhidden = "wipe"
+  vim.bo[bufnr].modifiable = false
+  vim.bo[bufnr].filetype = "number-preview"
+
+  local winid = vim.api.nvim_open_win(bufnr, false, {
+    relative = "cursor",
+    row = 1,
+    col = 1,
+    width = width,
+    height = #lines,
+    style = "minimal",
+    border = "rounded",
+    title = " Number Preview ",
+    title_pos = "center",
+    noautocmd = true,
+  })
+
+  number_preview.bufnr = bufnr
+  number_preview.winid = winid
+
+  vim.wo[winid].wrap = false
+  vim.wo[winid].winhl = "NormalFloat:Normal,FloatBorder:DiagnosticInfo"
+
+  vim.keymap.set("n", "q", close_number_preview, { buffer = bufnr, silent = true })
+  vim.keymap.set("n", "<Esc>", close_number_preview, { buffer = bufnr, silent = true })
+
+  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "BufLeave", "InsertEnter" }, {
+    group = number_preview.augroup,
+    buffer = 0,
+    callback = close_number_preview,
+    once = true,
+  })
+end
+
+local function current_word_text()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2] + 1
+
+  local start_col = col
+  while start_col > 1 and line:sub(start_col - 1, start_col - 1):match("[%w_]") do
+    start_col = start_col - 1
+  end
+
+  local end_col = col
+  while end_col <= #line and line:sub(end_col, end_col):match("[%w_]") do
+    end_col = end_col + 1
+  end
+
+  return line:sub(start_col, end_col - 1)
+end
+
+local function visual_selection_text()
+  local start_pos = vim.fn.getpos("'<")
+  local end_pos = vim.fn.getpos("'>")
+  local selected = vim.api.nvim_buf_get_text(
+    0,
+    start_pos[2] - 1,
+    start_pos[3] - 1,
+    end_pos[2] - 1,
+    end_pos[3],
+    {}
+  )
+
+  return table.concat(selected, "\n")
+end
+
+local function show_number_preview()
+  local target = vim.fn.mode():match("[vV\22]") and visual_selection_text() or current_word_text()
+  local lines = build_number_preview_lines(target)
+  if not lines then
+    vim.notify("Target must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
+    return
+  end
+
+  open_number_preview(lines)
+end
+
 local function convert_number_base_for_target(target_base)
   if vim.fn.mode():match("[vV\22]") then
     replace_visual_selection_with_base(target_base)
@@ -1413,6 +1607,8 @@ end, { desc = "Convert number to decimal" })
 vim.keymap.set({ "n", "v" }, "<leader>xx", function()
   convert_number_base_for_target(16)
 end, { desc = "Convert number to hex" })
+
+vim.keymap.set({ "n", "v" }, "<leader>xp", show_number_preview, { desc = "Preview number formats" })
 
 vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
 vim.api.nvim_set_keymap("n", "<esc>", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
