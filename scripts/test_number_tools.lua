@@ -58,4 +58,9 @@ assert_contains(
   "f32bits should encode the numeric value, not reinterpret the original bits"
 )
 
+local decimal_float_preview = number_tools.build_number_preview_lines("0.1")
+assert_contains(decimal_float_preview, "Detected: float", "decimal float should be previewable")
+assert_contains(decimal_float_preview, "float32: 0.10000000149012 ~= 0.1", "float32 row should show approximation and source")
+assert_contains(decimal_float_preview, "float64: 0.1 ~= 0.1", "float64 row should show approximation and source")
+
 print("number_tools tests passed")

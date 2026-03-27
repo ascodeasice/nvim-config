@@ -1449,38 +1449,63 @@ local function is_number_token_char(char)
   return number_tools.is_number_token_char(char)
 end
 
+local function is_number_candidate_char(char)
+  return char:match("[%w_'%.%+%-]") ~= nil
+end
+
+local function find_longest_parsable_span(line, col)
+  local start_col = col
+  while start_col > 1 and is_number_candidate_char(line:sub(start_col - 1, start_col - 1)) do
+    start_col = start_col - 1
+  end
+
+  local end_col = col
+  while end_col <= #line and is_number_candidate_char(line:sub(end_col, end_col)) do
+    end_col = end_col + 1
+  end
+
+  local segment = line:sub(start_col, end_col - 1)
+  local cursor_in_segment = col - start_col + 1
+
+  for width = #segment, 1, -1 do
+    for left = 1, (#segment - width + 1) do
+      local right = left + width - 1
+      if left <= cursor_in_segment and cursor_in_segment <= right then
+        local candidate = segment:sub(left, right)
+        if number_tools.build_number_preview_lines(candidate) then
+          return start_col + left - 1, start_col + right
+        end
+      end
+    end
+  end
+
+  return start_col, end_col - 1
+end
+
 local function replace_current_word_with_base(target_base)
   local line = vim.api.nvim_get_current_line()
   local row = vim.api.nvim_win_get_cursor(0)[1] - 1
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1
 
-  local start_col = col
-  while start_col > 1 and is_number_token_char(line:sub(start_col - 1, start_col - 1)) do
-    start_col = start_col - 1
-  end
-
-  local end_col = col
-  while end_col <= #line and is_number_token_char(line:sub(end_col, end_col)) do
-    end_col = end_col + 1
-  end
-
-  local target = line:sub(start_col, end_col - 1)
+  local start_col, end_col = find_longest_parsable_span(line, col)
+  local target = line:sub(start_col, end_col)
   local replacement = convert_number_base(target, target_base)
   if not replacement then
     vim.notify("Target must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
     return
   end
 
-  vim.api.nvim_buf_set_text(0, row, start_col - 1, row, end_col - 1, { replacement })
+  vim.api.nvim_buf_set_text(0, row, start_col - 1, row, end_col, { replacement })
 end
 
 local function replace_visual_selection_with_base(target_base)
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
+  local visual_mode = vim.fn.visualmode()
   local start_row = start_pos[2] - 1
   local start_col = start_pos[3] - 1
   local end_row = end_pos[2] - 1
-  local end_col = end_pos[3]
+  local end_col = visual_mode == "V" and #vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or end_pos[3]
 
   local selected = vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
   local target = table.concat(selected, "\n")
@@ -1775,29 +1800,22 @@ end
 local function current_word_text()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1
-
-  local start_col = col
-  while start_col > 1 and is_number_token_char(line:sub(start_col - 1, start_col - 1)) do
-    start_col = start_col - 1
-  end
-
-  local end_col = col
-  while end_col <= #line and is_number_token_char(line:sub(end_col, end_col)) do
-    end_col = end_col + 1
-  end
-
-  return line:sub(start_col, end_col - 1)
+  local start_col, end_col = find_longest_parsable_span(line, col)
+  return line:sub(start_col, end_col)
 end
 
 local function visual_selection_text()
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
+  local visual_mode = vim.fn.visualmode()
+  local end_row = end_pos[2] - 1
+  local end_col = visual_mode == "V" and #vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or end_pos[3]
   local selected = vim.api.nvim_buf_get_text(
     0,
     start_pos[2] - 1,
     start_pos[3] - 1,
-    end_pos[2] - 1,
-    end_pos[3],
+    end_row,
+    end_col,
     {}
   )
 

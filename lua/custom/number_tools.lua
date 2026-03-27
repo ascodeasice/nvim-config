@@ -251,6 +251,14 @@ local function represent_as_float64(value)
   return tostring(float_union.d), float_bits_from_bytes(float_union.b, 8)
 end
 
+local function format_float_decimal(approximation, original)
+  if approximation == "unavailable" then
+    return approximation
+  end
+
+  return string.format("%s ~= %s", approximation, original)
+end
+
 local function interpret_bits_as_float32(bits)
   if not ffi_ok or not bits then
     return "unavailable"
@@ -377,11 +385,24 @@ local function parse_text(text)
     }
   end
 
+  local has_float_marker = lowered:find("%.") or lowered:find("[eE]")
+  local float_value = tonumber(lowered)
+  if has_float_marker and float_value ~= nil then
+    return {
+      base = 10,
+      value = float_value,
+      input_bits = nil,
+      explicit_bits = false,
+      trimmed = trimmed,
+      is_float = true,
+    }
+  end
+
   return nil
 end
 
 function M.is_number_token_char(char)
-  return char:match("[%w_'-]") ~= nil
+  return char:match("[%w_'%.-]") ~= nil
 end
 
 function M.convert_number_base(text, target_base)
@@ -433,6 +454,22 @@ function M.build_number_preview_lines(text)
   local parsed = parse_text(text)
   if not parsed then
     return nil
+  end
+
+  if parsed.is_float then
+    local float32_value, float32_bits = represent_as_float32(parsed.value)
+    local float64_value, float64_bits = represent_as_float64(parsed.value)
+
+    return {
+      string.format("Input: %s", parsed.trimmed),
+      "Detected: float",
+      string.format("Decimal: %s", parsed.trimmed),
+      "",
+      string.format("float32: %s", format_float_decimal(float32_value, parsed.trimmed)),
+      string.format("f32bits: %s", format_float_parts(float32_bits, 8, 23, 127)),
+      string.format("float64: %s", format_float_decimal(float64_value, parsed.trimmed)),
+      string.format("f64bits: %s", format_float_parts(float64_bits, 11, 52, 1023)),
+    }
   end
 
   local bit_count
