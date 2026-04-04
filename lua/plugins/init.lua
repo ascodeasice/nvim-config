@@ -251,8 +251,8 @@ require('lazy').setup({
 					path = "~/gtd/reference",
 				},
 				{
-					name = "note",
-					path = "~/note",
+					name = "zk",
+					path = "~/zk",
 				},
 			},
 			ui = {
