@@ -49,9 +49,9 @@ require('lazy').setup({
 			-- refer to the configuration section below
 			bigfile = { enabled = true },
 			image = {
-				doc={
+				doc = {
 					enabled = true,
-					inline=false,
+					inline = false,
 				},
 				math = {
 					enabled = false
@@ -245,6 +245,7 @@ require('lazy').setup({
 			"nvim-lua/plenary.nvim",
 		},
 		opts = {
+			legacy_commands = false,
 			workspaces = {
 				{
 					name = "gtd",
@@ -271,26 +272,6 @@ require('lazy').setup({
 					return tostring(os.time()) .. "-" .. suffix
 				end
 			end,
-			mappings = {
-				["<cr>"] = {
-					action = function()
-						return require("obsidian").util.gf_passthrough()
-					end,
-					opts = { buffer = true, expr = true },
-				},
-				["<leader>ct"] = {
-					action = function()
-						return require("obsidian").util.toggle_checkbox()
-					end,
-					opts = { buffer = true },
-				},
-				["<C-c>"] = {
-					action = function()
-						return require("obsidian").util.toggle_checkbox()
-					end,
-					opts = { buffer = true },
-				},
-			},
 			-- NOTE: the mappings only work in obsidian vault
 			templates = {
 				folder = "templates",

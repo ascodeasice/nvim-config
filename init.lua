@@ -1873,17 +1873,18 @@ function CreateNextSevenDaysNotes()
   end
 end
 
-vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>ObsidianToday -1<CR>",
+vim.api.nvim_set_keymap("n", "<leader>oy", "<cmd>Obsidian today -1<CR>",
   { noremap = true, desc = "Obsidian yesterday without working day" })
-vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>ObsidianToday +1<CR>",
+vim.api.nvim_set_keymap("n", "<leader>ot", "<cmd>Obsidian today<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>om", "<cmd>Obsidian today +1<CR>",
   { noremap = true, desc = "Obsidian tomorrow without working day" })
-vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>ObsidianNew<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>og", "<cmd>ObsidianTags<CR>", { noremap = true })
-vim.api.nvim_set_keymap("v", "<leader>oe", ":ObsidianExtractNote<CR>", { noremap = true }) -- NOTE: <cmd> and : are different
-vim.api.nvim_set_keymap("n", "<leader>ob", "<cmd>ObsidianBacklinks<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>oN", "<cmd>ObsidianNewFromTemplate<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>oT", "<cmd>ObsidianTemplate<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>on", "<cmd>Obsidian new<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>og", "<cmd>Obsidian tags<CR>", { noremap = true })
+vim.api.nvim_set_keymap("v", "<leader>oe", ":Obsidian extract_note<CR>", { noremap = true }) -- NOTE: <cmd> and : are different
+vim.api.nvim_set_keymap("v", "<leader>ol", ":Obsidian link<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>ob", "<cmd>Obsidian backlinks<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>oN", "<cmd>Obsidian new_from_template<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>oT", "<cmd>Obsidian template<CR>", { noremap = true })
 
 -- SECTION: diagram.nvim
 
