@@ -237,7 +237,7 @@ require('lazy').setup({
 		},
 	},
 	{
-		"epwalsh/obsidian.nvim",
+		"obsidian-nvim/obsidian.nvim",
 		version = "*",
 		lazy = true,
 		ft = "markdown",
@@ -248,7 +248,7 @@ require('lazy').setup({
 			workspaces = {
 				{
 					name = "gtd",
-					path = "~/gtd/reference",
+					path = "~/gtd/note",
 				},
 				{
 					name = "zk",
@@ -300,7 +300,8 @@ require('lazy').setup({
 				substitutions = {},
 			},
 			daily_notes = {
-				template = "daily-note"
+				template = "daily-note",
+				folder = "dailies",
 			}
 		},
 	},
