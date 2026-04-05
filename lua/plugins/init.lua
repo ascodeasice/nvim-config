@@ -282,7 +282,6 @@ require('lazy').setup({
 			},
 			daily_notes = {
 				template = "daily-note",
-				folder = "dailies",
 			}
 		},
 	},
