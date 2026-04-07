@@ -1885,6 +1885,7 @@ vim.api.nvim_set_keymap("v", "<leader>ol", ":Obsidian link<CR>", { noremap = tru
 vim.api.nvim_set_keymap("n", "<leader>ob", "<cmd>Obsidian backlinks<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>oN", "<cmd>Obsidian new_from_template<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>oT", "<cmd>Obsidian template<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>or", "<cmd>Obsidian rename<CR>", { noremap = true })
 
 -- SECTION: diagram.nvim
 
