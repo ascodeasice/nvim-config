@@ -175,11 +175,89 @@ vim.keymap.set("n", "<leader>gh", require("telescope.builtin").git_bcommits)
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
+local function patch_treesitter_query_directives()
+  local ok, query = pcall(require, "vim.treesitter.query")
+  if not ok then
+    return
+  end
+
+  local opts = vim.fn.has("nvim-0.10") == 1 and { force = true, all = false } or true
+
+  local html_script_type_languages = {
+    ["importmap"] = "json",
+    ["module"] = "javascript",
+    ["application/ecmascript"] = "javascript",
+    ["text/ecmascript"] = "javascript",
+  }
+
+  local non_filetype_match_injection_language_aliases = {
+    ex = "elixir",
+    pl = "perl",
+    sh = "bash",
+    uxn = "uxntal",
+    ts = "typescript",
+  }
+
+  local function get_parser_from_markdown_info_string(injection_alias)
+    local match = vim.filetype.match({ filename = "a." .. injection_alias })
+    return match or non_filetype_match_injection_language_aliases[injection_alias] or injection_alias
+  end
+
+  local function normalize_capture(match, capture_id)
+    local node = match[capture_id]
+    if type(node) == "table" then
+      return node[#node]
+    end
+    return node
+  end
+
+  query.add_directive("set-lang-from-mimetype!", function(match, _, bufnr, pred, metadata)
+    local node = normalize_capture(match, pred[2])
+    if not node then
+      return
+    end
+
+    local type_attr_value = vim.treesitter.get_node_text(node, bufnr)
+    local configured = html_script_type_languages[type_attr_value]
+    if configured then
+      metadata["injection.language"] = configured
+    else
+      local parts = vim.split(type_attr_value, "/", {})
+      metadata["injection.language"] = parts[#parts]
+    end
+  end, opts)
+
+  query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
+    local node = normalize_capture(match, pred[2])
+    if not node then
+      return
+    end
+
+    local injection_alias = vim.treesitter.get_node_text(node, bufnr):lower()
+    metadata["injection.language"] = get_parser_from_markdown_info_string(injection_alias)
+  end, opts)
+
+  query.add_directive("downcase!", function(match, _, bufnr, pred, metadata)
+    local capture_id = pred[2]
+    local node = normalize_capture(match, capture_id)
+    if not node then
+      return
+    end
+
+    local capture_metadata = metadata[capture_id]
+    local text = vim.treesitter.get_node_text(node, bufnr, { metadata = capture_metadata }) or ""
+    metadata[capture_id] = metadata[capture_id] or {}
+    metadata[capture_id].text = string.lower(text)
+  end, opts)
+end
+
+patch_treesitter_query_directives()
+
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "latex", "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "diff", "xml", "csv", "ruby", "make" },
+    ensure_installed = { "bash", "c", "clojure", "commonlisp", "cpp", "css", "dockerfile", "fish", "gitignore", "go", "html", "javascript", "kotlin", "lua", "markdown", "markdown_inline", "python", "rust", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "diff", "xml", "csv", "ruby", "make" },
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
     -- Install languages synchronously (only applied to `ensure_installed`)

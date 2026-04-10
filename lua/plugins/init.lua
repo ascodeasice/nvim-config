@@ -428,6 +428,9 @@ require('lazy').setup({
 	,
 	{
 		'MeanderingProgrammer/render-markdown.nvim',
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+		},
 		opts = {
 			anti_conceal = {
 				enabled = true,
@@ -1588,6 +1591,7 @@ require('lazy').setup({
 	{
 		-- Highlight, edit, and navigate code
 		'nvim-treesitter/nvim-treesitter',
+		branch = 'master',
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter-textobjects',
 		},
