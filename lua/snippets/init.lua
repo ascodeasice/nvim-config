@@ -1,1 +1,1 @@
-require('gitignore')
+return require('snippets.gitignore')

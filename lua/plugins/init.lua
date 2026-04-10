@@ -1546,7 +1546,7 @@ require('lazy').setup({
 	{
 		-- Add indentation lines even on blank lines
 		'lukas-reineke/indent-blankline.nvim',
-		version = "3.5", -- the latest version only supports latest neovim, so use a older version
+		-- Neovim 0.12 is new enough for current ibl releases.
 		-- Enable `lukas-reineke/indent-blankline.nvim`
 		-- See `:help ibl`
 		main = 'ibl',

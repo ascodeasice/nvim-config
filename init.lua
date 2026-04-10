@@ -381,8 +381,6 @@ require('mason-lspconfig').setup()
 --  define the property 'filetypes' to the map in question.
 
 local mason_registry = require('mason-registry')
-local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
-    '/node_modules/@vue/language-server'
 
 local servers = {
   clangd = {},
@@ -396,11 +394,6 @@ local servers = {
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
     init_options = {
       plugins = {
-        {
-          name = '@vue/typescript-plugin',
-          location = vue_language_server_path,
-          languages = { 'vue' },
-        },
       },
     },
   },
@@ -428,7 +421,33 @@ capabilities.textDocument.foldingRange = {
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
-local lspconfig = require("lspconfig")
+
+local function setup_server(server_name, config)
+  local server_config = vim.deepcopy(config or {})
+  local lsp_config = {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  }
+
+  if server_config.filetypes then
+    lsp_config.filetypes = server_config.filetypes
+    server_config.filetypes = nil
+  end
+
+  if server_config.init_options then
+    lsp_config.init_options = server_config.init_options
+    server_config.init_options = nil
+  end
+
+  if server_config.settings then
+    lsp_config.settings = vim.tbl_deep_extend('force', server_config.settings, server_config)
+  elseif next(server_config) ~= nil then
+    lsp_config.settings = server_config
+  end
+
+  vim.lsp.config(server_name, lsp_config)
+  vim.lsp.enable(server_name)
+end
 
 mason_lspconfig.setup {
   ensure_installed = {
@@ -438,30 +457,18 @@ mason_lspconfig.setup {
     'pyright',
     'clangd',
   },
-  automatic_installation = true
+  automatic_enable = false,
   -- actionlint
   -- yaml-language-server
   --[[    NOTE: black, mypy, debugpy
   cannot be put into ensure_installed, so install them manually in the :Mason command ]]
 }
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    if server_name == "tsserver" then
-      server_name = "ts_ls"
-    end
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-      init_options = (servers[server_name] or {}).init_options,
-    }
-  end,
-}
+for server_name, config in pairs(servers) do
+  setup_server(server_name, config)
+end
 
-lspconfig.pyright.setup {
-  on_attach = on_attach,
+setup_server('pyright', {
   settings = {
     pyright = {
       autoImportCompletion = true,
@@ -471,15 +478,16 @@ lspconfig.pyright.setup {
         autoSearchPaths = true,
         diagnosticMode = 'openFilesOnly',
         useLibraryCodeForTypes = true,
-        typeCheckingMode = 'off' }
-    }
-  }
-}
+        typeCheckingMode = 'off',
+        diagnosticSeverityOverrides = {
+          reportUnusedExpression = "none",
+        },
+      },
+    },
+  },
+})
 
-
-lspconfig['yamlls'].setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
+setup_server('yamlls', {
   settings = {
     yaml = {
       schemas = {
@@ -494,36 +502,21 @@ lspconfig['yamlls'].setup({
         ["https://json.schemastore.org/dependabot-v2"] = ".github/dependabot.{yml,yaml}",
         ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = "*gitlab-ci*.{yml,yaml}",
         ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] =
-        "*api*.{yml,yaml}",
+            "*api*.{yml,yaml}",
         ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] =
-        "*docker-compose*.{yml,yaml}",
+            "*docker-compose*.{yml,yaml}",
         ["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] =
-        "*flow*.{yml,yaml}",
-      },
-    }
-  }
-})
-require("lspconfig")["pyright"].setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    python = {
-      analysis = {
-        diagnosticSeverityOverrides = {
-          reportUnusedExpression = "none",
-        },
+            "*flow*.{yml,yaml}",
       },
     },
   },
 })
 
+setup_server('jdtls', {})
 
-lspconfig.jdtls.setup {}
-
--- NOTE: this is needed for kotlin ls
-lspconfig.kotlin_language_server.setup({
+setup_server('kotlin_language_server', {
   init_options = {
-    storagePath = require('lspconfig/util').path.join(vim.env.XDG_DATA_HOME, "nvim-data"),
+    storagePath = vim.fs.joinpath(vim.env.XDG_DATA_HOME or vim.fn.stdpath('data'), "nvim-data"),
   },
 })
 
@@ -892,12 +885,6 @@ vim.keymap.set("n", "<leader>dB", require("dap").step_back)
 vim.keymap.set("n", "<leader>dr", require("dap").restart)
 vim.keymap.set("n", "<leader>ds", require("dap").close)            -- dap stop
 vim.keymap.set("n", "<leader>dv", '<cmd>DapVirtualTextToggle<CR>') -- dap stop
-
-require("codesnap").setup({
-  mac_window_bar = false,
-  watermark = ""
-})
-
 
 vim.keymap.set("n", "<leader>fml", function()
   vim.g.enable_spelunker_vim = 0; -- disable spelunker
