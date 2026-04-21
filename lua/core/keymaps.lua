@@ -1,0 +1,13 @@
+-- Copy current file name (e.g. inbox.md)
+vim.keymap.set('n', '<leader>cf', function()
+  local filename = vim.fn.expand('%:t')
+  vim.fn.setreg('+', filename)
+  vim.notify('Copied: ' .. filename)
+end, { desc = 'Copy current file name' })
+
+-- Copy current file path with ~ shortening (e.g. ~/gtd/note/inbox.md)
+vim.keymap.set('n', '<leader>cp', function()
+  local path = vim.fn.fnamemodify(vim.fn.expand('%:p'), ':~')
+  vim.fn.setreg('+', path)
+  vim.notify('Copied: ' .. path)
+end, { desc = 'Copy current file path' })
