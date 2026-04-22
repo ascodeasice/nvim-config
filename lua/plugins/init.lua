@@ -282,7 +282,12 @@ require('lazy').setup({
 			},
 			daily_notes = {
 				template = "daily-note",
-			}
+			},
+			checkbox = {
+				enabled = true,
+				create_new = true,
+				order = { " ", "x" },
+			},
 		},
 	},
 	{
