@@ -1004,6 +1004,59 @@ vim.keymap.set(
 vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
 vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
 
+-- `al` / `il` for markdown link [text](url) using injected markdown_inline treesitter nodes
+local function select_md_link(inner)
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local cur_row, cur_col = cursor[1] - 1, cursor[2]
+
+  -- first try: walk up from cursor node to find enclosing inline_link
+  local node = vim.treesitter.get_node({ ignore_injections = false })
+  local link_node = node
+  while link_node and link_node:type() ~= "inline_link" do
+    link_node = link_node:parent()
+  end
+
+  -- second try: scan forward through all inline_link nodes in the buffer
+  if not link_node then
+    local parser = vim.treesitter.get_parser(0)
+    parser:parse(true)
+    parser:for_each_tree(function(tree, lang_tree)
+      if link_node then return end
+      if lang_tree:lang() ~= "markdown_inline" then return end
+      local function walk(n)
+        if link_node then return end
+        if n:type() == "inline_link" then
+          local sr, sc = n:range()
+          if sr > cur_row or (sr == cur_row and sc >= cur_col) then
+            link_node = n
+          end
+          return
+        end
+        for child in n:iter_children() do walk(child) end
+      end
+      walk(tree:root())
+    end)
+  end
+
+  if not link_node then return end
+
+  if inner then
+    for child in link_node:iter_children() do
+      if child:type() == "link_text" then
+        link_node = child
+        break
+      end
+    end
+  end
+
+  local sr, sc, er, ec = link_node:range()
+  vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
+  vim.cmd("normal! " .. (vim.fn.mode() == "v" and "o" or "v"))
+  vim.api.nvim_win_set_cursor(0, { er + 1, ec - 1 })
+end
+vim.keymap.set({ "o", "x" }, "al", function() select_md_link(false) end, { desc = "around markdown link" })
+vim.keymap.set({ "o", "x" }, "il", function() select_md_link(true) end, { desc = "inner markdown link text" })
+
 vim.api.nvim_set_keymap('n', '<leader>te', '<cmd>tabn<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>tn', '<cmd>tabp<CR>', { noremap = true, silent = true })
 
