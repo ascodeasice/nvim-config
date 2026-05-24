@@ -1591,7 +1591,7 @@ local function find_longest_parsable_span(line, col)
       if left <= cursor_in_segment and cursor_in_segment <= right then
         local candidate = segment:sub(left, right)
         if number_tools.build_number_preview_lines(candidate) then
-          return start_col + left - 1, start_col + right
+          return start_col + left - 1, start_col + right - 1
         end
       end
     end
@@ -1940,8 +1940,8 @@ local function visual_selection_text()
   return table.concat(selected, "\n")
 end
 
-local function show_number_preview()
-  local target = vim.fn.mode():match("[vV\22]") and visual_selection_text() or current_word_text()
+local function show_number_preview(from_visual)
+  local target = from_visual and visual_selection_text() or current_word_text()
   local lines = build_number_preview_lines(target)
   if not lines then
     vim.notify("Target must be binary, octal, hex, or an unprefixed decimal integer.", vim.log.levels.WARN)
@@ -1951,8 +1951,8 @@ local function show_number_preview()
   open_number_preview(lines)
 end
 
-local function convert_number_base_for_target(target_base)
-  if vim.fn.mode():match("[vV\22]") then
+local function convert_number_base_for_target(target_base, from_visual)
+  if from_visual then
     replace_visual_selection_with_base(target_base)
     return
   end
@@ -1960,19 +1960,17 @@ local function convert_number_base_for_target(target_base)
   replace_current_word_with_base(target_base)
 end
 
-vim.keymap.set({ "n", "v" }, "<leader>xb", function()
-  convert_number_base_for_target(2)
-end, { desc = "Convert number to binary" })
+local function map_number_base(lhs, base, desc)
+  vim.keymap.set("n", lhs, function() convert_number_base_for_target(base, false) end, { desc = desc })
+  vim.keymap.set("x", lhs, function() convert_number_base_for_target(base, true) end, { desc = desc })
+end
 
-vim.keymap.set({ "n", "v" }, "<leader>xd", function()
-  convert_number_base_for_target(10)
-end, { desc = "Convert number to decimal" })
+map_number_base("<leader>xb", 2, "Convert number to binary")
+map_number_base("<leader>xd", 10, "Convert number to decimal")
+map_number_base("<leader>xx", 16, "Convert number to hex")
 
-vim.keymap.set({ "n", "v" }, "<leader>xx", function()
-  convert_number_base_for_target(16)
-end, { desc = "Convert number to hex" })
-
-vim.keymap.set({ "n", "v" }, "<leader>xp", show_number_preview, { desc = "Preview number formats" })
+vim.keymap.set("n", "<leader>xp", function() show_number_preview(false) end, { desc = "Preview number formats" })
+vim.keymap.set("x", "<leader>xp", function() show_number_preview(true) end, { desc = "Preview number formats" })
 
 vim.api.nvim_set_keymap("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
 vim.api.nvim_set_keymap("n", "<esc>", "<cmd>set wrap!<CR>", { desc = "Wrap toggle" })
