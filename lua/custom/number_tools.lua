@@ -188,6 +188,83 @@ local function format_hex_from_bits(bits)
   end)
 end
 
+local function format_decimal_with_commas(text)
+  if type(text) ~= "string" or not text:match("^%-?%d+$") then
+    return text
+  end
+  local sign = ""
+  if text:sub(1, 1) == "-" then
+    sign = "-"
+    text = text:sub(2)
+  end
+  local result = text:reverse():gsub("(%d%d%d)", "%1,"):reverse():gsub("^,", "")
+  return sign .. result
+end
+
+local IEC_UNITS = { "KiB", "MiB", "GiB", "TiB", "PiB", "EiB" }
+local SI_UNITS  = { "KB",  "MB",  "GB",  "TB",  "PB",  "EB"  }
+
+local function iec_is_exact(digits, unit_idx)
+  local bits = unsigned_decimal_to_bits(digits)
+  local trailing = 0
+  for i = #bits, 1, -1 do
+    if bits:sub(i, i) == "0" then trailing = trailing + 1 else break end
+  end
+  return trailing >= 10 * unit_idx
+end
+
+local function si_is_exact(digits, unit_idx)
+  local trailing = 0
+  for i = #digits, 1, -1 do
+    if digits:sub(i, i) == "0" then trailing = trailing + 1 else break end
+  end
+  return trailing >= 3 * unit_idx
+end
+
+local function humanize_size(decimal_text, base, units, is_exact)
+  if type(decimal_text) ~= "string" or not decimal_text:match("^%-?%d+$") then
+    return ""
+  end
+  local sign = ""
+  local digits = decimal_text
+  if digits:sub(1, 1) == "-" then
+    sign = "-"
+    digits = digits:sub(2)
+  end
+
+  digits = digits:gsub("^0+", "")
+  if digits == "" then return "" end
+
+  local value = tonumber(digits)
+  if not value or value < base then return "" end
+
+  local unit_idx = 1
+  local divisor = base
+  local unit = units[1]
+  for i, u in ipairs(units) do
+    unit_idx = i
+    divisor = base ^ i
+    unit = u
+    if value < base ^ (i + 1) then break end
+  end
+
+  local quotient = value / divisor
+
+  if is_exact(digits, unit_idx) then
+    return string.format(" = %s%d %s", sign, math.floor(quotient + 0.5), unit)
+  end
+
+  local formatted = string.format("%.2f", quotient)
+  formatted = formatted:gsub("0+$", ""):gsub("%.$", "")
+  return string.format(" ≈ %s%s %s", sign, formatted, unit)
+end
+
+local function format_number_with_units(text)
+  local iec = humanize_size(text, 1024, IEC_UNITS, iec_is_exact)
+  local si  = humanize_size(text, 1000, SI_UNITS,  si_is_exact)
+  return format_decimal_with_commas(text) .. iec .. si
+end
+
 local function base_name(base)
   return ({
     [2] = "binary",
@@ -544,17 +621,17 @@ function M.build_number_preview_lines(text)
     string.format("Bytes:   %d", math.max(1, math.ceil(bit_count / 8))),
     "",
     string.format("Binary:  %s", binary_display),
-    string.format("Decimal: %s", decimal_display),
+    string.format("Decimal: %s", format_number_with_units(decimal_display)),
     string.format("Hex:     %s", hex_display),
     "",
-    string.format("uint8:   %s", uint8_display),
-    string.format("int8:    %s", int8_display),
-    string.format("uint16:  %s", uint16_display),
-    string.format("int16:   %s", int16_display),
-    string.format("uint32:  %s", uint32_display),
-    string.format("int32:   %s", int32_display),
-    string.format("uint64:  %s", uint64_display),
-    string.format("int64:   %s", int64_display),
+    string.format("uint8:   %s", format_number_with_units(uint8_display)),
+    string.format("int8:    %s", format_number_with_units(int8_display)),
+    string.format("uint16:  %s", format_number_with_units(uint16_display)),
+    string.format("int16:   %s", format_number_with_units(int16_display)),
+    string.format("uint32:  %s", format_number_with_units(uint32_display)),
+    string.format("int32:   %s", format_number_with_units(int32_display)),
+    string.format("uint64:  %s", format_number_with_units(uint64_display)),
+    string.format("int64:   %s", format_number_with_units(int64_display)),
     string.format("float32: %s", float32_value),
     string.format("f32bits: %s", format_float_parts(float32_bits, 8, 23, 127)),
     string.format("float64: %s", float64_value),
